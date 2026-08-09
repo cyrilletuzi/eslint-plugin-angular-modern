@@ -1,0 +1,43 @@
+{
+  "name": "eslint-plugin-angular-modern",
+  "version": "0.0.1",
+  "description": "Modern Angular lint rules for ESLint",
+  "keywords": [
+    "angular",
+    "eslint"
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/cyrilletuzi"
+  },
+  "homepage": "https://github.com/cyrilletuzi/eslint-plugin-angular-modern#readme",
+  "bugs": {
+    "url": "https://github.com/cyrilletuzi/eslint-plugin-angular-modern/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyrilletuzi/eslint-plugin-angular-modern.git"
+  },
+  "license": "MIT",
+  "author": "Cyrille Tuzi",
+  "type": "commonjs",
+  "scripts": {
+    "build": "rm -rf dist && tsc && cp src/package.json dist/package.json && cp src/LICENSE dist/LICENSE && cp src/README.md dist/README.md",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release:major": "VERSION=major npm run release",
+    "release:minor": "VERSION=minor npm run release",
+    "release:patch": "VERSION=patch npm run release",
+    "release": "if test $VERSION; then npm run build && cd src && npm version $VERSION --no-git-tag-version && git add package.json && cd .. && npm run build && git commit -m \"release\" && npm version $VERSION && git push; fi",
+    "publish-release": "git push origin v$npm_package_version"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "eslint": "^10.8.0",
+    "typescript": "^6.0.3",
+    "typescript-7": "npm:typescript@^7.0.2",
+    "typescript-eslint": "^8.66.0"
+  },
+  "dependencies": {
+    "@typescript-eslint/utils": "^8.58.1"
+  }
+}

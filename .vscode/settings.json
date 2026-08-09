@@ -1,0 +1,29 @@
+{
+  "js/ts.preferences.autoImportFileExcludePatterns": [
+    "./dist"
+  ],
+  // Use project TypeScript version
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  // Disable random autocomplete for stricter code
+  "editor.wordBasedSuggestions": "off",
+  // Formatting
+  "editor.formatOnSave": true,
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2,
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "js/ts.preferences.quoteStyle": "double",
+  "js/ts.format.semicolons": "insert",
+  "js/ts.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+  // Inlay hints (display type information when already known)
+  "js/ts.inlayHints.variableTypes.enabled": true,
+  "js/ts.inlayHints.propertyDeclarationTypes.enabled": true,
+  "js/ts.inlayHints.parameterTypes.enabled": true,
+  "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
+  "js/ts.inlayHints.enumMemberValues.enabled": true,
+  "js/ts.inlayHints.parameterNames.enabled": "all",
+  "js/ts.inlayHints.variableTypes.suppressWhenTypeMatchesName": false
+}

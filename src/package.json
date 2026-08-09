@@ -1,0 +1,34 @@
+{
+  "name": "eslint-plugin-angular-modern",
+  "version": "0.0.1",
+  "description": "Modern Angular lint rules for ESLint",
+  "keywords": [
+    "angular",
+    "eslint"
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/cyrilletuzi"
+  },
+  "homepage": "https://github.com/cyrilletuzi/eslint-plugin-angular-modern#readme",
+  "bugs": {
+    "url": "https://github.com/cyrilletuzi/eslint-plugin-angular-modern/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyrilletuzi/eslint-plugin-angular-modern.git"
+  },
+  "license": "MIT",
+  "author": "Cyrille Tuzi",
+  "type": "commonjs",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "peerDependencies": {
+    "@typescript-eslint/utils": "^8.0.0"
+  }
+}

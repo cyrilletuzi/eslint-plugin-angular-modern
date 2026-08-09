@@ -1,0 +1,13 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Build files
+dist/
+
+# Cache
+.npm
+.eslintcache

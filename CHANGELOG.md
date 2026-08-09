@@ -1,0 +1,47 @@
+# Changelog
+
+## 1.0.0 (2026-08-09)
+
+Initial release with these rules:
+
+From `angular-eslint-injection-context`:
+- [inject-in-injection-context](./docs/injection-context/INJECT.md)
+- [inject-async-in-injection-context](./docs/injection-context/INJECT_ASYNC.md)
+- [effect-in-injection-context](./docs/injection-context/EFFECT.md)
+- [after-every-render-in-injection-context](./docs/injection-context/AFTER_EVERY_RENDER.md)
+- [after-next-render-in-injection-context](./docs/injection-context/AFTER_NEXT_RENDER.md)
+- [after-render-effect-in-injection-context](./docs/injection-context/AFTER_RENDER_EFFECT.md)
+- [signal-form-in-injection-context](./docs/injection-context/SIGNAL_FORM.md)
+- [resource-in-injection-context](./docs/injection-context/RESOURCE.md)
+- [rx-resource-in-injection-context](./docs/injection-context/RX_RESOURCE.md)
+- [take-until-destroyed-in-injection-context](./docs/injection-context/TAKE_UNTIL_DESTROYED.md)
+- [to-observable-in-injection-context](./docs/injection-context/TO_OBSERVABLE.md)
+- [to-signal-in-injection-context](./docs/injection-context/TO_SIGNAL.md)
+- [pending-until-event-in-injection-context](./docs/injection-context/PENDING_UNTIL_EVENT.md)
+- [custom-function-in-injection-context](./docs/injection-context/CUSTOM_FUNCTION.md)
+
+From `angular-eslint-zoneless`:
+- [no-zonejs-import](./docs/rules/NO_ZONEJS_IMPORT.md)
+- [no-providezonechangedetection](./docs/rules/NO_PROVIDEZONECHANGEDETECTION.md)
+- [no-ngzone](./docs/rules/NO_NGZONE.md)
+- [no-ngzone-testing](./docs/rules/NO_NGZONE_TESTING.md)
+- [no-zonejs-testing-functions](./docs/rules/NO_ZONEJS_TESTING_FUNCTIONS.md)
+- [no-directive-writable-property](./docs/signals/NO_DIRECTIVE_WRITABLE_PROPERTY.md)
+- [no-directive-accessor](./docs/signals/NO_DIRECTIVE_ACCESSOR.md)
+- [no-eager-change-detection](./docs/signals/NO_EAGER_CHANGE_DETECTION.md)
+- [no-ngoninit](./docs/signals/NO_NGONINIT.md)
+- [no-ngdocheck](./docs/signals/NO_NGDOCHECK.md)
+- [no-ngonchanges](./docs/signals/NO_NGONCHANGES.md)
+- [no-ngcontentviewinit](./docs/signals/NO_NGAFTERCONTENTINIT.md)
+- [no-ngcontentviewchecked](./docs/signals/NO_NGAFTERCONTENTCHECKED.md)
+- [no-ngafterviewinit](./docs/signals/NO_NGAFTERVIEWINIT.md)
+- [no-ngafterviewchecked](./docs/signals/NO_NGAFTERVIEWCHECKED.md)
+- [no-ngondestroy](./docs/signals/NO_NGONDESTROY.md)
+- [no-input-decorator](./docs/signals/NO_INPUT_DECORATOR.md)
+- [no-output-decorator](./docs/signals/NO_OUTPUT_DECORATOR.md)
+- [no-content-decorator](./docs/signals/NO_CONTENT_DECORATOR.md)
+- [no-view-decorator](./docs/signals/NO_VIEW_DECORATOR.md)
+- [no-asyncpipe](./docs/signals/NO_ASYNCPIPE.md)
+- [no-reactive-forms](./docs/signals/NO_REACTIVE_FORMS.md)
+- [no-detectchanges-testing](./docs/signals/NO_DETECTCHANGES_TESTING.md)
+- [no-changedetectorref](./docs/signals/NO_CHANGEDETECTORREF.md) (now in the recommended preset)
