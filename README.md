@@ -58,13 +58,13 @@ module.exports = defineConfig({
 { extends: [angularModern.configs.recommended] }
 ```
 
-The recommended preset enables all the rules of all the categories presets below, except the experimental ones. It is the recommended preset for:
+The recommended preset enables all the rules of all the categories presets below. It is the recommended preset for:
 - new projects
-- projects already fully migrated to the new Angular features
+- projects already fully migrated to modern Angular
 
 ## Categories presets
 
-A category preset enables the rules of specific set of features. It is recommended for projects only partially migrated to the new Angular features.
+A category preset enables the rules of a specific set of features. It is recommended for projects only partially migrated to modern Angular.
 
 ### Injection context preset
 
@@ -72,7 +72,7 @@ A category preset enables the rules of specific set of features. It is recommend
 { extends: [angularModern.configs.injectionContext] }
 ```
 
-**These rules check that `inject()` and similar functions (`takeUntilDestroyed()`, `toSignal()`, `resource()`, `form()`...) are called in an injection context**, to avoid the [`NG0203`](https://angular.dev/errors/NG0203) _runtime_ error:
+**These rules check that `inject()` and similar functions (`toSignal()`, `resource()`, `form()`...) are called in an injection context**, to avoid the [`NG0203`](https://angular.dev/errors/NG0203) _runtime_ error:
 
 - [inject-in-injection-context](./docs/injection-context/INJECT.md)
 - [inject-async-in-injection-context](./docs/injection-context/INJECT_ASYNC.md)
