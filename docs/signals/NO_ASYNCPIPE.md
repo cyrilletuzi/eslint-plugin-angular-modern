@@ -42,9 +42,7 @@ export class ProductPage {
 
   constructor() {
     const productApi = inject(ProductApi);
-    this.products = productApi.getProducts().pipe(
-      takeUntilDestroyed(),
-    );
+    this.products = productApi.getProducts();
   }
 }
 ```
@@ -58,13 +56,7 @@ export class ProductPage {
 })
 export class AdminPage implements OnInit {
   private readonly auth = inject(Auth);
-  protected readonly isAuthenticated: Observable<boolan>;
-
-  constructor() {
-    this.isAuthenticated = this.auth.isAuthenticatedObservable.pipe(
-      takeUntilDestroyed(),
-    );
-  }
+  protected readonly isAuthenticated = this.auth.isAuthenticatedObservable;
 }
 ```
 
