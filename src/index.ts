@@ -1,4 +1,5 @@
 import type { ConfigObject, Plugin } from "@eslint/core";
+import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
 import * as afterEveryRenderInInjectionContext from "./rules/injection-context/after-every-render-in-injection-context.js";
 import * as afterNextRenderInInjectionContext from "./rules/injection-context/after-next-render-in-injection-context.js";
 import * as afterRenderEffectInInjectionContext from "./rules/injection-context/after-render-effect-in-injection-context.js";
@@ -31,7 +32,6 @@ import * as noNgondestroy from "./rules/signals/no-ngondestroy.js";
 import * as noNgoninit from "./rules/signals/no-ngoninit.js";
 import * as noOutputDecorator from "./rules/signals/no-output-decorator.js";
 import * as noReactiveForms from "./rules/signals/no-reactive-forms.js";
-import * as noSubscribeInComponentConstructor from "./rules/signals/no-subscribe-in-component-constructor.js";
 import * as noViewDecorator from "./rules/signals/no-view-decorator.js";
 import * as noNgzoneTesting from "./rules/zoneless/no-ngzone-testing.js";
 import * as noNgzone from "./rules/zoneless/no-ngzone.js";
@@ -57,9 +57,6 @@ const plugin = {
     get recommended() {
       return recommended;
     },
-    get experimental() {
-      return experimental;
-    }
   },
   meta: { name, version },
   rules: {
@@ -84,9 +81,9 @@ const plugin = {
     [noNgzone.ruleName]: noNgzone.ruleDefinition,
     [noNgzoneTesting.ruleName]: noNgzoneTesting.ruleDefinition,
     [noZonejsTestingFunctions.ruleName]: noZonejsTestingFunctions.ruleDefinition,
+    // Signals
     [noDirectiveWritableProperty.ruleName]: noDirectiveWritableProperty.ruleDefinition,
     [noDirectiveAccessor.ruleName]: noDirectiveAccessor.ruleDefinition,
-    // Signals
     [noEagerChangeDetection.ruleName]: noEagerChangeDetection.ruleDefinition,
     [noNgoninit.ruleName]: noNgoninit.ruleDefinition,
     [noNgdocheck.ruleName]: noNgdocheck.ruleDefinition,
@@ -139,8 +136,6 @@ const zoneless: ConfigObject = {
     [`${name}/${noNgzone.ruleName}`]: "error",
     [`${name}/${noNgzoneTesting.ruleName}`]: "error",
     [`${name}/${noZonejsTestingFunctions.ruleName}`]: "error",
-    [`${name}/${noDirectiveWritableProperty.ruleName}`]: "error",
-    [`${name}/${noDirectiveAccessor.ruleName}`]: "error",
   },
 };
 
@@ -149,6 +144,8 @@ const signals: ConfigObject = {
     [name]: plugin
   },
   rules: {
+    [`${name}/${noDirectiveWritableProperty.ruleName}`]: "error",
+    [`${name}/${noDirectiveAccessor.ruleName}`]: "error",
     [`${name}/${noEagerChangeDetection.ruleName}`]: "error",
     [`${name}/${noNgoninit.ruleName}`]: "error",
     [`${name}/${noNgdocheck.ruleName}`]: "error",
@@ -177,15 +174,6 @@ const recommended: ConfigObject = {
     ...injectionContext.rules,
     ...zoneless.rules,
     ...signals.rules,
-  },
-};
-
-const experimental: ConfigObject = {
-  plugins: {
-    [name]: plugin
-  },
-  rules: {
-    [`${name}/${noSubscribeInComponentConstructor.ruleName}`]: "error",
   },
 };
 

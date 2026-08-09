@@ -146,9 +146,9 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 > [!TIP]
 > This preset should only be enabled after a project has fully migrated to signals. Otherwise, individual rules should be enabled gradually.
 
-### Experimental preset
+## Experimental rules
 
-Rules still being tested.
+Rules still being tested, not included in any preset.
 
 - [no-subscribe-in-component-constructor](./docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
 

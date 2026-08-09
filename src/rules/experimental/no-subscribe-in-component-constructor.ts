@@ -13,7 +13,7 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that observables are not explicitly subscribed in components constructors.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md',
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md',
     },
     schema: [],
   },
