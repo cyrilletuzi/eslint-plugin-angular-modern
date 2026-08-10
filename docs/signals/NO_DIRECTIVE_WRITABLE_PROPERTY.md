@@ -4,7 +4,7 @@ Restrict the usage of writable public and protected properties in components and
 
 In components and directives, a public or protected property can be bound to the UI. And in a zoneless application, mutating it will not update the UI anymore. So:
 - if it is indeed used in the UI, mark it as `readonly` and use signals
-- if it is only a property for the class itself, mark it as private (note: if you need to use it in tests, TypeScript allows `componentInstance['privateProperty']`)
+- if it is only a property for the class itself, mark it as private (note: to use it in tests, TypeScript allows `componentInstance['privateProperty']`)
 
 ## Documentation
 
