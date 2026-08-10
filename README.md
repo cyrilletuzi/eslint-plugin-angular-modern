@@ -1,6 +1,6 @@
 # eslint-plugin-angular-modern
 
-ESLint rules for modern Angular.
+ESLint rules for modern and safe Angular.
 
 > [!NOTE]
 > Find this tool useful? I’m open to freelance & full-time opportunities.
@@ -14,7 +14,7 @@ Angular has evolved a lot: standalone components, new control flow syntax, new d
 
 2. **Enforce safe Angular usage**
 
-Some of the new features, especially the new dependency injection, are not compilation safe, and can produce runtime errors. Lint rules can lower the risk of these runtime errors. 
+Some of the new features, especially the new dependency injection, can produce runtime errors, not protected by compilation. Lint rules can lower the risk of these runtime errors. 
 
 ## Requirements
 
