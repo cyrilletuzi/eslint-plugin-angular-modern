@@ -86,7 +86,7 @@ A category preset enables the rules of a specific set of features. It is recomme
 { extends: [angularModern.configs.injectionContext] }
 ```
 
-**These rules check that `inject()` and similar functions (`toSignal()`, `resource()`, `form()`...) are called in an injection context**, to avoid the [`NG0203`](https://angular.dev/errors/NG0203) _runtime_ error:
+**These safety rules check that `inject()` and similar functions (`toSignal()`, `resource()`, `form()`...) are called in an injection context**, to avoid the [`NG0203`](https://angular.dev/errors/NG0203) _runtime_ error:
 
 - [inject-in-injection-context](./docs/injection-context/INJECT.md)
 - [inject-async-in-injection-context](./docs/injection-context/INJECT_ASYNC.md)
@@ -105,7 +105,7 @@ A category preset enables the rules of a specific set of features. It is recomme
 A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-say-goodbye-to-ng0203-error-3g5i) explains the context and the purpose of these rules in more details.
 
 > [!TIP]
-> This preset can and should always be enabled, even if a project has not yet migrated to `inject()`.
+> This safety preset can and should always be enabled, even if a project has not yet migrated to `inject()`.
 
 #### Custom functions
 
