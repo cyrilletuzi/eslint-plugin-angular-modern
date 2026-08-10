@@ -62,8 +62,9 @@ module.exports = defineConfig({
 > [!NOTE]
 > In VS Code, it may be required to restart for the ESLint extension to apply the new rules.
 
-> [!TIP]
-> Coming from from `angular-eslint-injection-context` or `angular-eslint-zoneless` libraries? A [migration guide](./docs/MIGRATION.md) is available.
+## Migration
+
+If coming from from `angular-eslint-injection-context` and `angular-eslint-zoneless` libraries, a [migration guide](./docs/MIGRATION.md) is available.
 
 ## Recommended preset
 
