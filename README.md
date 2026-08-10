@@ -166,7 +166,7 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 
 ### Standalone preset
 
-Coming soon, a set of rules checking a project is not using NgModules.
+Coming soon, a set of rules enforcing a project to not use NgModules.
 
 ## Experimental rules
 
