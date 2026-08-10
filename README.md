@@ -164,6 +164,10 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 > [!TIP]
 > This preset should only be enabled after a project has fully migrated to signals. Otherwise, individual rules should be enabled gradually.
 
+### Standalone preset
+
+Coming soon, a set of rules checking a project is not using NgModules.
+
 ## Experimental rules
 
 Rules still being tested, not included in any preset.
