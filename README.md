@@ -118,7 +118,7 @@ For other functions requiring the injection context (custom ones or from librari
 { extends: [angularModern.configs.zoneless] }
 ```
 
-**These rules enforces that a zoneless application does not use zone.js-based features:**
+**These rules enforce a zoneless application to not use zone.js-based features:**
 
 - [no-zonejs-import](./docs/zoneless/NO_ZONEJS_IMPORT.md)
 - [no-providezonechangedetection](./docs/zoneless/NO_PROVIDEZONECHANGEDETECTION.md)
@@ -137,7 +137,7 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 { extends: [angularModern.configs.signals] }
 ```
 
-**These rules enforces that reactivity is handled with signals:**
+**These rules enforce a project to handle reactivity with signals:**
 
 - [no-directive-writable-property](./docs/signals/NO_DIRECTIVE_WRITABLE_PROPERTY.md)
 - [no-directive-accessor](./docs/signals/NO_DIRECTIVE_ACCESSOR.md)
