@@ -100,8 +100,9 @@ const plugin = {
     [noAsyncpipe.ruleName]: noAsyncpipe.ruleDefinition,
     [noDetectchangesTesting.ruleName]: noDetectchangesTesting.ruleDefinition,
     [noChangedetectorref.ruleName]: noChangedetectorref.ruleDefinition,
-    [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
     [noReactiveForms.ruleName]: noReactiveForms.ruleDefinition,
+    // Experimental
+    [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
 } satisfies Plugin;
 

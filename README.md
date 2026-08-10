@@ -68,7 +68,7 @@ module.exports = defineConfig({
 { extends: [angularModern.configs.recommended] }
 ```
 
-The recommended preset enables all the rules of all the categories presets below. It is the recommended preset for:
+**The recommended preset enables all the rules** of all the categories presets below. It is the recommended preset for:
 - new projects
 - projects already fully migrated to modern Angular
 
@@ -105,6 +105,7 @@ A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-sa
 
 #### Custom functions
 
+For other functions requiring the injection context (custom ones or from libraries), an additional rule is available:
 - [custom-function-in-injection-context](./docs/injection-context/CUSTOM_FUNCTION.md)
 
 ### Zoneless preset
@@ -114,11 +115,14 @@ A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-sa
 ```
 
 **These rules check that a zoneless application does not use zone.js-based features:**
+
 - [no-zonejs-import](./docs/rules/NO_ZONEJS_IMPORT.md)
 - [no-providezonechangedetection](./docs/rules/NO_PROVIDEZONECHANGEDETECTION.md)
 - [no-ngzone](./docs/rules/NO_NGZONE.md)
 - [no-ngzone-testing](./docs/rules/NO_NGZONE_TESTING.md)
 - [no-zonejs-testing-functions](./docs/rules/NO_ZONEJS_TESTING_FUNCTIONS.md)
+
+A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-signals-patterns-4fc) explains the context and the purpose of these rules in more details.
 
 > [!TIP]
 > This preset should only be enabled after a project has fully migrated to zoneless. Otherwise, individual rules should be enabled gradually.
