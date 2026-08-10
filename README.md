@@ -10,9 +10,9 @@ ESLint rules for modern Angular.
 
 1. Enforce modern Angular
 
-Angular has evolved a lot: standalone components, new control flow syntax, new dependency injection, zoneless, signals... One could even argue it is a new framework. It has been done in a backward compatible way, so existing applications still work. Which is nice, but it also has a downside: a lot of legacy features are still available, both for developers and for AI tools. Lint rules can restrict the usage of these legacy features, in a reliable way (contrary to AI custom instructions and skills, which are often not respected).
+Angular has evolved a lot: standalone components, new control flow syntax, new dependency injection, zoneless, signals... One could even argue it is a new framework. It has been done in a backward compatible way, which is nice, but it also has a downside: a lot of legacy features are still available, both for developers and for AI tools. Lint rules can restrict the usage of these legacy features, in a reliable way (unlike AI custom instructions and skills, which are often not followed).
 
-2. Enforce safe usage of modern Angular
+2. Enforce safe Angular usage
 
 Some of the new features, especially the new dependency injection, are not compilation safe, and can produce runtime errors. Lint rules can lower the risk of these runtime errors. 
 
