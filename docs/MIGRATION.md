@@ -1,6 +1,6 @@
 # Migration
 
-This library is a merge of `angular-eslint-injection-context` and `angular-eslint-zoneless` libraries. Rules names and behaviors are the exact same, only the package name has changed.
+This library is a merge of `angular-eslint-injection-context` and `angular-eslint-zoneless` libraries. Rules names and behaviors are the same, only the package name has changed.
 
 - Migration from `angular-eslint-injection-context`
 - Migration from `angular-eslint-zoneless`
@@ -11,6 +11,8 @@ This library is a merge of `angular-eslint-injection-context` and `angular-eslin
 
 ```bash
 npm uninstall angular-eslint-injection-context
+```
+```bash
 npm install eslint-plugin-angular-modern --save-dev
 ```
 
@@ -52,6 +54,8 @@ module.exports = defineConfig({
 
 ```bash
 npm uninstall angular-eslint-zoneless
+```
+```bash
 npm install eslint-plugin-angular-modern --save-dev
 ```
 
