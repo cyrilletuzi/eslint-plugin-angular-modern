@@ -6,6 +6,16 @@ ESLint rules for modern Angular.
 > Find this tool useful? I’m open to freelance & full-time opportunities.
 > Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/cyrilletuzi/) or [Bluesky](https://bsky.app/profile/cyrilletuzi.com).
 
+## Goals
+
+1. Enforce modern Angular
+
+Angular has evolved a lot: standalone components, new control flow syntax, new dependency injection, zoneless, signals... One could even argue it is a new framework. It has been done in a backward compatible way, so existing applications still work. Which is nice, but it also has a downside: a lot of legacy features are still available, both for developers and for AI tools. Lint rules can restrict the usage of these legacy features, in a reliable way (contrary to AI custom instructions and skills, which are often not respected).
+
+2. Enforce safe usage of modern Angular
+
+Some of the new features, especially the new dependency injection, are not compilation safe, and can produce runtime errors. Lint rules can lower the risk of these runtime errors. 
+
 ## Requirements
 
 - TypeScript ESLint v8
