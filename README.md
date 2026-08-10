@@ -64,7 +64,7 @@ module.exports = defineConfig({
 
 ## Migration
 
-If coming from from `angular-eslint-injection-context` and `angular-eslint-zoneless` libraries, a [migration guide](./docs/MIGRATION.md) is available.
+If coming from `angular-eslint-injection-context` or `angular-eslint-zoneless` libraries, a [migration guide](./docs/MIGRATION.md) is available.
 
 ## Recommended preset
 
