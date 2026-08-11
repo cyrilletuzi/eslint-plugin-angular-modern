@@ -16,7 +16,7 @@ Checks that a function is called inside an injection context, or that ax explici
   - `argumentPropertyName`: if the explicit injection context argument is an object, the name of the property, for example 'injector'; if not provided, the rule will consider the argument is directly the explicit injection context
   - `allowedSpecialInjectionContexts`: array of special injection contexts to allow: `routing`, `http`, `factory`, `asyncApplicationInitialization`, `syncApplicationInitialization` (see valid cases below)
 
-For example, if your custom function looks like this:
+For example, if the custom function looks like this:
 ```typescript
 function myCustomOperator(destroyRef: DestroyRef): void {
   if (!destroyRef) {
@@ -42,7 +42,7 @@ myCustomOperator(destroyRef); // outside injection context
 }
 ```
 
-For example, if your custom function looks like this:
+For example, if the custom function looks like this:
 ```typescript
 function myCustomOperator(data: string, { injector }: { injector: Injector } = {}): void {
   if (!injector) {

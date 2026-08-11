@@ -1,6 +1,6 @@
 # eslint-plugin-angular-modern
 
-ESLint rules for modern Angular.
+ESLint rules for modern and safe Angular.
 
 > [!NOTE]
 > Find this tool useful? I’m open to freelance & full-time opportunities.
@@ -8,13 +8,13 @@ ESLint rules for modern Angular.
 
 ## Goals
 
-1. Enforce modern Angular
+1. **Enforce modern Angular**
 
 Angular has evolved a lot: standalone components, new control flow syntax, new dependency injection, zoneless, signals... One could even argue it is a new framework. It has been done in a backward compatible way, which is nice, but it also has a downside: a lot of legacy features are still available, both for developers and for AI tools. Lint rules can restrict the usage of these legacy features, in a reliable way (unlike AI custom instructions and skills, which are often not followed).
 
-2. Enforce safe Angular usage
+2. **Enforce safe Angular usage**
 
-Some of the new features, especially the new dependency injection, are not compilation safe, and can produce runtime errors. Lint rules can lower the risk of these runtime errors. 
+Some of the new features, especially the new dependency injection, can produce runtime errors, not protected by compilation. Lint rules can lower the risk of these runtime errors. 
 
 ## Requirements
 
@@ -62,13 +62,17 @@ module.exports = defineConfig({
 > [!NOTE]
 > In VS Code, it may be required to restart for the ESLint extension to apply the new rules.
 
+## Migration
+
+If coming from `angular-eslint-injection-context` or `angular-eslint-zoneless` libraries, a [migration guide](./docs/MIGRATION.md) is available.
+
 ## Recommended preset
 
 ```javascript
 { extends: [angularModern.configs.recommended] }
 ```
 
-The recommended preset enables all the rules of all the categories presets below. It is the recommended preset for:
+**The recommended preset enables all the rules** of all the categories presets below. It is the recommended preset for:
 - new projects
 - projects already fully migrated to modern Angular
 
@@ -82,7 +86,7 @@ A category preset enables the rules of a specific set of features. It is recomme
 { extends: [angularModern.configs.injectionContext] }
 ```
 
-**These rules check that `inject()` and similar functions (`toSignal()`, `resource()`, `form()`...) are called in an injection context**, to avoid the [`NG0203`](https://angular.dev/errors/NG0203) _runtime_ error:
+**These safety rules check that `inject()` and similar functions (`toSignal()`, `resource()`, `form()`...) are called in an injection context**, to avoid the [`NG0203`](https://angular.dev/errors/NG0203) _runtime_ error:
 
 - [inject-in-injection-context](./docs/injection-context/INJECT.md)
 - [inject-async-in-injection-context](./docs/injection-context/INJECT_ASYNC.md)
@@ -101,10 +105,11 @@ A category preset enables the rules of a specific set of features. It is recomme
 A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-say-goodbye-to-ng0203-error-3g5i) explains the context and the purpose of these rules in more details.
 
 > [!TIP]
-> This preset can and should always be enabled, even if a project has not yet migrated to `inject()`.
+> This safety preset can and should always be enabled, even if a project has not yet migrated to `inject()`.
 
 #### Custom functions
 
+For other functions requiring the injection context (custom ones or from libraries), an additional rule is available:
 - [custom-function-in-injection-context](./docs/injection-context/CUSTOM_FUNCTION.md)
 
 ### Zoneless preset
@@ -113,12 +118,15 @@ A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-sa
 { extends: [angularModern.configs.zoneless] }
 ```
 
-**These rules check that a zoneless application does not use zone.js-based features:**
-- [no-zonejs-import](./docs/rules/NO_ZONEJS_IMPORT.md)
-- [no-providezonechangedetection](./docs/rules/NO_PROVIDEZONECHANGEDETECTION.md)
-- [no-ngzone](./docs/rules/NO_NGZONE.md)
-- [no-ngzone-testing](./docs/rules/NO_NGZONE_TESTING.md)
-- [no-zonejs-testing-functions](./docs/rules/NO_ZONEJS_TESTING_FUNCTIONS.md)
+**These rules enforce a zoneless application to not use zone.js-based features:**
+
+- [no-zonejs-import](./docs/zoneless/NO_ZONEJS_IMPORT.md)
+- [no-providezonechangedetection](./docs/zoneless/NO_PROVIDEZONECHANGEDETECTION.md)
+- [no-ngzone](./docs/zoneless/NO_NGZONE.md)
+- [no-ngzone-testing](./docs/zoneless/NO_NGZONE_TESTING.md)
+- [no-zonejs-testing-functions](./docs/zoneless/NO_ZONEJS_TESTING_FUNCTIONS.md)
+
+A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-signals-patterns-4fc) explains the context and the purpose of these rules in more details.
 
 > [!TIP]
 > This preset should only be enabled after a project has fully migrated to zoneless. Otherwise, individual rules should be enabled gradually.
@@ -129,7 +137,7 @@ A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-sa
 { extends: [angularModern.configs.signals] }
 ```
 
-**These rules check that reactivity is handled with signals:**
+**These rules enforce a project to handle reactivity with signals:**
 
 - [no-directive-writable-property](./docs/signals/NO_DIRECTIVE_WRITABLE_PROPERTY.md)
 - [no-directive-accessor](./docs/signals/NO_DIRECTIVE_ACCESSOR.md)
@@ -155,6 +163,10 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 
 > [!TIP]
 > This preset should only be enabled after a project has fully migrated to signals. Otherwise, individual rules should be enabled gradually.
+
+### Standalone preset
+
+Coming soon, a set of rules enforcing a project to not use NgModules.
 
 ## Experimental rules
 

@@ -1,7 +1,7 @@
 {
   "name": "eslint-plugin-angular-modern",
-  "version": "0.0.1",
-  "description": "Modern Angular lint rules for ESLint",
+  "version": "1.0.1",
+  "description": "ESLint rules for modern and safe Angular.",
   "keywords": [
     "angular",
     "eslint"
@@ -28,14 +28,14 @@
     "release:minor": "VERSION=minor npm run release",
     "release:patch": "VERSION=patch npm run release",
     "release": "if test $VERSION; then npm run build && cd src && npm version $VERSION --no-git-tag-version && git add package.json && cd .. && npm run build && git commit -m \"release\" && npm version $VERSION && git push; fi",
-    "publish-release": "git push origin v$npm_package_version"
+    "stage-release": "git push origin v$npm_package_version"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
-    "eslint": "^10.8.0",
-    "typescript": "^6.0.3",
-    "typescript-7": "npm:typescript@^7.0.2",
-    "typescript-eslint": "^8.66.0"
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "eslint": "^10.8.1",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript-eslint": "^8.67.0"
   },
   "dependencies": {
     "@typescript-eslint/utils": "^8.58.1"

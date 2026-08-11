@@ -1,7 +1,7 @@
 {
   "name": "eslint-plugin-angular-modern",
-  "version": "0.0.1",
-  "description": "Modern Angular lint rules for ESLint",
+  "version": "1.0.1",
+  "description": "ESLint rules for modern and safe Angular.",
   "keywords": [
     "angular",
     "eslint"
