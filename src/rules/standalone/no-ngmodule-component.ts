@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { getDecoratorProperty } from "../../utils/ast-decorator-property";
 
 export const ruleName = "no-ngmodule-component";
 const messageId = "noNgmoduleComponent";
@@ -19,29 +20,10 @@ export const ruleDefinition: RuleDefinition = {
   create(context) {
     return {
       "Decorator[expression.callee.name='Component']"(node: TSESTree.Decorator) {
-        if (node.expression.type !== AST_NODE_TYPES.CallExpression) {
-          return;
-        }
-
-        const config = node.expression.arguments[0];
+        const standalone = getDecoratorProperty(node, "standalone");
 
         if (
-          !config ||
-          config.type !== AST_NODE_TYPES.ObjectExpression
-        ) {
-          return;
-        }
-
-        const standalone = config.properties.find(
-          (property) =>
-            property.type === AST_NODE_TYPES.Property &&
-            property.key.type === AST_NODE_TYPES.Identifier &&
-            property.key.name === 'standalone',
-        );
-
-        if (
-          standalone?.type === AST_NODE_TYPES.Property &&
-          standalone.value.type === AST_NODE_TYPES.Literal &&
+          standalone?.value.type === AST_NODE_TYPES.Literal &&
           standalone.value.value === false
         ) {
           context.report({
