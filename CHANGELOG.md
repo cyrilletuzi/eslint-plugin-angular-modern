@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0 (2026-08-12)
+## 1.1.0 (not yet released)
 
 New `standalone` preset (included in `recommended`) with the following rules:
 - [no-ngmodule](./docs/standalone/NO_NGMODULE.md)
