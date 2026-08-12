@@ -9,7 +9,7 @@ export const ruleDefinition: RuleDefinition = {
   meta: {
     type: "problem",
     messages: {
-      [messageId]: `\`NgModule\` should be avoided in a standalone application, use standalone components instead.`,
+      [messageId]: `\`NgModule\` should be avoided in a standalone application, use standalone components, directives and pipes instead.`,
     },
     docs: {
       description: `Checks that \`NgModule\` is not used.`,

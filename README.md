@@ -166,7 +166,40 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 
 ### Standalone preset
 
-Coming soon, a set of rules enforcing a project to not use NgModules.
+```javascript
+{ extends: [angularModern.configs.standalone] }
+```
+
+**These rules enforce a standalone application to not use NgModules:**
+
+- [no-ngmodule](./docs/standalone/NO_NGMODULE.md)
+- [no-createngmodule](./docs/standalone/NO_CREATENGMODULE.md)
+- [no-platformbrowser](./docs/standalone/NO_PLATFORMBROWSER.md)
+- [no-platformbrowserdynamic](./docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md)
+- [no-browsermodule](./docs/standalone/NO_BROWSERMODULE.md)
+- [no-browsertestingmodule](./docs/standalone/NO_BROWSERTESTINGMODULE.md)
+- [no-applicationmodule](./docs/standalone/NO_APPLICATIONMODULE.md)
+- [no-commonmodule](./docs/standalone/NO_COMMONMODULE.md)
+- [no-routermodule](./docs/standalone/NO_ROUTERMODULE.md)
+- [no-routertestingmodule](./docs/standalone/NO_ROUTERTESTINGMODULE.md)
+- [no-httpclientmodule](./docs/standalone/NO_HTTPCLIENTMODULE.md)
+- [no-httpclientjsonpmodule](./docs/standalone/NO_HTTPCLIENTJSONPMODULE.md)
+- [no-httpclientxsrfmodule](./docs/standalone/NO_HTTPCLIENTXSRFMODULE.md)
+- [no-httpclienttestingmodule](./docs/standalone/NO_HTTPCLIENTTESTINGMODULE.md)
+- [no-browseranimationsmodule](./docs/standalone/NO_BROWSERANIMATIONSMODULE.md)
+- [no-noopanimationsmodule](./docs/standalone/NO_NOOPANIMATIONSMODULE.md)
+- [no-serviceworkermodule](./docs/standalone/NO_SERVICEWORKERMODULE.md)
+- [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
+
+--
+- [no-ngmodule-component](./docs/standalone/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](./docs/standalone/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](./docs/standalone/NO_NGMODULE_PIPE.md)
+
+- [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
+
+> [!TIP]
+> This preset should only be enabled after a project has fully migrated to standalone. Otherwise, individual rules should be enabled gradually.
 
 ## Experimental rules
 
