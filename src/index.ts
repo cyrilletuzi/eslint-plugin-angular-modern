@@ -44,6 +44,7 @@ import * as noHttpclientmodule from "./rules/standalone/no-httpclientmodule.js";
 import * as noHttpclienttestingmodule from "./rules/standalone/no-httpclienttestingmodule.js";
 import * as noHttpclientxsrfmodule from "./rules/standalone/no-httpclientxsrfmodule.js";
 import * as noMaterialModules from "./rules/standalone/no-material-modules.js";
+import * as noNgmoduleComponent from "./rules/standalone/no-ngmodule-component.js";
 import * as noNgmodule from "./rules/standalone/no-ngmodule.js";
 import * as noNoopanimationsmodule from "./rules/standalone/no-noopanimationsmodule.js";
 import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
@@ -94,6 +95,7 @@ const plugin = {
     [noHttpclienttestingmodule.ruleName]: noHttpclienttestingmodule.ruleDefinition,
     [noHttpclientxsrfmodule.ruleName]: noHttpclientxsrfmodule.ruleDefinition,
     [noMaterialModules.ruleName]: noMaterialModules.ruleDefinition,
+    [noNgmoduleComponent.ruleName]: noNgmoduleComponent.ruleDefinition,
     [noNgmodule.ruleName]: noNgmodule.ruleDefinition,
     [noNoopanimationsmodule.ruleName]: noNoopanimationsmodule.ruleDefinition,
     [noPlatformbrowser.ruleName]: noPlatformbrowser.ruleDefinition,
@@ -163,6 +165,7 @@ const standalone: ConfigObject = {
     [noHttpclientmodule.ruleName]: "error",
     [noHttpclienttestingmodule.ruleName]: "error",
     [noHttpclientxsrfmodule.ruleName]: "error",
+    [noNgmoduleComponent.ruleName]: "error",
     [noNgmodule.ruleName]: "error",
     [noNoopanimationsmodule.ruleName]: "error",
     [noPlatformbrowser.ruleName]: "error",
@@ -240,6 +243,7 @@ const recommended: ConfigObject = {
     [name]: plugin
   },
   rules: {
+    ...standalone.rules,
     ...injectionContext.rules,
     ...zoneless.rules,
     ...signals.rules,
