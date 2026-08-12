@@ -9,7 +9,7 @@ export const ruleDefinition: RuleDefinition = {
   meta: {
     type: "problem",
     messages: {
-      [messageId]: `\`CommonModule\` should be avoided in a standalone application, use the new control flow syntax instead.`,
+      [messageId]: `\`CommonModule\` should be avoided in a standalone application, use the new control flow syntax instead and standalone pipes.`,
     },
     docs: {
       description: `Checks that \`CommonModule\` is not used.`,
