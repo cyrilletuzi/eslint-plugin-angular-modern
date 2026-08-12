@@ -45,6 +45,8 @@ import * as noHttpclienttestingmodule from "./rules/standalone/no-httpclienttest
 import * as noHttpclientxsrfmodule from "./rules/standalone/no-httpclientxsrfmodule.js";
 import * as noMaterialModules from "./rules/standalone/no-material-modules.js";
 import * as noNgmoduleComponent from "./rules/standalone/no-ngmodule-component.js";
+import * as noNgmoduleDirective from "./rules/standalone/no-ngmodule-directive.js";
+import * as noNgmodulePipe from "./rules/standalone/no-ngmodule-pipe.js";
 import * as noNgmodule from "./rules/standalone/no-ngmodule.js";
 import * as noNoopanimationsmodule from "./rules/standalone/no-noopanimationsmodule.js";
 import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
@@ -96,6 +98,8 @@ const plugin = {
     [noHttpclientxsrfmodule.ruleName]: noHttpclientxsrfmodule.ruleDefinition,
     [noMaterialModules.ruleName]: noMaterialModules.ruleDefinition,
     [noNgmoduleComponent.ruleName]: noNgmoduleComponent.ruleDefinition,
+    [noNgmoduleDirective.ruleName]: noNgmoduleDirective.ruleDefinition,
+    [noNgmodulePipe.ruleName]: noNgmodulePipe.ruleDefinition,
     [noNgmodule.ruleName]: noNgmodule.ruleDefinition,
     [noNoopanimationsmodule.ruleName]: noNoopanimationsmodule.ruleDefinition,
     [noPlatformbrowser.ruleName]: noPlatformbrowser.ruleDefinition,
