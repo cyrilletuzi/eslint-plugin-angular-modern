@@ -13,8 +13,7 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`HttpClientTestingModule\` is not used.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTTESTINGMODULE.md',
-      recommended: true,
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_HTTPCLIENTTESTINGMODULE.md',
     },
     schema: [],
   },

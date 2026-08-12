@@ -19,7 +19,7 @@ Use a standalone pipe instead.
 ```
 
 > [!TIP]
-> This rule is _not_ in the `recommended` or the `standalone` presets because Angular already has the `strictStandalone` compiler option, which should be prefered. See the [documentation](../standalone/STRICT_STANDALONE.md).
+> This rule is _not_ in the `recommended` or the `standalone` presets because Angular already has the `strictStandalone` compiler option, which should be prefered. See the [documentation](./STRICT_STANDALONE.md).
 
 ## ❌ Invalid
 

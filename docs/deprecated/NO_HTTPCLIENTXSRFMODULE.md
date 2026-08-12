@@ -1,8 +1,8 @@
-# no-httpclientjsonpmodule
+# no-httpclientxsrfmodule
 
-Restrict the usage of deprecated `HttpClientJsonpModule`.
+Restrict the usage of `HttpClientXsrfModule`.
 
-It is planned for removal because of security issues; in the meantime, use `withJsonpSupport()` instead.
+Use `withXsrfConfiguration()` instead.
 
 ## Documentation
 
@@ -12,27 +12,23 @@ It is planned for removal because of security issues; in the meantime, use `with
 
 ## Configuration
 
-- in the `recommended` preset
-- in the `standalone` preset
-- or just this rule:
-
 ```json
 {
   "rules": {
-    "eslint-plugin-angular-modern/no-httpclientjsonpmodule": "error"
+    "eslint-plugin-angular-modern/no-httpclientxsrfmodule": "error"
   }
 }
 ```
 
 > [!TIP]
-> See the [README](../../README.md) for the global and presets configuration.
+> This rule is _not_ in the `recommended` or the `standalone` presets because `@typescript-eslint/no-deprecated` already reports this. See the [documentation](./DEPRECATED.md).
 
 ## ❌ Invalid
 
 ```typescript
 @NgModule({
   imports: [
-    HttpClientJsonpModule,
+    HttpClientXsrfModule,
   ],
 })
 export class AppModule {}
@@ -43,7 +39,7 @@ export class AppModule {}
 ```typescript
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withJsonpSupport()),
+    provideHttpClient(withXsrfConfiguration()),
   ],
 };
 ```

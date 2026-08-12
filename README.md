@@ -175,25 +175,19 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 - [no-ngmodule](./docs/standalone/NO_NGMODULE.md)
 - [no-createngmodule](./docs/standalone/NO_CREATENGMODULE.md)
 - [no-platformbrowser](./docs/standalone/NO_PLATFORMBROWSER.md)
-- [no-platformbrowserdynamic](./docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md)
 - [no-browsermodule](./docs/standalone/NO_BROWSERMODULE.md)
 - [no-browsertestingmodule](./docs/standalone/NO_BROWSERTESTINGMODULE.md)
 - [no-applicationmodule](./docs/standalone/NO_APPLICATIONMODULE.md)
 - [no-commonmodule](./docs/standalone/NO_COMMONMODULE.md)
 - [no-routermodule](./docs/standalone/NO_ROUTERMODULE.md)
-- [no-routertestingmodule](./docs/standalone/NO_ROUTERTESTINGMODULE.md)
-- [no-httpclientmodule](./docs/standalone/NO_HTTPCLIENTMODULE.md)
-- [no-httpclientjsonpmodule](./docs/standalone/NO_HTTPCLIENTJSONPMODULE.md)
-- [no-httpclientxsrfmodule](./docs/standalone/NO_HTTPCLIENTXSRFMODULE.md)
-- [no-httpclienttestingmodule](./docs/standalone/NO_HTTPCLIENTTESTINGMODULE.md)
-- [no-browseranimationsmodule](./docs/standalone/NO_BROWSERANIMATIONSMODULE.md)
-- [no-noopanimationsmodule](./docs/standalone/NO_NOOPANIMATIONSMODULE.md)
 - [no-serviceworkermodule](./docs/standalone/NO_SERVICEWORKERMODULE.md)
 - [no-servermodule](./docs/standalone/NO_SERVERMODULE.md)
 - [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
 
 > [!TIP]
-> To fully enforce standalone, the `strictStandalone` Angular compiler option should be enabled too. See the [documentation](./docs/standalone/STRICT_STANDALONE.md).
+> To fully enforce standalone, 2 other check must be enabled too:
+> - the `strictStandalone` Angular compiler option: [documentation](./docs/standalone-strict/STRICT_STANDALONE.md)
+> - the `@typescript-eslint/no-deprecated` rule: [documentation](./docs/deprecated/DEPRECATED.md)
 
 #### Libraries modules
 
@@ -201,14 +195,30 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 - [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
 
-## Experimental rules
+## Other rules
+
+### Rules already reported by `strictStandalone`
+
+- [no-ngmodule-component](./docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](./docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](./docs/standalone-strict/NO_NGMODULE_PIPE.md)
+
+### Rules already reported by `@typescript-eslint/no-deprecated`
+
+- [no-platformbrowserdynamic](./docs/deprecated/NO_PLATFORMBROWSERDYNAMIC.md)
+- [no-routertestingmodule](./docs/deprecated/NO_ROUTERTESTINGMODULE.md)
+- [no-httpclientmodule](./docs/deprecated/NO_HTTPCLIENTMODULE.md)
+- [no-httpclientjsonpmodule](./docs/deprecated/NO_HTTPCLIENTJSONPMODULE.md)
+- [no-httpclientxsrfmodule](./docs/deprecated/NO_HTTPCLIENTXSRFMODULE.md)
+- [no-httpclienttestingmodule](./docs/deprecated/NO_HTTPCLIENTTESTINGMODULE.md)
+- [no-browseranimationsmodule](./docs/deprecated/NO_BROWSERANIMATIONSMODULE.md)
+- [no-noopanimationsmodule](./docs/deprecated/NO_NOOPANIMATIONSMODULE.md)
+
+### Experimental
 
 Rules still being tested, not included in any preset.
 
-- [no-ngmodule-component](./docs/experimental/NO_NGMODULE_COMPONENT.md)
-- [no-ngmodule-directive](./docs/experimental/NO_NGMODULE_DIRECTIVE.md)
-- [no-ngmodule-pipe](./docs/experimental/NO_NGMODULE_PIPE.md)
-- [no-subscribe-in-component-constructor](./docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
+- [no-subscribe-in-component-constructor](./docs/deprecated/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
 
 ## FAQ
 

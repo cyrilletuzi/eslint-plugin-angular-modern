@@ -12,10 +12,6 @@ Use `provideRouter()` instead.
 
 ## Configuration
 
-- in the `recommended` preset
-- in the `standalone` preset
-- or just this rule:
-
 ```json
 {
   "rules": {
@@ -25,7 +21,7 @@ Use `provideRouter()` instead.
 ```
 
 > [!TIP]
-> See the [README](../../README.md) for the global and presets configuration.
+> This rule is _not_ in the `recommended` or the `standalone` presets because `@typescript-eslint/no-deprecated` already reports this. See the [documentation](./DEPRECATED.md).
 
 ## ❌ Invalid
 

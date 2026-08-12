@@ -13,8 +13,7 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`NoopAnimationsModule\` is not used.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NOOPANIMATIONSMODULE.md',
-      recommended: true,
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_NOOPANIMATIONSMODULE.md',
     },
     schema: [],
   },
