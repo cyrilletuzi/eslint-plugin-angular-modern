@@ -191,20 +191,22 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 - [no-serviceworkermodule](./docs/standalone/NO_SERVICEWORKERMODULE.md)
 - [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
 
---
-- [no-ngmodule-component](./docs/standalone/NO_NGMODULE_COMPONENT.md)
-- [no-ngmodule-directive](./docs/standalone/NO_NGMODULE_DIRECTIVE.md)
-- [no-ngmodule-pipe](./docs/standalone/NO_NGMODULE_PIPE.md)
+> [!TIP]
+> To fully enforce standalone, the `strictStandalone` Angular compiler option should be enabled too. See the [documentation](./docs/standalone/STRICT_STANDALONE.md).
+
+#### Libraries modules
+
+Additional individual rules, _not_ included in the preset, are available for some libraries:
 
 - [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
-
-> [!TIP]
-> This preset should only be enabled after a project has fully migrated to standalone. Otherwise, individual rules should be enabled gradually.
 
 ## Experimental rules
 
 Rules still being tested, not included in any preset.
 
+- [no-ngmodule-component](./docs/experimental/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](./docs/experimental/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](./docs/experimental/NO_NGMODULE_PIPE.md)
 - [no-subscribe-in-component-constructor](./docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
 
 ## FAQ

@@ -14,7 +14,6 @@ export const ruleDefinition: RuleDefinition = {
     docs: {
       description: `Checks that Material modules are not used.`,
       url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_MATERIAL_MODULES.md',
-      recommended: true,
     },
     schema: [],
   },

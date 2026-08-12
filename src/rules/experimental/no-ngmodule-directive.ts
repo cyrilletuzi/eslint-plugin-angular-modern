@@ -13,7 +13,7 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`standalone: false\` is not used in a directive.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_DIRECTIVE.md',
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/experimental/NO_NGMODULE_DIRECTIVE.md',
     },
     schema: [],
   },
