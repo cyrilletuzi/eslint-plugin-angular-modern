@@ -33,6 +33,25 @@ import * as noNgoninit from "./rules/signals/no-ngoninit.js";
 import * as noOutputDecorator from "./rules/signals/no-output-decorator.js";
 import * as noReactiveForms from "./rules/signals/no-reactive-forms.js";
 import * as noViewDecorator from "./rules/signals/no-view-decorator.js";
+import * as noApplicationmodule from "./rules/standalone/no-applicationmodule.js";
+import * as noBrowseranimationsmodule from "./rules/standalone/no-browseranimationsmodule.js";
+import * as noBrowsermodule from "./rules/standalone/no-browsermodule.js";
+import * as noBrowsertestingmodule from "./rules/standalone/no-browsertestingmodule.js";
+import * as noCommonmodule from "./rules/standalone/no-commonmodule.js";
+import * as noCreatengmodule from "./rules/standalone/no-createngmodule.js";
+import * as noHttpclientjsonpmodule from "./rules/standalone/no-httpclientjsonpmodule.js";
+import * as noHttpclientmodule from "./rules/standalone/no-httpclientmodule.js";
+import * as noHttpclienttestingmodule from "./rules/standalone/no-httpclienttestingmodule.js";
+import * as noHttpclientxsrfmodule from "./rules/standalone/no-httpclientxsrfmodule.js";
+import * as noMaterialModules from "./rules/standalone/no-material-modules.js";
+import * as noNgmodule from "./rules/standalone/no-ngmodule.js";
+import * as noNoopanimationsmodule from "./rules/standalone/no-noopanimationsmodule.js";
+import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
+import * as noPlatformbrowserdynamic from "./rules/standalone/no-platformbrowserdynamic.js";
+import * as noRoutermodule from "./rules/standalone/no-routermodule.js";
+import * as noRoutertestingmodule from "./rules/standalone/no-routertestingmodule.js";
+import * as noServiceworkermodule from "./rules/standalone/no-serviceworkermodule.js";
+import * as noWithmoduleTesting from "./rules/standalone/no-withmodule-testing.js";
 import * as noNgzoneTesting from "./rules/zoneless/no-ngzone-testing.js";
 import * as noNgzone from "./rules/zoneless/no-ngzone.js";
 import * as noProvidezonechangedetection from "./rules/zoneless/no-providezonechangedetection.js";
@@ -45,6 +64,9 @@ const { name, version } =
 
 const plugin = {
   configs: {
+    get standalone() {
+      return standalone;
+    },
     get injectionContext() {
       return injectionContext;
     },
@@ -60,6 +82,26 @@ const plugin = {
   },
   meta: { name, version },
   rules: {
+    // Standalone
+    [noApplicationmodule.ruleName]: noApplicationmodule.ruleDefinition,
+    [noBrowseranimationsmodule.ruleName]: noBrowseranimationsmodule.ruleDefinition,
+    [noBrowsermodule.ruleName]: noBrowsermodule.ruleDefinition,
+    [noBrowsertestingmodule.ruleName]: noBrowsertestingmodule.ruleDefinition,
+    [noCommonmodule.ruleName]: noCommonmodule.ruleDefinition,
+    [noCreatengmodule.ruleName]: noCreatengmodule.ruleDefinition,
+    [noHttpclientjsonpmodule.ruleName]: noHttpclientjsonpmodule.ruleDefinition,
+    [noHttpclientmodule.ruleName]: noHttpclientmodule.ruleDefinition,
+    [noHttpclienttestingmodule.ruleName]: noHttpclienttestingmodule.ruleDefinition,
+    [noHttpclientxsrfmodule.ruleName]: noHttpclientxsrfmodule.ruleDefinition,
+    [noMaterialModules.ruleName]: noMaterialModules.ruleDefinition,
+    [noNgmodule.ruleName]: noNgmodule.ruleDefinition,
+    [noNoopanimationsmodule.ruleName]: noNoopanimationsmodule.ruleDefinition,
+    [noPlatformbrowser.ruleName]: noPlatformbrowser.ruleDefinition,
+    [noPlatformbrowserdynamic.ruleName]: noPlatformbrowserdynamic.ruleDefinition,
+    [noRoutermodule.ruleName]: noRoutermodule.ruleDefinition,
+    [noRoutertestingmodule.ruleName]: noRoutertestingmodule.ruleDefinition,
+    [noServiceworkermodule.ruleName]: noServiceworkermodule.ruleDefinition,
+    [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
     // Injection context
     [injectInInjectionContext.ruleName]: injectInInjectionContext.ruleDefinition,
     [injectAsyncInInjectionContext.ruleName]: injectAsyncInInjectionContext.ruleDefinition,
@@ -105,6 +147,32 @@ const plugin = {
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
 } satisfies Plugin;
+
+const standalone: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [noApplicationmodule.ruleName]: "error",
+    [noBrowseranimationsmodule.ruleName]: "error",
+    [noBrowsermodule.ruleName]: "error",
+    [noBrowsertestingmodule.ruleName]: "error",
+    [noCommonmodule.ruleName]: "error",
+    [noCreatengmodule.ruleName]: "error",
+    [noHttpclientjsonpmodule.ruleName]: "error",
+    [noHttpclientmodule.ruleName]: "error",
+    [noHttpclienttestingmodule.ruleName]: "error",
+    [noHttpclientxsrfmodule.ruleName]: "error",
+    [noNgmodule.ruleName]: "error",
+    [noNoopanimationsmodule.ruleName]: "error",
+    [noPlatformbrowser.ruleName]: "error",
+    [noPlatformbrowserdynamic.ruleName]: "error",
+    [noRoutermodule.ruleName]: "error",
+    [noRoutertestingmodule.ruleName]: "error",
+    [noServiceworkermodule.ruleName]: "error",
+    [noWithmoduleTesting.ruleName]: "error",
+  },
+};
 
 const injectionContext: ConfigObject = {
   plugins: {
