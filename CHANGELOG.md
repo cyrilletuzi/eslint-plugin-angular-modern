@@ -2,7 +2,7 @@
 
 ## 1.1.0 (not yet released)
 
-New `standalone` preset (included in `recommended`) with the following rules:
+New `standalone` preset (included in `recommended`) with the following new rules:
 - [no-ngmodule](./docs/standalone/NO_NGMODULE.md)
 - [no-createngmodule](./docs/standalone/NO_CREATENGMODULE.md)
 - [no-platformbrowser](./docs/standalone/NO_PLATFORMBROWSER.md)
@@ -15,7 +15,7 @@ New `standalone` preset (included in `recommended`) with the following rules:
 - [no-servermodule](./docs/standalone/NO_SERVERMODULE.md)
 - [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
 
-Related rule not in the preset:
+New related rules not in the preset:
 - [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
 - [no-ngmodule-component](./docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
 - [no-ngmodule-directive](./docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
