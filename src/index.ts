@@ -53,6 +53,7 @@ import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
 import * as noPlatformbrowserdynamic from "./rules/standalone/no-platformbrowserdynamic.js";
 import * as noRoutermodule from "./rules/standalone/no-routermodule.js";
 import * as noRoutertestingmodule from "./rules/standalone/no-routertestingmodule.js";
+import * as noServermodule from "./rules/standalone/no-servermodule.js";
 import * as noServiceworkermodule from "./rules/standalone/no-serviceworkermodule.js";
 import * as noWithmoduleTesting from "./rules/standalone/no-withmodule-testing.js";
 import * as noNgzoneTesting from "./rules/zoneless/no-ngzone-testing.js";
@@ -104,6 +105,7 @@ const plugin = {
     [noRoutermodule.ruleName]: noRoutermodule.ruleDefinition,
     [noRoutertestingmodule.ruleName]: noRoutertestingmodule.ruleDefinition,
     [noServiceworkermodule.ruleName]: noServiceworkermodule.ruleDefinition,
+    [noServermodule.ruleName]: noServermodule.ruleDefinition,
     [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
     // Injection context
     [injectInInjectionContext.ruleName]: injectInInjectionContext.ruleDefinition,
@@ -176,6 +178,7 @@ const standalone: ConfigObject = {
     [`${name}/${noRoutermodule.ruleName}`]: "error",
     [`${name}/${noRoutertestingmodule.ruleName}`]: "error",
     [`${name}/${noServiceworkermodule.ruleName}`]: "error",
+    [`${name}/${noServermodule.ruleName}`]: "error",
     [`${name}/${noWithmoduleTesting.ruleName}`]: "error",
   },
 };

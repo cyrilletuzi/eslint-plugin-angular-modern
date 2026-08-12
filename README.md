@@ -189,6 +189,7 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 - [no-browseranimationsmodule](./docs/standalone/NO_BROWSERANIMATIONSMODULE.md)
 - [no-noopanimationsmodule](./docs/standalone/NO_NOOPANIMATIONSMODULE.md)
 - [no-serviceworkermodule](./docs/standalone/NO_SERVICEWORKERMODULE.md)
+- [no-servermodule](./docs/standalone/NO_SERVERMODULE.md)
 - [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
 
 > [!TIP]
