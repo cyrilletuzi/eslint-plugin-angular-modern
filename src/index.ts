@@ -1,4 +1,12 @@
 import type { ConfigObject, Plugin } from "@eslint/core";
+import * as noBrowseranimationsmodule from "./rules/deprecated/no-browseranimationsmodule.js";
+import * as noHttpclientjsonpmodule from "./rules/deprecated/no-httpclientjsonpmodule.js";
+import * as noHttpclientmodule from "./rules/deprecated/no-httpclientmodule.js";
+import * as noHttpclienttestingmodule from "./rules/deprecated/no-httpclienttestingmodule.js";
+import * as noHttpclientxsrfmodule from "./rules/deprecated/no-httpclientxsrfmodule.js";
+import * as noNoopanimationsmodule from "./rules/deprecated/no-noopanimationsmodule.js";
+import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowserdynamic.js";
+import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
 import * as afterEveryRenderInInjectionContext from "./rules/injection-context/after-every-render-in-injection-context.js";
 import * as afterNextRenderInInjectionContext from "./rules/injection-context/after-next-render-in-injection-context.js";
@@ -33,6 +41,21 @@ import * as noNgoninit from "./rules/signals/no-ngoninit.js";
 import * as noOutputDecorator from "./rules/signals/no-output-decorator.js";
 import * as noReactiveForms from "./rules/signals/no-reactive-forms.js";
 import * as noViewDecorator from "./rules/signals/no-view-decorator.js";
+import * as noNgmoduleComponent from "./rules/standalone-strict/no-ngmodule-component.js";
+import * as noNgmoduleDirective from "./rules/standalone-strict/no-ngmodule-directive.js";
+import * as noNgmodulePipe from "./rules/standalone-strict/no-ngmodule-pipe.js";
+import * as noApplicationmodule from "./rules/standalone/no-applicationmodule.js";
+import * as noBrowsermodule from "./rules/standalone/no-browsermodule.js";
+import * as noBrowsertestingmodule from "./rules/standalone/no-browsertestingmodule.js";
+import * as noCommonmodule from "./rules/standalone/no-commonmodule.js";
+import * as noCreatengmodule from "./rules/standalone/no-createngmodule.js";
+import * as noMaterialModules from "./rules/standalone/no-material-modules.js";
+import * as noNgmodule from "./rules/standalone/no-ngmodule.js";
+import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
+import * as noRoutermodule from "./rules/standalone/no-routermodule.js";
+import * as noServermodule from "./rules/standalone/no-servermodule.js";
+import * as noServiceworkermodule from "./rules/standalone/no-serviceworkermodule.js";
+import * as noWithmoduleTesting from "./rules/standalone/no-withmodule-testing.js";
 import * as noNgzoneTesting from "./rules/zoneless/no-ngzone-testing.js";
 import * as noNgzone from "./rules/zoneless/no-ngzone.js";
 import * as noProvidezonechangedetection from "./rules/zoneless/no-providezonechangedetection.js";
@@ -45,6 +68,9 @@ const { name, version } =
 
 const plugin = {
   configs: {
+    get standalone() {
+      return standalone;
+    },
     get injectionContext() {
       return injectionContext;
     },
@@ -60,6 +86,19 @@ const plugin = {
   },
   meta: { name, version },
   rules: {
+    // Standalone
+    [noApplicationmodule.ruleName]: noApplicationmodule.ruleDefinition,
+    [noBrowsermodule.ruleName]: noBrowsermodule.ruleDefinition,
+    [noBrowsertestingmodule.ruleName]: noBrowsertestingmodule.ruleDefinition,
+    [noCommonmodule.ruleName]: noCommonmodule.ruleDefinition,
+    [noCreatengmodule.ruleName]: noCreatengmodule.ruleDefinition,
+    [noMaterialModules.ruleName]: noMaterialModules.ruleDefinition,
+    [noNgmodule.ruleName]: noNgmodule.ruleDefinition,
+    [noPlatformbrowser.ruleName]: noPlatformbrowser.ruleDefinition,
+    [noRoutermodule.ruleName]: noRoutermodule.ruleDefinition,
+    [noServiceworkermodule.ruleName]: noServiceworkermodule.ruleDefinition,
+    [noServermodule.ruleName]: noServermodule.ruleDefinition,
+    [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
     // Injection context
     [injectInInjectionContext.ruleName]: injectInInjectionContext.ruleDefinition,
     [injectAsyncInInjectionContext.ruleName]: injectAsyncInInjectionContext.ruleDefinition,
@@ -101,10 +140,42 @@ const plugin = {
     [noDetectchangesTesting.ruleName]: noDetectchangesTesting.ruleDefinition,
     [noChangedetectorref.ruleName]: noChangedetectorref.ruleDefinition,
     [noReactiveForms.ruleName]: noReactiveForms.ruleDefinition,
+    // Strict standalone
+    [noNgmoduleComponent.ruleName]: noNgmoduleComponent.ruleDefinition,
+    [noNgmoduleDirective.ruleName]: noNgmoduleDirective.ruleDefinition,
+    [noNgmodulePipe.ruleName]: noNgmodulePipe.ruleDefinition,
+    // Deprecated
+    [noPlatformbrowserdynamic.ruleName]: noPlatformbrowserdynamic.ruleDefinition,
+    [noRoutertestingmodule.ruleName]: noRoutertestingmodule.ruleDefinition,
+    [noHttpclientjsonpmodule.ruleName]: noHttpclientjsonpmodule.ruleDefinition,
+    [noHttpclientmodule.ruleName]: noHttpclientmodule.ruleDefinition,
+    [noHttpclienttestingmodule.ruleName]: noHttpclienttestingmodule.ruleDefinition,
+    [noHttpclientxsrfmodule.ruleName]: noHttpclientxsrfmodule.ruleDefinition,
+    [noBrowseranimationsmodule.ruleName]: noBrowseranimationsmodule.ruleDefinition,
+    [noNoopanimationsmodule.ruleName]: noNoopanimationsmodule.ruleDefinition,
     // Experimental
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
 } satisfies Plugin;
+
+const standalone: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noApplicationmodule.ruleName}`]: "error",
+    [`${name}/${noBrowsermodule.ruleName}`]: "error",
+    [`${name}/${noBrowsertestingmodule.ruleName}`]: "error",
+    [`${name}/${noCommonmodule.ruleName}`]: "error",
+    [`${name}/${noCreatengmodule.ruleName}`]: "error",
+    [`${name}/${noNgmodule.ruleName}`]: "error",
+    [`${name}/${noPlatformbrowser.ruleName}`]: "error",
+    [`${name}/${noRoutermodule.ruleName}`]: "error",
+    [`${name}/${noServiceworkermodule.ruleName}`]: "error",
+    [`${name}/${noServermodule.ruleName}`]: "error",
+    [`${name}/${noWithmoduleTesting.ruleName}`]: "error",
+  },
+};
 
 const injectionContext: ConfigObject = {
   plugins: {
@@ -172,6 +243,7 @@ const recommended: ConfigObject = {
     [name]: plugin
   },
   rules: {
+    ...standalone.rules,
     ...injectionContext.rules,
     ...zoneless.rules,
     ...signals.rules,

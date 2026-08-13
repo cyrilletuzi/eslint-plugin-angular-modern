@@ -166,11 +166,63 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 
 ### Standalone preset
 
-Coming soon, a set of rules enforcing a project to not use NgModules.
+```javascript
+{ extends: [angularModern.configs.standalone] }
+```
 
-## Experimental rules
+**These rules enforce a standalone application to not use NgModules:**
 
-Rules still being tested, not included in any preset.
+- [no-ngmodule](./docs/standalone/NO_NGMODULE.md)
+- [no-createngmodule](./docs/standalone/NO_CREATENGMODULE.md)
+- [no-platformbrowser](./docs/standalone/NO_PLATFORMBROWSER.md)
+- [no-browsermodule](./docs/standalone/NO_BROWSERMODULE.md)
+- [no-browsertestingmodule](./docs/standalone/NO_BROWSERTESTINGMODULE.md)
+- [no-applicationmodule](./docs/standalone/NO_APPLICATIONMODULE.md)
+- [no-commonmodule](./docs/standalone/NO_COMMONMODULE.md)
+- [no-routermodule](./docs/standalone/NO_ROUTERMODULE.md)
+- [no-serviceworkermodule](./docs/standalone/NO_SERVICEWORKERMODULE.md)
+- [no-servermodule](./docs/standalone/NO_SERVERMODULE.md)
+- [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
+
+> [!TIP]
+> To fully enforce standalone, 2 other check must be enabled too:
+> - the `strictStandalone` Angular compiler option: [documentation](./docs/standalone-strict/STRICT_STANDALONE.md)
+> - the `@typescript-eslint/no-deprecated` rule: [documentation](./docs/deprecated/DEPRECATED.md)
+
+#### Libraries modules
+
+Additional individual rules, _not_ included in the preset, are available for some libraries:
+
+- [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
+
+## Other rules
+
+The following invidiual rules are _not_ in presets.
+
+### Rules already reported by `strictStandalone`
+
+See [the documentation](./docs/standalone-strict/STRICT_STANDALONE.md) to enable Angular `strictStandalone` compiler option.
+
+- [no-ngmodule-component](./docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](./docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](./docs/standalone-strict/NO_NGMODULE_PIPE.md)
+
+### Rules already reported by `@typescript-eslint/no-deprecated`
+
+See [the documentation](./docs/deprecated/DEPRECATED.md) to enable `@typescript-eslint/no-deprecated` rule.
+
+- [no-platformbrowserdynamic](./docs/deprecated/NO_PLATFORMBROWSERDYNAMIC.md)
+- [no-routertestingmodule](./docs/deprecated/NO_ROUTERTESTINGMODULE.md)
+- [no-httpclientmodule](./docs/deprecated/NO_HTTPCLIENTMODULE.md)
+- [no-httpclientjsonpmodule](./docs/deprecated/NO_HTTPCLIENTJSONPMODULE.md)
+- [no-httpclientxsrfmodule](./docs/deprecated/NO_HTTPCLIENTXSRFMODULE.md)
+- [no-httpclienttestingmodule](./docs/deprecated/NO_HTTPCLIENTTESTINGMODULE.md)
+- [no-browseranimationsmodule](./docs/deprecated/NO_BROWSERANIMATIONSMODULE.md)
+- [no-noopanimationsmodule](./docs/deprecated/NO_NOOPANIMATIONSMODULE.md)
+
+### Experimental
+
+Rules still being tested.
 
 - [no-subscribe-in-component-constructor](./docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
 

@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.1.0 (not yet released)
+
+New `standalone` preset (included in `recommended`) with the following new rules:
+- [no-ngmodule](./docs/standalone/NO_NGMODULE.md)
+- [no-createngmodule](./docs/standalone/NO_CREATENGMODULE.md)
+- [no-platformbrowser](./docs/standalone/NO_PLATFORMBROWSER.md)
+- [no-browsermodule](./docs/standalone/NO_BROWSERMODULE.md)
+- [no-browsertestingmodule](./docs/standalone/NO_BROWSERTESTINGMODULE.md)
+- [no-applicationmodule](./docs/standalone/NO_APPLICATIONMODULE.md)
+- [no-commonmodule](./docs/standalone/NO_COMMONMODULE.md)
+- [no-routermodule](./docs/standalone/NO_ROUTERMODULE.md)
+- [no-serviceworkermodule](./docs/standalone/NO_SERVICEWORKERMODULE.md)
+- [no-servermodule](./docs/standalone/NO_SERVERMODULE.md)
+- [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
+
+New related rules not in the preset:
+- [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
+- [no-ngmodule-component](./docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](./docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](./docs/standalone-strict/NO_NGMODULE_PIPE.md)
+- [no-platformbrowserdynamic](./docs/deprecated/NO_PLATFORMBROWSERDYNAMIC.md)
+- [no-routertestingmodule](./docs/deprecated/NO_ROUTERTESTINGMODULE.md)
+- [no-httpclientmodule](./docs/deprecated/NO_HTTPCLIENTMODULE.md)
+- [no-httpclientjsonpmodule](./docs/deprecated/NO_HTTPCLIENTJSONPMODULE.md)
+- [no-httpclientxsrfmodule](./docs/deprecated/NO_HTTPCLIENTXSRFMODULE.md)
+- [no-browseranimationsmodule](./docs/deprecated/NO_BROWSERANIMATIONSMODULE.md)
+- [no-noopanimationsmodule](./docs/deprecated/NO_NOOPANIMATIONSMODULE.md)
+- [no-httpclienttestingmodule](./docs/deprecated/NO_HTTPCLIENTTESTINGMODULE.md)
+
 ## 1.0.1 (2026-08-10)
 
 Initial release with these rules:
