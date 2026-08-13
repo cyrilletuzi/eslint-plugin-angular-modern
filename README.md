@@ -72,13 +72,13 @@ If coming from `angular-eslint-injection-context` or `angular-eslint-zoneless` l
 { extends: [angularModern.configs.recommended] }
 ```
 
-**The recommended preset enables all the rules** of all the categories presets below. It is the recommended preset for:
+**The recommended preset enables all the rules** of all the features presets below. It is the recommended preset for:
 - new projects
 - projects already fully migrated to modern Angular
 
-## Categories presets
+## Features presets
 
-A category preset enables the rules of a specific set of features. It is recommended for projects only partially migrated to modern Angular.
+A feature preset enables the rules for a specific set of features. It is recommended for projects only partially migrated to modern Angular.
 
 ### Injection context preset
 
