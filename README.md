@@ -185,7 +185,7 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 - [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
 
 > [!TIP]
-> To fully enforce standalone, 2 other check must be enabled too:
+> To fully enforce standalone, 2 other checks must be enabled too:
 > - the `strictStandalone` Angular compiler option: [documentation](./docs/standalone-strict/STRICT_STANDALONE.md)
 > - the `@typescript-eslint/no-deprecated` rule: [documentation](./docs/deprecated/DEPRECATED.md)
 
