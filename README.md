@@ -224,7 +224,7 @@ See [the documentation](./docs/deprecated/DEPRECATED.md) to enable `@typescript-
 
 Rules still being tested.
 
-- [no-subscribe-in-component-constructor](./docs/deprecated/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
+- [no-subscribe-in-component-constructor](./docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
 
 ## FAQ
 
