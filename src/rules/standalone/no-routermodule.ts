@@ -9,7 +9,7 @@ export const ruleDefinition: RuleDefinition = {
   meta: {
     type: "problem",
     messages: {
-      [messageId]: `\`RouterModule\` should be avoided in a standalone application, use \`provideRouter()\` instead.`,
+      [messageId]: `\`RouterModule\` should be avoided in a standalone application, use \`provideRouter()\` or \`RouterLink\` instead.`,
     },
     docs: {
       description: `Checks that \`RouterModule\` is not used.`,

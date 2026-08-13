@@ -2,13 +2,14 @@
 
 Restrict the usage of `RouterModule`.
 
-Use `provideRouter()` instead.
+Use `provideRouter()` or `RouterLink` instead.
 
 ## Documentation
 
 - [Standalone migration](https://angular.dev/reference/migrations/standalone)
 - [Routing guide](https://angular.dev/guide/routing)
 - [`provideRouter` API reference](https://angular.dev/api/router/provideRouter)
+- [`RouterLink` API reference](https://angular.dev/api/router/RouterLink)
 
 ## Configuration
 
@@ -38,6 +39,16 @@ Use `provideRouter()` instead.
 export class AppModule {}
 ```
 
+```typescript
+@Component({
+  imports: [RouterModule],
+  template: `
+    <a routerLink="/path/to/some/page">Link</a>
+  `,
+})
+export class SomeComponent {}
+```
+
 ## ✅ Valid
 
 ```typescript
@@ -46,6 +57,16 @@ export const appConfig: ApplicationConfig = {
     provideRouter([{ path: 'home', component: HomeComponent }]),
   ],
 };
+```
+
+```typescript
+@Component({
+  imports: [RouterLink],
+  template: `
+    <a routerLink="/path/to/some/page">Link</a>
+  `,
+})
+export class SomeComponent {}
 ```
 
 [Back to README](../../README.md)
