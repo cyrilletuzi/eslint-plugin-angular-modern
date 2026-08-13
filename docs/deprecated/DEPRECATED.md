@@ -1,25 +1,19 @@
 # Deprecated
 
-For performance, to avoid redundant checks, this library presets do not enable the rules for deprecated features, which can already be reported by `@typescript-eslint/no-deprecated`:
+For performance, to avoid redundant checks, this library presets do not enable the rules reporting deprecated features, which can already be reported by `@typescript-eslint/no-deprecated`:
 
 ```javascript
-const eslint = require('@eslint/js');
-const { defineConfig } = require('eslint/config');
 const tsEslint = require('typescript-eslint');
-const angularModern = require('eslint-plugin-angular-modern');
 
 module.exports = defineConfig({
   files: ['**/*.ts'],
   languageOptions: {
     parserOptions: {
-      projectService: true,
+      projectService: true, // ⬅️ required
     },
   },
   extends: [
-    eslint.configs.recommended,
-    tsEslint.configs.strictTypeChecked,
-    tsEslint.configs.stylisticTypeChecked,
-    angularModern.configs.recommended,
+    tsEslint.configs.recommendedTypeChecked, // or `strictTypeChecked`
   ],
   rules: {
     '@typescript-eslint/no-deprecated': 'error' // ⬅️

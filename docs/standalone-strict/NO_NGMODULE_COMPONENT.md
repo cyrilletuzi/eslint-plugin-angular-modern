@@ -19,7 +19,7 @@ Use a standalone component instead.
 ```
 
 > [!TIP]
-> This rule is _not_ in the `recommended` or the `standalone` presets because Angular already has the `strictStandalone` compiler option, which should be prefered. See the [documentation](./STRICT_STANDALONE.md).
+> This rule is _not_ in the `recommended` or the `standalone` presets because Angular `strictStandalone` compiler option already reports this. See the [documentation](./STRICT_STANDALONE.md).
 
 ## ❌ Invalid
 

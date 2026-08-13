@@ -197,13 +197,19 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 ## Other rules
 
+The following invidiual rules are _not_ in presets.
+
 ### Rules already reported by `strictStandalone`
+
+See [the documentation](./docs/standalone-strict/STRICT_STANDALONE.md) to enable Angular `strictStandalone` compiler option.
 
 - [no-ngmodule-component](./docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
 - [no-ngmodule-directive](./docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
 - [no-ngmodule-pipe](./docs/standalone-strict/NO_NGMODULE_PIPE.md)
 
 ### Rules already reported by `@typescript-eslint/no-deprecated`
+
+See [the documentation](./docs/deprecated/DEPRECATED.md) to enable `@typescript-eslint/no-deprecated` rule.
 
 - [no-platformbrowserdynamic](./docs/deprecated/NO_PLATFORMBROWSERDYNAMIC.md)
 - [no-routertestingmodule](./docs/deprecated/NO_ROUTERTESTINGMODULE.md)
@@ -216,7 +222,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 ### Experimental
 
-Rules still being tested, not included in any preset.
+Rules still being tested.
 
 - [no-subscribe-in-component-constructor](./docs/deprecated/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
 
