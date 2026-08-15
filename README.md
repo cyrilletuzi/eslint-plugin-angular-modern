@@ -201,6 +201,17 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 - [no-ngclass](./docs/styling-bindings/NO_NGCLASS.md)
 - [no-ngstyle](./docs/styling-bindings/NO_NGSTYLE.md)
 
+### Host bindings preset
+
+```javascript
+{ extends: [angularModern.configs.hostBindings] }
+```
+
+**These rules enforce typed checked host bindings:**
+
+- [no-hostbinding-decorator](./docs/host-bindings/NO_HOSTBINDING_DECORATOR.md)
+- [no-hostlistener-decorator](./docs/host-bindings/NO_HOSTLISTENER_DECORATOR.md)
+
 #### Libraries modules
 
 Additional individual rules, _not_ included in the preset, are available for some libraries:

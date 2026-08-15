@@ -8,6 +8,8 @@ import * as noNoopanimationsmodule from "./rules/deprecated/no-noopanimationsmod
 import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowserdynamic.js";
 import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
+import * as noHostbindingDecorator from "./rules/host-bindings/no-hostbinding-decorator.js";
+import * as noHostlistenerDecorator from "./rules/host-bindings/no-hostlistener-decorator.js";
 import * as afterEveryRenderInInjectionContext from "./rules/injection-context/after-every-render-in-injection-context.js";
 import * as afterNextRenderInInjectionContext from "./rules/injection-context/after-next-render-in-injection-context.js";
 import * as afterRenderEffectInInjectionContext from "./rules/injection-context/after-render-effect-in-injection-context.js";
@@ -77,6 +79,9 @@ const plugin = {
     get stylingBindings() {
       return stylingBindings;
     },
+    get hostBindings() {
+      return hostBindings;
+    },
     get injectionContext() {
       return injectionContext;
     },
@@ -108,6 +113,9 @@ const plugin = {
     // Styling bindings
     [noNgclass.ruleName]: noNgclass.ruleDefinition,
     [noNgstyle.ruleName]: noNgstyle.ruleDefinition,
+    // Host bindings
+    [noHostbindingDecorator.ruleName]: noHostbindingDecorator.ruleDefinition,
+    [noHostlistenerDecorator.ruleName]: noHostlistenerDecorator.ruleDefinition,
     // Injection context
     [injectInInjectionContext.ruleName]: injectInInjectionContext.ruleDefinition,
     [injectAsyncInInjectionContext.ruleName]: injectAsyncInInjectionContext.ruleDefinition,
@@ -197,6 +205,16 @@ const stylingBindings: ConfigObject = {
   },
 };
 
+const hostBindings: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noHostbindingDecorator.ruleName}`]: "error",
+    [`${name}/${noHostlistenerDecorator.ruleName}`]: "error",
+  },
+};
+
 const injectionContext: ConfigObject = {
   plugins: {
     [name]: plugin
@@ -266,6 +284,7 @@ const recommended: ConfigObject = {
   rules: {
     ...standalone.rules,
     ...stylingBindings.rules,
+    ...hostBindings.rules,
     ...injectionContext.rules,
     ...zoneless.rules,
     ...signals.rules,
