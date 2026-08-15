@@ -23,6 +23,7 @@ import * as takeUntilDestroyedInInjectionContext from "./rules/injection-context
 import * as toObservableInInjectionContext from "./rules/injection-context/to-observable-in-injection-context.js";
 import * as toSignalInInjectionContext from "./rules/injection-context/to-signal-in-injection-context.js";
 import * as noAsyncpipe from "./rules/signals/no-asyncpipe.js";
+import * as noAttributeDecorator from "./rules/signals/no-attribute-decorator.js";
 import * as noChangedetectorref from "./rules/signals/no-changedetectorref.js";
 import * as noContentDecorator from "./rules/signals/no-content-decorator.js";
 import * as noDetectchangesTesting from "./rules/signals/no-detectchanges-testing.js";
@@ -136,6 +137,7 @@ const plugin = {
     [noOutputDecorator.ruleName]: noOutputDecorator.ruleDefinition,
     [noContentDecorator.ruleName]: noContentDecorator.ruleDefinition,
     [noViewDecorator.ruleName]: noViewDecorator.ruleDefinition,
+    [noAttributeDecorator.ruleName]: noAttributeDecorator.ruleDefinition,
     [noAsyncpipe.ruleName]: noAsyncpipe.ruleDefinition,
     [noDetectchangesTesting.ruleName]: noDetectchangesTesting.ruleDefinition,
     [noChangedetectorref.ruleName]: noChangedetectorref.ruleDefinition,
@@ -231,6 +233,7 @@ const signals: ConfigObject = {
     [`${name}/${noOutputDecorator.ruleName}`]: "error",
     [`${name}/${noContentDecorator.ruleName}`]: "error",
     [`${name}/${noViewDecorator.ruleName}`]: "error",
+    [`${name}/${noAttributeDecorator.ruleName}`]: "error",
     [`${name}/${noAsyncpipe.ruleName}`]: "error",
     [`${name}/${noReactiveForms.ruleName}`]: "error",
     [`${name}/${noDetectchangesTesting.ruleName}`]: "error",
