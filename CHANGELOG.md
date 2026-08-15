@@ -1,6 +1,10 @@
 # Changelog
 
-## 1.2.0 (not yet released)
+## 1.2.0 (2026-08-15)
+
+New `stylingBindings` preset (included in `recommended`) with the following new rules:
+- [no-ngclass](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/styling-bindings/NO_NGCLASS.md)
+- [no-ngstyle](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/styling-bindings/NO_NGSTYLE.md)
 
 New rule in `signals` and `recommended` presets:
 - [no-attribute-decorator](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_ATTRIBUTE_DECORATOR.md)

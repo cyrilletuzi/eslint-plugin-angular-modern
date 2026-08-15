@@ -190,6 +190,17 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 > - the `strictStandalone` Angular compiler option: [documentation](./docs/standalone-strict/STRICT_STANDALONE.md)
 > - the `@typescript-eslint/no-deprecated` rule: [documentation](./docs/deprecated/DEPRECATED.md)
 
+### Styling bindings preset
+
+```javascript
+{ extends: [angularModern.configs.stylingBindings] }
+```
+
+**These rules enforce native styling bindings:**
+
+- [no-ngclass](./docs/styling-bindings/NO_NGCLASS.md)
+- [no-ngstyle](./docs/styling-bindings/NO_NGSTYLE.md)
+
 #### Libraries modules
 
 Additional individual rules, _not_ included in the preset, are available for some libraries:

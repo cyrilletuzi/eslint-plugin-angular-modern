@@ -57,6 +57,8 @@ import * as noRoutermodule from "./rules/standalone/no-routermodule.js";
 import * as noServermodule from "./rules/standalone/no-servermodule.js";
 import * as noServiceworkermodule from "./rules/standalone/no-serviceworkermodule.js";
 import * as noWithmoduleTesting from "./rules/standalone/no-withmodule-testing.js";
+import * as noNgclass from "./rules/styling-bindings/no-ngclass.js";
+import * as noNgstyle from "./rules/styling-bindings/no-ngstyle.js";
 import * as noNgzoneTesting from "./rules/zoneless/no-ngzone-testing.js";
 import * as noNgzone from "./rules/zoneless/no-ngzone.js";
 import * as noProvidezonechangedetection from "./rules/zoneless/no-providezonechangedetection.js";
@@ -71,6 +73,9 @@ const plugin = {
   configs: {
     get standalone() {
       return standalone;
+    },
+    get stylingBindings() {
+      return stylingBindings;
     },
     get injectionContext() {
       return injectionContext;
@@ -100,6 +105,9 @@ const plugin = {
     [noServiceworkermodule.ruleName]: noServiceworkermodule.ruleDefinition,
     [noServermodule.ruleName]: noServermodule.ruleDefinition,
     [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
+    // Styling bindings
+    [noNgclass.ruleName]: noNgclass.ruleDefinition,
+    [noNgstyle.ruleName]: noNgstyle.ruleDefinition,
     // Injection context
     [injectInInjectionContext.ruleName]: injectInInjectionContext.ruleDefinition,
     [injectAsyncInInjectionContext.ruleName]: injectAsyncInInjectionContext.ruleDefinition,
@@ -179,6 +187,16 @@ const standalone: ConfigObject = {
   },
 };
 
+const stylingBindings: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noNgclass.ruleName}`]: "error",
+    [`${name}/${noNgstyle.ruleName}`]: "error",
+  },
+};
+
 const injectionContext: ConfigObject = {
   plugins: {
     [name]: plugin
@@ -247,6 +265,7 @@ const recommended: ConfigObject = {
   },
   rules: {
     ...standalone.rules,
+    ...stylingBindings.rules,
     ...injectionContext.rules,
     ...zoneless.rules,
     ...signals.rules,
