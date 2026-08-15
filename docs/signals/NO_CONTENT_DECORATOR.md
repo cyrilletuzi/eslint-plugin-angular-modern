@@ -6,6 +6,7 @@ Use the `contentChild()` and `contentChildren()` signal versions instead.
 
 ## Documentation
 
+- [Signal queries migration](https://angular.dev/reference/migrations/signal-queries)
 - [`contentChild()` API reference](https://angular.dev/api/core/contentChild)
 - [`contentChildren()` API reference](https://angular.dev/api/core/contentChildren)
 

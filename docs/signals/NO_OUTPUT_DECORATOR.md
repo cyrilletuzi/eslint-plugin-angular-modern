@@ -9,6 +9,7 @@ Use the `output()` version instead
 
 ## Documentation
 
+- [Output function migration](https://angular.dev/reference/migrations/outputs)
 - [Outputs guide](https://angular.dev/guide/components/outputs)
 - [`output()` API reference](https://angular.dev/api/core/output)
 

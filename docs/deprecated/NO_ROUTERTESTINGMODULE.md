@@ -6,7 +6,7 @@ Use `provideRouter()` instead.
 
 ## Documentation
 
-- [Standalone migration](https://angular.dev/reference/migrations/standalone)
+- [RouterTestingModule migration](https://angular.dev/reference/migrations/router-testing-module-migration)
 - [Routing guide](https://angular.dev/guide/routing)
 - [`provideRouter` API reference](https://angular.dev/api/router/provideRouter)
 

@@ -6,6 +6,7 @@ Use the new control flow syntax instead and standalone pipes instead.
 
 ## Documentation
 
+- [CommonModule migration](https://angular.dev/reference/migrations/common-to-standalone)
 - [Standalone migration](https://angular.dev/reference/migrations/standalone)
 - [Control flow guide](https://angular.dev/guide/templates/control-flow)
 - [Pipes guide](https://angular.dev/guide/templates/pipes)

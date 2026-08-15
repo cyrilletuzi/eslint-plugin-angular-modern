@@ -6,6 +6,7 @@ Use the `ìnput()` signal version instead.
 
 ## Documentation
 
+- [Signal inputs migration](https://angular.dev/reference/migrations/signal-inputs)
 - [Inputs guide](https://angular.dev/guide/components/inputs)
 - [`input()` API reference](https://angular.dev/api/core/input)
 

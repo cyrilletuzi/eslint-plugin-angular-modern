@@ -6,6 +6,7 @@ Use the `viewChild()` and `viewChildren()` signal versions instead.
 
 ## Documentation
 
+- [Signal queries migration](https://angular.dev/reference/migrations/signal-queries)
 - [`viewChild()` API reference](https://angular.dev/api/core/viewChild)
 - [`viewChildren()` API reference](https://angular.dev/api/core/viewChildren)
 
