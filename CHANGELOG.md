@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 (2026-08-15)
+
+New `hostBindings` preset (included in `recommended`) with the following new rules:
+- [no-hostbinding-decorator](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/host-bindings/NO_HOSTBINDING_DECORATOR.md)
+- [no-hostlistener-decorator](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/host-bindings/NO_HOSTLISTENER_DECORATOR.md)
+
 ## 1.2.0 (2026-08-15)
 
 New `stylingBindings` preset (included in `recommended`) with the following new rules:
