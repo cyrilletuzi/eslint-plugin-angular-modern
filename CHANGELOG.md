@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0 (not yet released)
+
+New rule in `signals` and `recommended` presets:
+- [no-attribute-decorator](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_ATTRIBUTE_DECORATOR.md)
+
 ## 1.1.0 (2026-08-13)
 
 New `standalone` preset (included in `recommended`) with the following new rules:

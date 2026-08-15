@@ -154,6 +154,7 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 - [no-output-decorator](./docs/signals/NO_OUTPUT_DECORATOR.md)
 - [no-content-decorator](./docs/signals/NO_CONTENT_DECORATOR.md)
 - [no-view-decorator](./docs/signals/NO_VIEW_DECORATOR.md)
+- [no-attribute-decorator](./docs/signals/NO_ATTRIBUTE_DECORATOR.md)
 - [no-asyncpipe](./docs/signals/NO_ASYNCPIPE.md)
 - [no-reactive-forms](./docs/signals/NO_REACTIVE_FORMS.md)
 - [no-detectchanges-testing](./docs/signals/NO_DETECTCHANGES_TESTING.md)
