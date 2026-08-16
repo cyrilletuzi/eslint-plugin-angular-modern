@@ -112,6 +112,16 @@ A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-sa
 For other functions requiring the injection context (custom ones or from libraries), an additional rule is available:
 - [custom-function-in-injection-context](./docs/injection-context/CUSTOM_FUNCTION.md)
 
+### Dependency injection preset
+
+```javascript
+{ extends: [angularModern.configs.dependencyInjection] }
+```
+
+**These rules enforce using the new dependency injection system:**
+
+- [no-injectable-decator](./docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
+
 ### Zoneless preset
 
 ```javascript

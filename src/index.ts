@@ -1,4 +1,5 @@
 import type { ConfigObject, Plugin } from "@eslint/core";
+import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decator.js";
 import * as noBrowseranimationsmodule from "./rules/deprecated/no-browseranimationsmodule.js";
 import * as noHttpclientjsonpmodule from "./rules/deprecated/no-httpclientjsonpmodule.js";
 import * as noHttpclientmodule from "./rules/deprecated/no-httpclientmodule.js";
@@ -85,6 +86,9 @@ const plugin = {
     get injectionContext() {
       return injectionContext;
     },
+    get dependencyInjection() {
+      return dependencyInjection;
+    },
     get zoneless() {
       return zoneless;
     },
@@ -131,6 +135,8 @@ const plugin = {
     [signalFormInInjectionContext.ruleName]: signalFormInInjectionContext.ruleDefinition,
     [pendingUntilEventInInjectionContext.ruleName]: pendingUntilEventInInjectionContext.ruleDefinition,
     [customFunctionInInjectionContext.ruleName]: customFunctionInInjectionContext.ruleDefinition,
+    // Dependency injection
+    [noInjectableDecorator.ruleName]: noInjectableDecorator.ruleDefinition,
     // Zoneless
     [noZonejsImport.ruleName]: noZonejsImport.ruleDefinition,
     [noProvidezonechangedetection.ruleName]: noProvidezonechangedetection.ruleDefinition,
@@ -236,6 +242,14 @@ const injectionContext: ConfigObject = {
   },
 };
 
+const dependencyInjection: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noInjectableDecorator.ruleName}`]: "error",
+  },
+};
 const zoneless: ConfigObject = {
   plugins: {
     [name]: plugin
@@ -286,6 +300,7 @@ const recommended: ConfigObject = {
     ...stylingBindings.rules,
     ...hostBindings.rules,
     ...injectionContext.rules,
+    ...dependencyInjection.rules,
     ...zoneless.rules,
     ...signals.rules,
   },
