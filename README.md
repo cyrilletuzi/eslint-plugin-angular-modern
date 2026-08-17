@@ -120,6 +120,7 @@ For other functions requiring the injection context (custom ones or from librari
 
 **These rules enforce using the new dependency injection system:**
 
+- [no-constructor-injection](./docs/dependency-injection/NO_CONSTRUCTOR_INJECTION.md)
 - [no-injectable-decorator](./docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
 - [no-inject-decorator](./docs/dependency-injection/NO_INJECT_DECORATOR.md)
 - [no-provider-deps](./docs/dependency-injection/NO_PROVIDER_DEPS.md)

@@ -1,4 +1,5 @@
 import type { ConfigObject, Plugin } from "@eslint/core";
+import * as noConstructorInjection from "./rules/dependency-injection/no-constructor-injection.js";
 import * as noInjectDecorator from "./rules/dependency-injection/no-inject-decorator.js";
 import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decorator.js";
 import * as noProviderDeps from "./rules/dependency-injection/no-provider-deps.js";
@@ -138,6 +139,7 @@ const plugin = {
     [pendingUntilEventInInjectionContext.ruleName]: pendingUntilEventInInjectionContext.ruleDefinition,
     [customFunctionInInjectionContext.ruleName]: customFunctionInInjectionContext.ruleDefinition,
     // Dependency injection
+    [noConstructorInjection.ruleName]: noConstructorInjection.ruleDefinition,
     [noInjectableDecorator.ruleName]: noInjectableDecorator.ruleDefinition,
     [noInjectDecorator.ruleName]: noInjectDecorator.ruleDefinition,
     [noProviderDeps.ruleName]: noProviderDeps.ruleDefinition,
@@ -251,6 +253,7 @@ const dependencyInjection: ConfigObject = {
     [name]: plugin
   },
   rules: {
+    [`${name}/${noConstructorInjection.ruleName}`]: "error",
     [`${name}/${noInjectableDecorator.ruleName}`]: "error",
     [`${name}/${noInjectDecorator.ruleName}`]: "error",
     [`${name}/${noProviderDeps.ruleName}`]: "error",
