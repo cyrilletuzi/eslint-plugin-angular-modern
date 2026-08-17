@@ -12,6 +12,7 @@ import * as noNoopanimationsmodule from "./rules/deprecated/no-noopanimationsmod
 import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowserdynamic.js";
 import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
+import * as noHttpinterceptorClass from "./rules/functional/no-httpinterceptor-class.js";
 import * as noHttpinterceptorsToken from "./rules/functional/no-httpinterceptors-token.js";
 import * as noWithinterceptorsfromdi from "./rules/functional/no-withinterceptorsfromdi.js";
 import * as noHostbindingDecorator from "./rules/host-bindings/no-hostbinding-decorator.js";
@@ -123,6 +124,7 @@ const plugin = {
     [noServermodule.ruleName]: noServermodule.ruleDefinition,
     [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
     // Functional
+    [noHttpinterceptorClass.ruleName]: noHttpinterceptorClass.ruleDefinition,
     [noHttpinterceptorsToken.ruleName]: noHttpinterceptorsToken.ruleDefinition,
     [noWithinterceptorsfromdi.ruleName]: noWithinterceptorsfromdi.ruleDefinition,
     // Styling bindings
@@ -220,6 +222,7 @@ const functional: ConfigObject = {
     [name]: plugin
   },
   rules: {
+    [`${name}/${noHttpinterceptorClass.ruleName}`]: "error",
     [`${name}/${noHttpinterceptorsToken.ruleName}`]: "error",
     [`${name}/${noWithinterceptorsfromdi.ruleName}`]: "error",
   },
