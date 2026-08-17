@@ -1,6 +1,7 @@
 import type { ConfigObject, Plugin } from "@eslint/core";
 import * as noInjectDecorator from "./rules/dependency-injection/no-inject-decorator.js";
 import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decorator.js";
+import * as noProviderDeps from "./rules/dependency-injection/no-provider-deps.js";
 import * as noBrowseranimationsmodule from "./rules/deprecated/no-browseranimationsmodule.js";
 import * as noHttpclientjsonpmodule from "./rules/deprecated/no-httpclientjsonpmodule.js";
 import * as noHttpclientmodule from "./rules/deprecated/no-httpclientmodule.js";
@@ -139,6 +140,7 @@ const plugin = {
     // Dependency injection
     [noInjectableDecorator.ruleName]: noInjectableDecorator.ruleDefinition,
     [noInjectDecorator.ruleName]: noInjectDecorator.ruleDefinition,
+    [noProviderDeps.ruleName]: noProviderDeps.ruleDefinition,
     // Zoneless
     [noZonejsImport.ruleName]: noZonejsImport.ruleDefinition,
     [noProvidezonechangedetection.ruleName]: noProvidezonechangedetection.ruleDefinition,
@@ -251,6 +253,7 @@ const dependencyInjection: ConfigObject = {
   rules: {
     [`${name}/${noInjectableDecorator.ruleName}`]: "error",
     [`${name}/${noInjectDecorator.ruleName}`]: "error",
+    [`${name}/${noProviderDeps.ruleName}`]: "error",
   },
 };
 const zoneless: ConfigObject = {

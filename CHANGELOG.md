@@ -5,6 +5,7 @@
 New `dependencyInjection` preset (included in `recommended`) with the following new rules:
 - [no-injectable-decorator](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
 - [no-inject-decorator](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/dependency-injection/NO_INJECT_DECORATOR.md)
+- [no-provider-deps](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/dependency-injection/NO_PROVIDER_DEPS.md)
 
 ## 1.3.0 (2026-08-15)
 

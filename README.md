@@ -122,6 +122,7 @@ For other functions requiring the injection context (custom ones or from librari
 
 - [no-injectable-decorator](./docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
 - [no-inject-decorator](./docs/dependency-injection/NO_INJECT_DECORATOR.md)
+- [no-provider-deps](./docs/dependency-injection/NO_PROVIDER_DEPS.md)
 
 ### Zoneless preset
 
