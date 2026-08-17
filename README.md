@@ -201,6 +201,12 @@ For other functions requiring the injection context (custom ones or from librari
 > - the `strictStandalone` Angular compiler option: [documentation](./docs/standalone-strict/STRICT_STANDALONE.md)
 > - the `@typescript-eslint/no-deprecated` rule: [documentation](./docs/deprecated/DEPRECATED.md)
 
+#### Libraries modules
+
+Additional individual rules, _not_ included in the preset, are available for some libraries:
+
+- [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
+
 ### Styling bindings preset
 
 ```javascript
@@ -222,12 +228,6 @@ For other functions requiring the injection context (custom ones or from librari
 
 - [no-hostbinding-decorator](./docs/host-bindings/NO_HOSTBINDING_DECORATOR.md)
 - [no-hostlistener-decorator](./docs/host-bindings/NO_HOSTLISTENER_DECORATOR.md)
-
-#### Libraries modules
-
-Additional individual rules, _not_ included in the preset, are available for some libraries:
-
-- [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
 
 ## Other rules
 
