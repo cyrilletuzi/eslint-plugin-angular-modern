@@ -12,9 +12,13 @@
 
 Angular has evolved a lot: standalone components, new control flow syntax, new dependency injection, zoneless, signals... One could even argue it is a new framework. It has been done in a backward compatible way, which is nice, but it also has a downside: a lot of legacy features are still available, both for developers and for AI tools. Lint rules can restrict the usage of these legacy features, in a reliable way (unlike AI custom instructions and skills, which are often not followed).
 
+A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-signals-patterns-4fc) explains this goal in more details.
+
 2. **Enforce safe Angular usage**
 
 Some of the new features, especially the new dependency injection, can produce runtime errors, not protected by compilation. Lint rules can lower the risk of these runtime errors. 
+
+Another [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-say-goodbye-to-ng0203-error-3g5i) explains this goal in more details.
 
 ## Requirements
 
@@ -105,8 +109,6 @@ A feature preset enables the rules for a specific set of features. It is recomme
 - [to-signal-in-injection-context](./docs/injection-context/TO_SIGNAL.md)
 - [pending-until-event-in-injection-context](./docs/injection-context/PENDING_UNTIL_EVENT.md)
 
-A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-say-goodbye-to-ng0203-error-3g5i) explains the context and the purpose of these rules in more details.
-
 > [!TIP]
 > This safety preset can and should always be enabled, even if a project has not yet migrated to `inject()`.
 
@@ -142,8 +144,6 @@ For other functions requiring the injection context (custom ones or from librari
 - [no-ngzone-testing](./docs/zoneless/NO_NGZONE_TESTING.md)
 - [no-zonejs-testing-functions](./docs/zoneless/NO_ZONEJS_TESTING_FUNCTIONS.md)
 
-A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-signals-patterns-4fc) explains the context and the purpose of these rules in more details.
-
 ### Signals preset
 
 ```javascript
@@ -172,8 +172,6 @@ A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-sig
 - [no-reactive-forms](./docs/signals/NO_REACTIVE_FORMS.md)
 - [no-detectchanges-testing](./docs/signals/NO_DETECTCHANGES_TESTING.md)
 - [no-changedetectorref](./docs/signals/NO_CHANGEDETECTORREF.md)
-
-A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-signals-patterns-4fc) explains the context and the purpose of these rules in more details.
 
 > [!TIP]
 > This preset should only be enabled after a project has fully migrated to signals. Otherwise, individual rules should be enabled gradually.
