@@ -1,6 +1,6 @@
 # eslint-plugin-angular-modern
 
-ESLint rules for modern and safe Angular.
+70+ ESLint rules for modern and safe Angular.
 
 > [!NOTE]
 > Find this tool useful? I’m open to freelance & full-time opportunities.
@@ -111,6 +111,19 @@ A [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-sa
 
 For other functions requiring the injection context (custom ones or from libraries), an additional rule is available:
 - [custom-function-in-injection-context](./docs/injection-context/CUSTOM_FUNCTION.md)
+
+### Dependency injection preset
+
+```javascript
+{ extends: [angularModern.configs.dependencyInjection] }
+```
+
+**These rules enforce using the new dependency injection system:**
+
+- [no-constructor-injection](./docs/dependency-injection/NO_CONSTRUCTOR_INJECTION.md)
+- [no-injectable-decorator](./docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
+- [no-inject-decorator](./docs/dependency-injection/NO_INJECT_DECORATOR.md)
+- [no-provider-deps](./docs/dependency-injection/NO_PROVIDER_DEPS.md)
 
 ### Zoneless preset
 

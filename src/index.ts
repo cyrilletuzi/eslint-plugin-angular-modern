@@ -1,4 +1,8 @@
 import type { ConfigObject, Plugin } from "@eslint/core";
+import * as noConstructorInjection from "./rules/dependency-injection/no-constructor-injection.js";
+import * as noInjectDecorator from "./rules/dependency-injection/no-inject-decorator.js";
+import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decorator.js";
+import * as noProviderDeps from "./rules/dependency-injection/no-provider-deps.js";
 import * as noBrowseranimationsmodule from "./rules/deprecated/no-browseranimationsmodule.js";
 import * as noHttpclientjsonpmodule from "./rules/deprecated/no-httpclientjsonpmodule.js";
 import * as noHttpclientmodule from "./rules/deprecated/no-httpclientmodule.js";
@@ -85,6 +89,9 @@ const plugin = {
     get injectionContext() {
       return injectionContext;
     },
+    get dependencyInjection() {
+      return dependencyInjection;
+    },
     get zoneless() {
       return zoneless;
     },
@@ -131,6 +138,11 @@ const plugin = {
     [signalFormInInjectionContext.ruleName]: signalFormInInjectionContext.ruleDefinition,
     [pendingUntilEventInInjectionContext.ruleName]: pendingUntilEventInInjectionContext.ruleDefinition,
     [customFunctionInInjectionContext.ruleName]: customFunctionInInjectionContext.ruleDefinition,
+    // Dependency injection
+    [noConstructorInjection.ruleName]: noConstructorInjection.ruleDefinition,
+    [noInjectableDecorator.ruleName]: noInjectableDecorator.ruleDefinition,
+    [noInjectDecorator.ruleName]: noInjectDecorator.ruleDefinition,
+    [noProviderDeps.ruleName]: noProviderDeps.ruleDefinition,
     // Zoneless
     [noZonejsImport.ruleName]: noZonejsImport.ruleDefinition,
     [noProvidezonechangedetection.ruleName]: noProvidezonechangedetection.ruleDefinition,
@@ -236,6 +248,17 @@ const injectionContext: ConfigObject = {
   },
 };
 
+const dependencyInjection: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noConstructorInjection.ruleName}`]: "error",
+    [`${name}/${noInjectableDecorator.ruleName}`]: "error",
+    [`${name}/${noInjectDecorator.ruleName}`]: "error",
+    [`${name}/${noProviderDeps.ruleName}`]: "error",
+  },
+};
 const zoneless: ConfigObject = {
   plugins: {
     [name]: plugin
@@ -286,6 +309,7 @@ const recommended: ConfigObject = {
     ...stylingBindings.rules,
     ...hostBindings.rules,
     ...injectionContext.rules,
+    ...dependencyInjection.rules,
     ...zoneless.rules,
     ...signals.rules,
   },
