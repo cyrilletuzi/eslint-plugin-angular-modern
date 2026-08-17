@@ -3,7 +3,7 @@
 ## 1.4.0 (2026-08-16)
 
 New `dependencyInjection` preset (included in `recommended`) with the following new rules:
-- [no-injectable-decator](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
+- [decorator](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
 
 ## 1.3.0 (2026-08-15)
 

@@ -120,7 +120,7 @@ For other functions requiring the injection context (custom ones or from librari
 
 **These rules enforce using the new dependency injection system:**
 
-- [no-injectable-decator](./docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
+- [decorator](./docs/dependency-injection/NO_INJECTABLE_DECORATOR.md)
 
 ### Zoneless preset
 

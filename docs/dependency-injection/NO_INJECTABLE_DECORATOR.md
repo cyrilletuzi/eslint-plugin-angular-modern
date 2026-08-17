@@ -1,4 +1,4 @@
-# no-injectable-decator
+# decorator
 
 Restrict the usage of legacy `@Injectable()`.
 
@@ -17,7 +17,7 @@ Use `@Service()` instead.
 ```json
 {
   "rules": {
-    "eslint-plugin-angular-modern/no-injectable-decator": "error"
+    "eslint-plugin-angular-modern/decorator": "error"
   }
 }
 ```

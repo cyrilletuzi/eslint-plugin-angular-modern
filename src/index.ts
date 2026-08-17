@@ -1,5 +1,5 @@
 import type { ConfigObject, Plugin } from "@eslint/core";
-import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decator.js";
+import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decorator.js";
 import * as noBrowseranimationsmodule from "./rules/deprecated/no-browseranimationsmodule.js";
 import * as noHttpclientjsonpmodule from "./rules/deprecated/no-httpclientjsonpmodule.js";
 import * as noHttpclientmodule from "./rules/deprecated/no-httpclientmodule.js";
