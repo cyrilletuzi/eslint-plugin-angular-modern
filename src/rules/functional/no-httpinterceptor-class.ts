@@ -19,7 +19,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "TSClassImplements[expression.name='HttpInterceptor']"(node: TSESTree.Identifier) {
+      "TSClassImplements[expression.name='HttpInterceptor']"(node: TSESTree.TSClassImplements) {
         context.report({
           node,
           messageId,
