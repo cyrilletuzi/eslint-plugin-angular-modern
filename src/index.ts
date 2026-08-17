@@ -4,6 +4,7 @@ import * as noInjectDecorator from "./rules/dependency-injection/no-inject-decor
 import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decorator.js";
 import * as noProviderDeps from "./rules/dependency-injection/no-provider-deps.js";
 import * as noBrowseranimationsmodule from "./rules/deprecated/no-browseranimationsmodule.js";
+import * as noCanloadClass from "./rules/deprecated/no-canload-class.js";
 import * as noHttpclientjsonpmodule from "./rules/deprecated/no-httpclientjsonpmodule.js";
 import * as noHttpclientmodule from "./rules/deprecated/no-httpclientmodule.js";
 import * as noHttpclienttestingmodule from "./rules/deprecated/no-httpclienttestingmodule.js";
@@ -203,6 +204,7 @@ const plugin = {
     [noHttpclientxsrfmodule.ruleName]: noHttpclientxsrfmodule.ruleDefinition,
     [noBrowseranimationsmodule.ruleName]: noBrowseranimationsmodule.ruleDefinition,
     [noNoopanimationsmodule.ruleName]: noNoopanimationsmodule.ruleDefinition,
+    [noCanloadClass.ruleName]: noCanloadClass.ruleDefinition,
     // Experimental
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },

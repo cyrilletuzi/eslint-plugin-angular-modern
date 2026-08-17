@@ -270,6 +270,7 @@ See [the documentation](./docs/deprecated/DEPRECATED.md) to enable `@typescript-
 - [no-httpclienttestingmodule](./docs/deprecated/NO_HTTPCLIENTTESTINGMODULE.md)
 - [no-browseranimationsmodule](./docs/deprecated/NO_BROWSERANIMATIONSMODULE.md)
 - [no-noopanimationsmodule](./docs/deprecated/NO_NOOPANIMATIONSMODULE.md)
+- [no-canload-class](./docs/deprecated/NO_CANLOAD_CLASS.md)
 
 ### Experimental
 
