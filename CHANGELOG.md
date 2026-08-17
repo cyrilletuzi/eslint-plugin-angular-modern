@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.4.0 (2026-08-17)
+## 1.4.0 (not yet released)
 
 New `dependencyInjection` preset (included in `recommended`) with the following new rules:
 - [no-constructor-injection](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/dependency-injection/NO_CONSTRUCTOR_INJECTION.md)
