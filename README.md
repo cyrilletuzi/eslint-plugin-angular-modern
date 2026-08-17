@@ -144,9 +144,6 @@ For other functions requiring the injection context (custom ones or from librari
 
 A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-signals-patterns-4fc) explains the context and the purpose of these rules in more details.
 
-> [!TIP]
-> This preset should only be enabled after a project has fully migrated to zoneless. Otherwise, individual rules should be enabled gradually.
-
 ### Signals preset
 
 ```javascript
