@@ -11,6 +11,9 @@ Use signals `form()` instead.
 
 ## Configuration
 
+> [!IMPORTANT]
+> Signal forms were introduced in Angular 21, so this rule should only be enabled in Angular >= 21 projects.
+
 - in the `recommended` preset
 - in the `signals` preset
 ```json

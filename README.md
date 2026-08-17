@@ -22,7 +22,10 @@ Some of the new features, especially the new dependency injection, can produce r
 - New flat ESLint configuration (`eslint.config.js` or equivalent)
 
 > [!NOTE]
-> `.eslintrc.json` and other legacy ESLint configurations are not supported
+> `.eslintrc.json` and other legacy ESLint configurations are not supported.
+
+> [!IMPORTANT]
+> The default presets target the latest Angular stable version. Some rules may be unsuitable for previous versions, see below to adapt the configuration accordingly.
 
 ## Getting started
 
@@ -261,6 +264,31 @@ See [the documentation](./docs/deprecated/DEPRECATED.md) to enable `@typescript-
 Rules still being tested.
 
 - [no-subscribe-in-component-constructor](./docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
+
+## Angular versions
+
+The presets above target the latest Angular stable version (currently v22). Some rules may be unsuitable for previous versions and must be disabled.
+
+### Angular 21
+
+```javascript
+module.exports = defineConfig({
+  rules: {
+    "eslint-plugin-angular-modern/no-injectable-decorator": "off",
+  },
+});
+```
+
+### Angular 20
+
+```javascript
+module.exports = defineConfig({
+  rules: {
+    "eslint-plugin-angular-modern/no-injectable-decorator": "off",
+    "eslint-plugin-angular-modern/no-reactive-forms": "off",
+  },
+});
+```
 
 ## FAQ
 
