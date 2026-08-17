@@ -216,6 +216,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 **These rules enforce functional APIs instead of class-based APIs:**
 
 - [no-httpinterceptors-token](./docs/functional/NO_HTTPINTERCEPTORS_TOKEN.md)
+- [no-withinterceptorsfromdi](./docs/functional/NO_WITHINTERCEPTORSFROMDI.md)
 
 ### Styling bindings preset
 

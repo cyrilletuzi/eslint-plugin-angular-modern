@@ -13,6 +13,7 @@ import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowser
 import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
 import * as noHttpinterceptorsToken from "./rules/functional/no-httpinterceptors-token.js";
+import * as noWithinterceptorsfromdi from "./rules/functional/no-withinterceptorsfromdi.js";
 import * as noHostbindingDecorator from "./rules/host-bindings/no-hostbinding-decorator.js";
 import * as noHostlistenerDecorator from "./rules/host-bindings/no-hostlistener-decorator.js";
 import * as afterEveryRenderInInjectionContext from "./rules/injection-context/after-every-render-in-injection-context.js";
@@ -123,6 +124,7 @@ const plugin = {
     [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
     // Functional
     [noHttpinterceptorsToken.ruleName]: noHttpinterceptorsToken.ruleDefinition,
+    [noWithinterceptorsfromdi.ruleName]: noWithinterceptorsfromdi.ruleDefinition,
     // Styling bindings
     [noNgclass.ruleName]: noNgclass.ruleDefinition,
     [noNgstyle.ruleName]: noNgstyle.ruleDefinition,
@@ -219,6 +221,7 @@ const functional: ConfigObject = {
   },
   rules: {
     [`${name}/${noHttpinterceptorsToken.ruleName}`]: "error",
+    [`${name}/${noWithinterceptorsfromdi.ruleName}`]: "error",
   },
 };
 
