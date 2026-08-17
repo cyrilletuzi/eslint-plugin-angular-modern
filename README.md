@@ -1,6 +1,6 @@
 # eslint-plugin-angular-modern
 
-ESLint rules for modern and safe Angular.
+70+ ESLint rules for modern and safe Angular.
 
 > [!NOTE]
 > Find this tool useful? I’m open to freelance & full-time opportunities.
