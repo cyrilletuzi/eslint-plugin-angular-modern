@@ -215,6 +215,11 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 **These rules enforce functional APIs instead of class-based APIs:**
 
+- [no-canactivate-class](./docs/functional/NO_CANACTIVATE_CLASS.md)
+- [no-canactivatechild-class](./docs/functional/NO_CANACTIVATECHILD_CLASS.md)
+- [no-candeactivate-class](./docs/functional/NO_CANDEACTIVATE_CLASS.md)
+- [no-canmatch-class](./docs/functional/NO_CANMATCH_CLASS.md)
+- [no-resolve-class](./docs/functional/NO_RESOLVE_CLASS.md)
 - [no-httpinterceptor-class](./docs/functional/NO_HTTPINTERCEPTOR_CLASS.md)
 - [no-httpinterceptors-token](./docs/functional/NO_HTTPINTERCEPTORS_TOKEN.md)
 - [no-withinterceptorsfromdi](./docs/functional/NO_WITHINTERCEPTORSFROMDI.md)
