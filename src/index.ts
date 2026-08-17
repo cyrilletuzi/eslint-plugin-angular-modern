@@ -12,6 +12,7 @@ import * as noNoopanimationsmodule from "./rules/deprecated/no-noopanimationsmod
 import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowserdynamic.js";
 import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
+import * as noHttpinterceptorsToken from "./rules/functional/no-httpinterceptors-token.js";
 import * as noHostbindingDecorator from "./rules/host-bindings/no-hostbinding-decorator.js";
 import * as noHostlistenerDecorator from "./rules/host-bindings/no-hostlistener-decorator.js";
 import * as afterEveryRenderInInjectionContext from "./rules/injection-context/after-every-render-in-injection-context.js";
@@ -80,6 +81,9 @@ const plugin = {
     get standalone() {
       return standalone;
     },
+    get functional() {
+      return functional;
+    },
     get stylingBindings() {
       return stylingBindings;
     },
@@ -117,6 +121,8 @@ const plugin = {
     [noServiceworkermodule.ruleName]: noServiceworkermodule.ruleDefinition,
     [noServermodule.ruleName]: noServermodule.ruleDefinition,
     [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
+    // Functional
+    [noHttpinterceptorsToken.ruleName]: noHttpinterceptorsToken.ruleDefinition,
     // Styling bindings
     [noNgclass.ruleName]: noNgclass.ruleDefinition,
     [noNgstyle.ruleName]: noNgstyle.ruleDefinition,
@@ -204,6 +210,15 @@ const standalone: ConfigObject = {
     [`${name}/${noServiceworkermodule.ruleName}`]: "error",
     [`${name}/${noServermodule.ruleName}`]: "error",
     [`${name}/${noWithmoduleTesting.ruleName}`]: "error",
+  },
+};
+
+const functional: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noHttpinterceptorsToken.ruleName}`]: "error",
   },
 };
 
@@ -306,6 +321,7 @@ const recommended: ConfigObject = {
   },
   rules: {
     ...standalone.rules,
+    ...functional.rules,
     ...stylingBindings.rules,
     ...hostBindings.rules,
     ...injectionContext.rules,

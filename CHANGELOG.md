@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0 (2026-08-17)
+
+New `functional` preset (included in `recommended`) with the following new rules:
+- [no-httpinterceptors-token](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_HTTPINTERCEPTORS_TOKEN.md)
+
 ## 1.4.0 (2026-08-17)
 
 New `dependencyInjection` preset (included in `recommended`) with the following new rules:

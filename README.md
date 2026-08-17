@@ -207,6 +207,16 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 - [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
 
+### Functional preset
+
+```javascript
+{ extends: [angularModern.configs.functional] }
+```
+
+**These rules enforce functional APIs instead of class-based APIs:**
+
+- [no-httpinterceptors-token](./docs/functional/NO_HTTPINTERCEPTORS_TOKEN.md)
+
 ### Styling bindings preset
 
 ```javascript
