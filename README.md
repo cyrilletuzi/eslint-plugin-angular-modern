@@ -29,7 +29,7 @@ Another [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-ru
 > `.eslintrc.json` and other legacy ESLint configurations are not supported.
 
 > [!IMPORTANT]
-> The default presets target the latest Angular stable version. Some rules may be unsuitable for previous versions, see below to adapt the configuration accordingly.
+> The default presets target the latest Angular stable version. Some rules may be unsuitable for previous versions, see "Angular versions" section below to adapt the configuration accordingly.
 
 ## Getting started
 
