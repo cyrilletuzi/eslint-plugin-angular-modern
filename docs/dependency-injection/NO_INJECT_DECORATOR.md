@@ -29,10 +29,8 @@ Use `inject()` instead.
 ## ❌ Invalid
 
 ```typescript
-@Service({
-  providedIn: 'root',
-})
-export class SomeService {
+@Component()
+export class SomeComponent {
   constructor(@Inject(SOME_TOKEN) private readonly someOption: string) {}
 }
 ```
@@ -40,10 +38,8 @@ export class SomeService {
 ## ✅ Valid
 
 ```typescript
-@Service({
-  providedIn: 'root',
-})
-export class SomeService {
+@Component()
+export class SomeComponent {
    private readonly someOption = inject(SOME_TOKEN);
 }
 ```
