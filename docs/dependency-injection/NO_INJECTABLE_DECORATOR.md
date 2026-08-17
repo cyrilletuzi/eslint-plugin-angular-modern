@@ -10,6 +10,9 @@ Use `@Service()` instead.
 
 ## Configuration
 
+> [!IMPORTANT]
+> `@Service()` was introduced in Angular 22, so this rule should only be enabled in Angular >= 22 projects.
+
 - in the `recommended` preset
 - in the `dependencyInjection` preset
 - or just this rule:
