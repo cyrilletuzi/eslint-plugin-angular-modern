@@ -2,7 +2,7 @@ import type { RuleDefinition } from "@eslint/core";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import { getDecoratorProperty } from "../../utils/ast-decorator-property";
 
-export const ruleName = "decorator";
+export const ruleName = "no-injectable-decorator";
 const messageId = "noInjectableDecorator";
 
 export const ruleDefinition: RuleDefinition = {
