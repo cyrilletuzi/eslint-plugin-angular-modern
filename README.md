@@ -231,7 +231,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 ## Other rules
 
-The following invidiual rules are _not_ in presets.
+The following invidiual rules are _not_ enabled in presets.
 
 ### Rules already reported by `strictStandalone`
 
