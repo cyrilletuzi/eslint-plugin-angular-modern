@@ -289,19 +289,7 @@ Rules still being tested.
 
 ## Angular versions
 
-The presets above target the latest Angular stable version (currently v22). Some rules may be unsuitable for previous versions and must be disabled.
-
-### Angular 21
-
-```javascript
-module.exports = defineConfig({
-  rules: {
-    "eslint-plugin-angular-modern/no-injectable-decorator": "off",
-  },
-});
-```
-
-### Angular 20
+The presets above target the latest Angular stable version (currently v22). Some rules may be unsuitable for previous versions and must be disabled. For Angular 20 & 21:
 
 ```javascript
 module.exports = defineConfig({
