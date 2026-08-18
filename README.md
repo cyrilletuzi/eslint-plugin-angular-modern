@@ -265,6 +265,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 **These rules enforce to not use XHR HTTP:**
 
 - [no-withxhr](./docs/fetch-http/NO_WITHXHR.md)
+- [no-httpxhrbackend](./docs/fetch-http/NO_HTTPXHRBACKEND.md)
 - [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
 - [no-http-reportuploadprogress](./docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
 

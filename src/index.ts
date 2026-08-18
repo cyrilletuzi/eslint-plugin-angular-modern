@@ -15,6 +15,7 @@ import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodul
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
 import * as noHttpReportprogress from "./rules/fetch-http/no-http-reportprogress.js";
 import * as noHttpReportuploadprogress from "./rules/fetch-http/no-http-reportuploadprogress.js";
+import * as noHttpxhrbackend from "./rules/fetch-http/no-httpxhrbackend.js";
 import * as noWithxhr from "./rules/fetch-http/no-withxhr.js";
 import * as noCanactivateClass from "./rules/functional/no-canactivate-class.js";
 import * as noCanactivatechildClass from "./rules/functional/no-canactivatechild-class.js";
@@ -199,6 +200,7 @@ const plugin = {
     [noReactiveForms.ruleName]: noReactiveForms.ruleDefinition,
     // Fetch HTTP
     [noWithxhr.ruleName]: noWithxhr.ruleDefinition,
+    [noHttpxhrbackend.ruleName]: noHttpxhrbackend.ruleDefinition,
     [noHttpReportprogress.ruleName]: noHttpReportprogress.ruleDefinition,
     [noHttpReportuploadprogress.ruleName]: noHttpReportuploadprogress.ruleDefinition,
     // Strict standalone
@@ -354,6 +356,7 @@ const fetchHttp: ConfigObject = {
   },
   rules: {
     [`${name}/${noWithxhr.ruleName}`]: "error",
+    [`${name}/${noHttpxhrbackend}`]: "error",
     [`${name}/${noHttpReportprogress.ruleName}`]: "error",
     [`${name}/${noHttpReportuploadprogress.ruleName}`]: "error",
   },
