@@ -1,8 +1,8 @@
 # no-withxhr
 
-Restrict the usage of `withInterceptorsFromDi`, which was the way to provide legacy class-based interceptors.
+Restrict the usage of `withXhr()`, which enables back legacy XHR based HTTP.
 
-Use `withInterceptors()` with functional interceptors instead.
+Stay on the default fetch based HTTP instead.
 
 ## Documentation
 
