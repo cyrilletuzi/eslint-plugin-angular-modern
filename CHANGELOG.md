@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0 (2026-08-18)
+
+New `fetchHttp` preset (included in `recommended`) with the following new rules:
+- [no-withxhr](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/fetch-http/NO_WITHXHR.md)
+
 ## 1.5.0 (2026-08-18)
 
 New `functional` preset (included in `recommended`) with the following new rules:

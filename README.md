@@ -95,6 +95,7 @@ A feature preset enables the rules for a specific set of features. It is recomme
 - **functional**: no class-based APIs
 - **styling bindings**: no legacy styling bindings
 - **host bindings**: no legacy host bindings
+- **fetch HTTP**: no XHR HTTP
 
 ### Injection context preset
 
@@ -254,6 +255,16 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 - [no-hostbinding-decorator](./docs/host-bindings/NO_HOSTBINDING_DECORATOR.md)
 - [no-hostlistener-decorator](./docs/host-bindings/NO_HOSTLISTENER_DECORATOR.md)
+
+### Fetch HTTP preset
+
+```javascript
+{ extends: [angularModern.configs.fetchHttp] }
+```
+
+**These rules enforce to not use XHR HTTP:**
+
+- [no-withxhr](./docs/fetch-http/NO_WITHXHR.md)
 
 ## Other rules
 
