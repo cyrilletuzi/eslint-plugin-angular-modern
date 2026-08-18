@@ -85,7 +85,16 @@ If coming from `angular-eslint-injection-context` or `angular-eslint-zoneless` l
 
 ## Features presets
 
-A feature preset enables the rules for a specific set of features. It is recommended for projects only partially migrated to modern Angular.
+A feature preset enables the rules for a specific set of features. It is recommended for projects only partially migrated to modern Angular. The presets available are:
+
+- **injection context**: safety rules for `inject()` and else
+- **dependency injection**: no constructor injection
+- **zoneless**: no zone.js features
+- **signals**: no legacy reactivity
+- **standalone**: no NgModules
+- **functional**: no class-based APIs
+- **styling bindings**: no legacy styling bindings
+- **host bindings**: no legacy host bindings
 
 ### Injection context preset
 
