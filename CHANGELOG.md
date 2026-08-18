@@ -2,6 +2,8 @@
 
 ## 1.6.0 (2026-08-18)
 
+Note: v1.6.0 release was broken, please use v1.6.1.
+
 New `fetchHttp` preset (included in `recommended`) with the following new rules:
 - [no-withxhr](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/fetch-http/NO_WITHXHR.md)
 - [no-httpxhrbackend](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/fetch-http/NO_HTTPXHRBACKEND.md)
