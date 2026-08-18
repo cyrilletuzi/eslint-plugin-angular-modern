@@ -14,6 +14,7 @@ import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowser
 import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
 import * as noHttpReportprogress from "./rules/fetch-http/no-http-reportprogress.js";
+import * as noHttpReportuploadprogress from "./rules/fetch-http/no-http-reportuploadprogress.js";
 import * as noWithxhr from "./rules/fetch-http/no-withxhr.js";
 import * as noCanactivateClass from "./rules/functional/no-canactivate-class.js";
 import * as noCanactivatechildClass from "./rules/functional/no-canactivatechild-class.js";
@@ -199,6 +200,7 @@ const plugin = {
     // Fetch HTTP
     [noWithxhr.ruleName]: noWithxhr.ruleDefinition,
     [noHttpReportprogress.ruleName]: noHttpReportprogress.ruleDefinition,
+    [noHttpReportuploadprogress.ruleName]: noHttpReportuploadprogress.ruleDefinition,
     // Strict standalone
     [noNgmoduleComponent.ruleName]: noNgmoduleComponent.ruleDefinition,
     [noNgmoduleDirective.ruleName]: noNgmoduleDirective.ruleDefinition,
@@ -353,6 +355,7 @@ const fetchHttp: ConfigObject = {
   rules: {
     [`${name}/${noWithxhr.ruleName}`]: "error",
     [`${name}/${noHttpReportprogress.ruleName}`]: "error",
+    [`${name}/${noHttpReportuploadprogress.ruleName}`]: "error",
   },
 };
 

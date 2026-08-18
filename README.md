@@ -266,6 +266,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 - [no-withxhr](./docs/fetch-http/NO_WITHXHR.md)
 - [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
+- [no-http-reportuploadprogress](./docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
 
 ## Other rules
 

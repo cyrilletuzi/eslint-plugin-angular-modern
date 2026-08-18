@@ -5,6 +5,7 @@
 New `fetchHttp` preset (included in `recommended`) with the following new rules:
 - [no-withxhr](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/fetch-http/NO_WITHXHR.md)
 - [no-http-reportprogress](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
+- [no-http-reportuploadprogress](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
 
 ## 1.5.0 (2026-08-18)
 
