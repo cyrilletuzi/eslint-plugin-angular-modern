@@ -265,6 +265,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 **These rules enforce to not use XHR HTTP:**
 
 - [no-withxhr](./docs/fetch-http/NO_WITHXHR.md)
+- [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
 
 ## Other rules
 
@@ -307,6 +308,7 @@ module.exports = defineConfig({
   rules: {
     "eslint-plugin-angular-modern/no-injectable-decorator": "off",
     "eslint-plugin-angular-modern/no-reactive-forms": "off",
+    "eslint-plugin-angular-modern/no-http-reportprogress": "off",
   },
 });
 ```
