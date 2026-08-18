@@ -13,6 +13,10 @@ import * as noNoopanimationsmodule from "./rules/deprecated/no-noopanimationsmod
 import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowserdynamic.js";
 import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
+import * as noHttpReportprogress from "./rules/fetch-http/no-http-reportprogress.js";
+import * as noHttpReportuploadprogress from "./rules/fetch-http/no-http-reportuploadprogress.js";
+import * as noHttpxhrbackend from "./rules/fetch-http/no-httpxhrbackend.js";
+import * as noWithxhr from "./rules/fetch-http/no-withxhr.js";
 import * as noCanactivateClass from "./rules/functional/no-canactivate-class.js";
 import * as noCanactivatechildClass from "./rules/functional/no-canactivatechild-class.js";
 import * as noCandeactivateClass from "./rules/functional/no-candeactivate-class.js";
@@ -110,6 +114,9 @@ const plugin = {
     get signals() {
       return signals;
     },
+    get fetchHttp() {
+      return fetchHttp;
+    },
     get recommended() {
       return recommended;
     },
@@ -191,6 +198,11 @@ const plugin = {
     [noDetectchangesTesting.ruleName]: noDetectchangesTesting.ruleDefinition,
     [noChangedetectorref.ruleName]: noChangedetectorref.ruleDefinition,
     [noReactiveForms.ruleName]: noReactiveForms.ruleDefinition,
+    // Fetch HTTP
+    [noWithxhr.ruleName]: noWithxhr.ruleDefinition,
+    [noHttpxhrbackend.ruleName]: noHttpxhrbackend.ruleDefinition,
+    [noHttpReportprogress.ruleName]: noHttpReportprogress.ruleDefinition,
+    [noHttpReportuploadprogress.ruleName]: noHttpReportuploadprogress.ruleDefinition,
     // Strict standalone
     [noNgmoduleComponent.ruleName]: noNgmoduleComponent.ruleDefinition,
     [noNgmoduleDirective.ruleName]: noNgmoduleDirective.ruleDefinition,
@@ -338,6 +350,18 @@ const signals: ConfigObject = {
   },
 };
 
+const fetchHttp: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noWithxhr.ruleName}`]: "error",
+    [`${name}/${noHttpxhrbackend}`]: "error",
+    [`${name}/${noHttpReportprogress.ruleName}`]: "error",
+    [`${name}/${noHttpReportuploadprogress.ruleName}`]: "error",
+  },
+};
+
 const recommended: ConfigObject = {
   plugins: {
     [name]: plugin
@@ -351,6 +375,7 @@ const recommended: ConfigObject = {
     ...dependencyInjection.rules,
     ...zoneless.rules,
     ...signals.rules,
+    ...fetchHttp.rules,
   },
 };
 

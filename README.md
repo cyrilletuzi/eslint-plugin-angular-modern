@@ -95,6 +95,7 @@ A feature preset enables the rules for a specific set of features. It is recomme
 - **functional**: no class-based APIs
 - **styling bindings**: no legacy styling bindings
 - **host bindings**: no legacy host bindings
+- **fetch HTTP**: no XHR HTTP
 
 ### Injection context preset
 
@@ -255,6 +256,19 @@ Additional individual rules, _not_ included in the preset, are available for som
 - [no-hostbinding-decorator](./docs/host-bindings/NO_HOSTBINDING_DECORATOR.md)
 - [no-hostlistener-decorator](./docs/host-bindings/NO_HOSTLISTENER_DECORATOR.md)
 
+### Fetch HTTP preset
+
+```javascript
+{ extends: [angularModern.configs.fetchHttp] }
+```
+
+**These rules enforce to not use XHR HTTP:**
+
+- [no-withxhr](./docs/fetch-http/NO_WITHXHR.md)
+- [no-httpxhrbackend](./docs/fetch-http/NO_HTTPXHRBACKEND.md)
+- [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
+- [no-http-reportuploadprogress](./docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
+
 ## Other rules
 
 The following invidiual rules are _not_ enabled in presets.
@@ -296,6 +310,7 @@ module.exports = defineConfig({
   rules: {
     "eslint-plugin-angular-modern/no-injectable-decorator": "off",
     "eslint-plugin-angular-modern/no-reactive-forms": "off",
+    "eslint-plugin-angular-modern/no-http-reportprogress": "off",
   },
 });
 ```
