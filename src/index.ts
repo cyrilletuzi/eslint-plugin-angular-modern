@@ -356,7 +356,7 @@ const fetchHttp: ConfigObject = {
   },
   rules: {
     [`${name}/${noWithxhr.ruleName}`]: "error",
-    [`${name}/${noHttpxhrbackend}`]: "error",
+    [`${name}/${noHttpxhrbackend.ruleName}`]: "error",
     [`${name}/${noHttpReportprogress.ruleName}`]: "error",
     [`${name}/${noHttpReportuploadprogress.ruleName}`]: "error",
   },
