@@ -59,4 +59,21 @@ module.exports = defineConfig({
 });
 ```
 
+### Functional
+
+- [no-canload-class](./NO_CANLOAD_CLASS.md)
+
+```javascript
+const angularModern = require('eslint-plugin-angular-modern');
+
+module.exports = defineConfig({
+  extends: [
+    angularModern.configs.functional, // or `recommended`
+  ],
+  rules: {
+    'eslint-plugin-angular-modern/no-canload-class': 'error',
+  },
+});
+```
+
 [Back to README](../../README.md)

@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.5.0 (2026-08-18)
+
+New `functional` preset (included in `recommended`) with the following new rules:
+- [no-canactivate-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_CANACTIVATE_CLASS.md)
+- [no-canactivatechild-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_CANACTIVATECHILD_CLASS.md)
+- [no-candeactivate-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_CANDEACTIVATE_CLASS.md)
+- [no-canmatch-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_CANMATCH_CLASS.md)
+- [no-resolve-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_RESOLVE_CLASS.md)
+- [no-httpinterceptor-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_HTTPINTERCEPTOR_CLASS.md)
+- [no-httpinterceptors-token](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_HTTPINTERCEPTORS_TOKEN.md)
+- [no-withinterceptorsfromdi](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_WITHINTERCEPTORSFROMDI.md)
+
+New related rules not in the preset:
+- [no-canload-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_CANLOAD_CLASS.md)
+
 ## 1.4.0 (2026-08-17)
 
 New `dependencyInjection` preset (included in `recommended`) with the following new rules:

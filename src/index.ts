@@ -4,6 +4,7 @@ import * as noInjectDecorator from "./rules/dependency-injection/no-inject-decor
 import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decorator.js";
 import * as noProviderDeps from "./rules/dependency-injection/no-provider-deps.js";
 import * as noBrowseranimationsmodule from "./rules/deprecated/no-browseranimationsmodule.js";
+import * as noCanloadClass from "./rules/deprecated/no-canload-class.js";
 import * as noHttpclientjsonpmodule from "./rules/deprecated/no-httpclientjsonpmodule.js";
 import * as noHttpclientmodule from "./rules/deprecated/no-httpclientmodule.js";
 import * as noHttpclienttestingmodule from "./rules/deprecated/no-httpclienttestingmodule.js";
@@ -12,6 +13,14 @@ import * as noNoopanimationsmodule from "./rules/deprecated/no-noopanimationsmod
 import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowserdynamic.js";
 import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
+import * as noCanactivateClass from "./rules/functional/no-canactivate-class.js";
+import * as noCanactivatechildClass from "./rules/functional/no-canactivatechild-class.js";
+import * as noCandeactivateClass from "./rules/functional/no-candeactivate-class.js";
+import * as noCanmatchClass from "./rules/functional/no-canmatch-class.js";
+import * as noHttpinterceptorClass from "./rules/functional/no-httpinterceptor-class.js";
+import * as noHttpinterceptorsToken from "./rules/functional/no-httpinterceptors-token.js";
+import * as noResolveClass from "./rules/functional/no-resolve-class.js";
+import * as noWithinterceptorsfromdi from "./rules/functional/no-withinterceptorsfromdi.js";
 import * as noHostbindingDecorator from "./rules/host-bindings/no-hostbinding-decorator.js";
 import * as noHostlistenerDecorator from "./rules/host-bindings/no-hostlistener-decorator.js";
 import * as afterEveryRenderInInjectionContext from "./rules/injection-context/after-every-render-in-injection-context.js";
@@ -80,6 +89,9 @@ const plugin = {
     get standalone() {
       return standalone;
     },
+    get functional() {
+      return functional;
+    },
     get stylingBindings() {
       return stylingBindings;
     },
@@ -117,6 +129,15 @@ const plugin = {
     [noServiceworkermodule.ruleName]: noServiceworkermodule.ruleDefinition,
     [noServermodule.ruleName]: noServermodule.ruleDefinition,
     [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
+    // Functional
+    [noCanactivateClass.ruleName]: noCanactivateClass.ruleDefinition,
+    [noCanactivatechildClass.ruleName]: noCanactivatechildClass.ruleDefinition,
+    [noCandeactivateClass.ruleName]: noCandeactivateClass.ruleDefinition,
+    [noCanmatchClass.ruleName]: noCanmatchClass.ruleDefinition,
+    [noResolveClass.ruleName]: noResolveClass.ruleDefinition,
+    [noHttpinterceptorClass.ruleName]: noHttpinterceptorClass.ruleDefinition,
+    [noHttpinterceptorsToken.ruleName]: noHttpinterceptorsToken.ruleDefinition,
+    [noWithinterceptorsfromdi.ruleName]: noWithinterceptorsfromdi.ruleDefinition,
     // Styling bindings
     [noNgclass.ruleName]: noNgclass.ruleDefinition,
     [noNgstyle.ruleName]: noNgstyle.ruleDefinition,
@@ -183,6 +204,7 @@ const plugin = {
     [noHttpclientxsrfmodule.ruleName]: noHttpclientxsrfmodule.ruleDefinition,
     [noBrowseranimationsmodule.ruleName]: noBrowseranimationsmodule.ruleDefinition,
     [noNoopanimationsmodule.ruleName]: noNoopanimationsmodule.ruleDefinition,
+    [noCanloadClass.ruleName]: noCanloadClass.ruleDefinition,
     // Experimental
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
@@ -204,6 +226,22 @@ const standalone: ConfigObject = {
     [`${name}/${noServiceworkermodule.ruleName}`]: "error",
     [`${name}/${noServermodule.ruleName}`]: "error",
     [`${name}/${noWithmoduleTesting.ruleName}`]: "error",
+  },
+};
+
+const functional: ConfigObject = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noCanactivateClass.ruleName}`]: "error",
+    [`${name}/${noCanactivatechildClass.ruleName}`]: "error",
+    [`${name}/${noCandeactivateClass.ruleName}`]: "error",
+    [`${name}/${noCanmatchClass.ruleName}`]: "error",
+    [`${name}/${noResolveClass.ruleName}`]: "error",
+    [`${name}/${noHttpinterceptorClass.ruleName}`]: "error",
+    [`${name}/${noHttpinterceptorsToken.ruleName}`]: "error",
+    [`${name}/${noWithinterceptorsfromdi.ruleName}`]: "error",
   },
 };
 
@@ -306,6 +344,7 @@ const recommended: ConfigObject = {
   },
   rules: {
     ...standalone.rules,
+    ...functional.rules,
     ...stylingBindings.rules,
     ...hostBindings.rules,
     ...injectionContext.rules,
