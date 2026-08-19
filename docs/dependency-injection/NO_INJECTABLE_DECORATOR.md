@@ -11,7 +11,7 @@ Use `@Service()` instead.
 ## Configuration
 
 > [!IMPORTANT]
-> `@Service()` was introduced in Angular 22, so this rule should only be enabled in Angular >= 22 projects.
+> `@Service()` was introduced in Angular 22, so this rule should only be disabled in previous versions.
 
 - in the `recommended` preset
 - in the `dependencyInjection` preset

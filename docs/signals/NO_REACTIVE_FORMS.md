@@ -12,7 +12,7 @@ Use signals `form()` instead.
 ## Configuration
 
 > [!IMPORTANT]
-> Signal forms were introduced in Angular 21, so this rule should only be enabled in Angular >= 21 projects.
+> Stable signals forms were introduced in Angular 22, so this rule should only be disabled in previous versions.
 
 - in the `recommended` preset
 - in the `signals` preset

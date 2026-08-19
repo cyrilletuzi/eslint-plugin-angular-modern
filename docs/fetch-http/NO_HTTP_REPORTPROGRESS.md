@@ -10,6 +10,9 @@ Use `reportDownloadProgress()` instead.
 
 ## Configuration
 
+> [!IMPORTANT]
+> `reportDownloadProgress` was introduced in Angular 22, so this rule should only be disabled in previous versions.
+
 - in the `recommended` preset
 - in the `fetchHttp` preset
 - or just this rule:
