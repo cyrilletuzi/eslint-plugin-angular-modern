@@ -325,7 +325,7 @@ I proposed a [Pull Request](https://github.com/angular-eslint/angular-eslint/pul
 
 > Is Angular ESLint required?
 
-No, these rules only depends on TypeScript ESLint.
+No, these rules only depends on TypeScript ESLint. Both can be used in a project, but some rules may be redundant. See the [documentation](./docs/ANGULAR_ESLINT.md) for optimization.
 
 > Is adding a plugin making the project heavier?
 
