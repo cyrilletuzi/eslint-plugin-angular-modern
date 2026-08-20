@@ -215,7 +215,9 @@ For other functions requiring the injection context (custom ones or from librari
 
 Additional individual rules, _not_ included in the preset, are available for some libraries:
 
+- [no-cdk-modules](./docs/standalone/NO_CDK_MODULES.md)
 - [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
+- [no-ionicmodule](./docs/standalone/NO_IONICMODULE.md)
 
 ### Functional preset
 

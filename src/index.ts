@@ -67,8 +67,10 @@ import * as noNgmodulePipe from "./rules/standalone-strict/no-ngmodule-pipe.js";
 import * as noApplicationmodule from "./rules/standalone/no-applicationmodule.js";
 import * as noBrowsermodule from "./rules/standalone/no-browsermodule.js";
 import * as noBrowsertestingmodule from "./rules/standalone/no-browsertestingmodule.js";
+import * as noCdkModules from "./rules/standalone/no-cdk-modules.js";
 import * as noCommonmodule from "./rules/standalone/no-commonmodule.js";
 import * as noCreatengmodule from "./rules/standalone/no-createngmodule.js";
+import * as noIonicmodule from "./rules/standalone/no-ionicmodule.js";
 import * as noMaterialModules from "./rules/standalone/no-material-modules.js";
 import * as noNgmodule from "./rules/standalone/no-ngmodule.js";
 import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
@@ -129,13 +131,15 @@ const plugin = {
     [noBrowsertestingmodule.ruleName]: noBrowsertestingmodule.ruleDefinition,
     [noCommonmodule.ruleName]: noCommonmodule.ruleDefinition,
     [noCreatengmodule.ruleName]: noCreatengmodule.ruleDefinition,
-    [noMaterialModules.ruleName]: noMaterialModules.ruleDefinition,
     [noNgmodule.ruleName]: noNgmodule.ruleDefinition,
     [noPlatformbrowser.ruleName]: noPlatformbrowser.ruleDefinition,
     [noRoutermodule.ruleName]: noRoutermodule.ruleDefinition,
     [noServiceworkermodule.ruleName]: noServiceworkermodule.ruleDefinition,
     [noServermodule.ruleName]: noServermodule.ruleDefinition,
     [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
+    [noCdkModules.ruleName]: noCdkModules.ruleDefinition,
+    [noMaterialModules.ruleName]: noMaterialModules.ruleDefinition,
+    [noIonicmodule.ruleName]: noIonicmodule.ruleDefinition,
     // Functional
     [noCanactivateClass.ruleName]: noCanactivateClass.ruleDefinition,
     [noCanactivatechildClass.ruleName]: noCanactivatechildClass.ruleDefinition,
