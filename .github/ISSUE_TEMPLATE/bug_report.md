@@ -13,6 +13,7 @@ assignees: ''
 - [ ] I have read _all_ the library's documentation:
   - [README](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/README.md)
   - [rules documentation](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/tree/main/docs/rules)
+  - [design choices](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/tree/main/docs/DESIGN_CHOICES.md)
   - [CHANGELOG](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/CHANGELOG.md)
 - [ ] I have checked in already:
   - [opened issues](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/issues)

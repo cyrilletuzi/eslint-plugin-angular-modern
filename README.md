@@ -327,13 +327,13 @@ I proposed a [Pull Request](https://github.com/angular-eslint/angular-eslint/pul
 
 No, these rules only depends on TypeScript ESLint.
 
-> Is typed linting required?
-
-[Typed linting](https://typescript-eslint.io/getting-started/typed-linting) is not required for now, but it could change in the future.
-
 > Is adding a plugin making the project heavier?
 
-No, the package has 0 dependency. It just add lint rules using TypeScript ESLint, which is already installed in the project.
+No, the package has 0 dependency. It just add lint rules using TypeScript ESLint, which is already installed in the project. And the main [design choice](./docs/DESIGN_CHOICES.md) is performance.
+
+> Why is X or Y feature considered as legacy?
+
+This is explained in the "Legacy" section of the [design choices](./docs/DESIGN_CHOICES.md).
 
 ## License
 
