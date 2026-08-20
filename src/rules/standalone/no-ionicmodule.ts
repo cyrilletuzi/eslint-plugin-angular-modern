@@ -2,8 +2,8 @@ import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { isImportIdentifier } from "../../utils/is-import-identifier";
 
-export const ruleName = "no-ionic-module";
-const messageId = "noIonicModule";
+export const ruleName = "no-ionicmodule";
+const messageId = "noIonicmodule";
 
 export const ruleDefinition: RuleDefinition = {
   meta: {
@@ -13,7 +13,7 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`IonicModule\` not used.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_IONIC_MODULE.md',
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_IONICMODULE.md',
     },
     schema: [],
   },

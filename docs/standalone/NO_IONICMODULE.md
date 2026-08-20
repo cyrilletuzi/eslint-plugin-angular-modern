@@ -1,4 +1,4 @@
-# no-ionic-module
+# no-ionicmodule
 
 Restrict the usage of `IonicModule`.
 
@@ -13,7 +13,7 @@ Use standalone components and directives instead, and \`provideIonicAngular()\` 
 ```json
 {
   "rules": {
-    "eslint-plugin-angular-modern/no-ionic-module": "error"
+    "eslint-plugin-angular-modern/no-ionicmodule": "error"
   }
 }
 ```

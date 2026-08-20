@@ -217,7 +217,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 
 - [no-cdk-modules](./docs/standalone/NO_CDK_MODULES.md)
 - [no-material-modules](./docs/standalone/NO_MATERIAL_MODULES.md)
-- [no-ionic-module](./docs/standalone/NO_IONIC_MODULE.md)
+- [no-ionicmodule](./docs/standalone/NO_IONICMODULE.md)
 
 ### Functional preset
 

@@ -70,7 +70,7 @@ import * as noBrowsertestingmodule from "./rules/standalone/no-browsertestingmod
 import * as noCdkModules from "./rules/standalone/no-cdk-modules.js";
 import * as noCommonmodule from "./rules/standalone/no-commonmodule.js";
 import * as noCreatengmodule from "./rules/standalone/no-createngmodule.js";
-import * as noIonicModule from "./rules/standalone/no-ionic-module.js";
+import * as noIonicmodule from "./rules/standalone/no-ionicmodule.js";
 import * as noMaterialModules from "./rules/standalone/no-material-modules.js";
 import * as noNgmodule from "./rules/standalone/no-ngmodule.js";
 import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
@@ -139,7 +139,7 @@ const plugin = {
     [noWithmoduleTesting.ruleName]: noWithmoduleTesting.ruleDefinition,
     [noCdkModules.ruleName]: noCdkModules.ruleDefinition,
     [noMaterialModules.ruleName]: noMaterialModules.ruleDefinition,
-    [noIonicModule.ruleName]: noIonicModule.ruleDefinition,
+    [noIonicmodule.ruleName]: noIonicmodule.ruleDefinition,
     // Functional
     [noCanactivateClass.ruleName]: noCanactivateClass.ruleDefinition,
     [noCanactivatechildClass.ruleName]: noCanactivatechildClass.ruleDefinition,
