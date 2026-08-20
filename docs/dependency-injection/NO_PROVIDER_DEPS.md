@@ -31,7 +31,7 @@ Use `inject()` instead.
 ```typescript
 {
   provide: SomeService,
-  useFactory: (requiredDep: SomeRequiredDep, optionalDep?: SomeOptionalDep) {
+  useFactory: (requiredDep: SomeRequiredDep, optionalDep?: SomeOptionalDep) => {
     // Build and return something
   },
   deps: [SomeRequiredDep, [new Optional(), SomeOptionalDep]],
@@ -43,7 +43,7 @@ Use `inject()` instead.
 ```typescript
 {
   provide: SomeService,
-  useFactory: () {
+  useFactory: () => {
     const requiredDep = inject(SomeRequiredDep);
     const optionalDep = inject(SomeOptionalDep, { optional: true });
     // Build and return something
