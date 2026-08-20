@@ -12,7 +12,7 @@ There are a few exceptions, to respect the performance goal mentionned below:
 
 - while most rules are about Angular itself, some are for additional libraries (for example Material): as the usage of these libraries is specific to each project, their related rules must be enabled individually, to avoid useless checks
 
-- to avoid redundant checks, rules about things which can already be reported by existing ESLint or TypeScript ESLint rules (especially the `@typescript-eslint/no-deprecated` one) or by Angular compiler options are not enabled by default
+- to avoid redundant checks, rules about things which can already be reported by existing ESLint or TypeScript ESLint rules (especially the [`@typescript-eslint/no-deprecated`](./deprecated/DEPRECATED.md) one) or by Angular compiler options are not enabled by default
 
 ## Features presets
 
