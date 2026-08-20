@@ -1,5 +1,13 @@
 # Design choices
 
+## Legacy
+
+One of the main goals of this lint package is to ban legacy Angular features. But **what is considered legacy? Any feature for which a new stable API has been introduced to achieve the same goal but in a new way.**
+
+Some may argue that some features are not legacy and are still supported. I work with the modern Angular since its alpha version, so more than 10 years now, and I learned one thing: the cake is a lie. For many reasons, the Angular team has to be careful about how they communicate about changes. But let us take an example: dependency injection. At first, the official message from the documentation was "both constructor-based injection and `inject()` are OK". But quietly and quite quickly, the constructor-based injection has disappeared from the documentation and `inject()` is now enforced by default by Angular ESLint. It has been the same story for every feature.
+
+One may disagree, and that is OK. Then, just do not use the presets aimed at banning legacy features. But **it is useless to start debates about this in issues or discussions, they would be closed right away.**
+
 ## Recommended preset
 
 Recommended presets in lint packages are often a mess: it is commonly opaque or unclear why a rule is or is not inside the recommended preset, and generally the decision is done more or less arbitrarily by one individual. From the user side, it makes things really difficult, because each rule must be searched and inspected one by one to see if it is already in the recommended preset or not, and if not, if it should be enabled or not.
@@ -29,13 +37,5 @@ In the today state of development, where AI tools have a central place, **the li
 For example, banning `NgClass` is just done by detecting identifiers called `NgClass`, and that is all. In a theorical world, precision would require to check it is a `NgClass` coming from `@angular/common`. But in practice, this level of precision is useless, because it is very unlikely something else is called `NgClass`.
 
 For the same reason, [typed linting](https://typescript-eslint.io/getting-started/typed-linting) is avoided as much as possible.
-
-## Legacy
-
-One of the main goals of this lint package is to ban legacy Angular features. But **what is considered legacy? Any feature for which a new stable API has been introduced to achieve the same goal but in a new way.**
-
-Some may argue that some features are not legacy and are still supported. I work with the modern Angular since its alpha version, so more than 10 years now, and I learned one thing: the cake is a lie. For many reasons, the Angular team has to be careful about how they communicate about changes. But let us take an example: dependency injection. At first, the official message from the documentation was "both constructor-based injection and `inject()` are OK". But quietly and quite quickly, the constructor-based injection has disappeared from the documentation and `inject()` is now enforced by default by Angular ESLint. It has been the same story for every feature.
-
-One may disagree, and that is OK. Then, just do not use the presets aimed at banning legacy features. But **it is useless to start debates about this in issues or discussions, they would be closed right away.**
 
 [Back to README](../README.md)
