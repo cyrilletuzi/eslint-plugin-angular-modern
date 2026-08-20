@@ -4,6 +4,7 @@
 
 New `standalone` related rules not in the preset:
 - [no-cdk-modules](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_CDK_MODULES.md)
+- [no-ionic-module](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_IONIC_MODULE.md)
 
 ## 1.6.0 (2026-08-18)
 
