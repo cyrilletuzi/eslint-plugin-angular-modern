@@ -36,6 +36,6 @@ One of the main goals of this lint package is to ban legacy Angular features. Bu
 
 Some may argue that some features are not legacy and are still supported. I work with the modern Angular since its alpha version, so more than 10 years now, and I learned one thing: the cake is a lie. For many reasons, the Angular team has to be careful about how they communicate about changes. But let us take an example: dependency injection. At first, the official message from the documentation was "both constructor-based injection and `inject()` are OK". But quietly and quite quickly, the constructor-based injection has disappeared from the documentation and `inject()` is now enforced by default by Angular ESLint. It has been the same story for every feature.
 
-One may disagree, and that is OK. Then, just do not use the presets aimed at banning legacy features. But **it is useless to start debates about this in issues or discussions, they will be closed right away.**
+One may disagree, and that is OK. Then, just do not use the presets aimed at banning legacy features. But **it is useless to start debates about this in issues or discussions, they would be closed right away.**
 
 [Back to README](../README.md)
