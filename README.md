@@ -10,13 +10,13 @@
 
 1. **Enforce modern Angular**
 
-Angular has evolved a lot: standalone components, new control flow syntax, new dependency injection, zoneless, signals... One could even argue it is a new framework. It has been done in a backward compatible way, which is nice, but it also has a downside: a lot of legacy features are still available, both for developers and for AI tools. Lint rules can restrict the usage of these legacy features, in a reliable way (unlike AI custom instructions and skills, which are often not followed).
+Angular has evolved a lot: standalone components, new control flow syntax, new dependency injection, zoneless, signals... One could even argue it is a new framework. It has been done in a backward compatible way, which is nice, but it also has a downside: a lot of legacy features are still available, both for developers and for AI tools. Lint rules can **restrict the usage of these legacy features**, in a reliable way (unlike AI custom instructions and skills, which are often not followed).
 
 A [blog post](https://dev.to/cyrilletuzi/angular-zoneless-lint-rules-enforce-signals-patterns-4fc) explains this goal in more details.
 
 2. **Enforce safe Angular usage**
 
-Some of the new features, especially the new dependency injection, can produce runtime errors, not protected by compilation. Lint rules can lower the risk of these runtime errors. 
+Some of the new features, especially the new dependency injection, can produce runtime errors, not protected by compilation. Lint rules can **lower the risk of these runtime errors**. 
 
 Another [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-rules-say-goodbye-to-ng0203-error-3g5i) explains this goal in more details.
 
