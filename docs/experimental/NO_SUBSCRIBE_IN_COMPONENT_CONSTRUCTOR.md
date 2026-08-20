@@ -11,10 +11,10 @@ An observable inside a component constructor can generally be managed with `toSi
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-subscribe-in-component-constructor": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-subscribe-in-component-constructor': 'error'
   }
 }
 ```

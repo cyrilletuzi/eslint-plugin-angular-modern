@@ -12,10 +12,10 @@ Use `await fixture.whenStable()` instead.
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-detectchanges-testing": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-detectchanges-testing': 'error'
   }
 }
 ```

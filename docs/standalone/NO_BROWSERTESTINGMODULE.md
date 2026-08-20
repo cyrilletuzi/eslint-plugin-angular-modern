@@ -12,10 +12,10 @@ Restrict the usage of `BrowserTestingModule`.
 - in the `standalone` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-browsertestingmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-browsertestingmodule': 'error'
   }
 }
 ```

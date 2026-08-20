@@ -10,10 +10,10 @@ Use `CanMatchFn` with a functional guard instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-canload-class": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-canload-class': 'error'
   }
 }
 ```

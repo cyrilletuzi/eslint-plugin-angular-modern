@@ -12,10 +12,10 @@ Restrict the usage of deprecated `HttpClientModule`.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-httpclientmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-httpclientmodule': 'error'
   }
 }
 ```

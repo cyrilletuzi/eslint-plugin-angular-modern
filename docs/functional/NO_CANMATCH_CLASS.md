@@ -14,10 +14,10 @@ Use `CanMatchFn` with a functional guard instead.
 - in the `functional` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-canmatch-class": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-canmatch-class': 'error'
   }
 }
 ```

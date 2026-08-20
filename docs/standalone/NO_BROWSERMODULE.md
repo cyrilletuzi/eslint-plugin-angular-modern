@@ -15,10 +15,10 @@ Use `bootstrapApplication()` instead.
 - in the `standalone` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-browsermodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-browsermodule': 'error'
   }
 }
 ```

@@ -11,10 +11,10 @@ It is planned for removal; in the meantime, use `provideAnimations()` or `provid
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-noopanimationsmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-noopanimationsmodule': 'error'
   }
 }
 ```

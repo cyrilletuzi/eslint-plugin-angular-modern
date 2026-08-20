@@ -12,10 +12,10 @@ Checks that `pendingUntilEvent()` is called inside an injection context, or that
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/pending-until-event-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/pending-until-event-in-injection-context': 'error'
   }
 }
 ```

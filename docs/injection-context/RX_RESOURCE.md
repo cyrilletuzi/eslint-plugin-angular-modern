@@ -13,10 +13,10 @@ Checks that `rxResource()` is called inside an injection context, or that an exp
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/rx-resource-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/rx-resource-in-injection-context': 'error'
   }
 }
 ```

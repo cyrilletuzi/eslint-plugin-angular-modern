@@ -13,10 +13,10 @@ Checks that `afterEveryRender()` is called inside an injection context, or that 
 - in the `recommended` preset
 - in the `injectionContext` preset
 - or just this rule:
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/after-every-render-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/after-every-render-in-injection-context': 'error'
   }
 }
 ```

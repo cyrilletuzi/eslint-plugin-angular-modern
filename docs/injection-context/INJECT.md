@@ -12,10 +12,10 @@ Checks that `inject()` is called inside an injection context, to avoid the `NG02
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/inject-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/inject-in-injection-context': 'error'
   }
 }
 ```

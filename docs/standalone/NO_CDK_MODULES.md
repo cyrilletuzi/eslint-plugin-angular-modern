@@ -10,10 +10,10 @@ Use CDK standalone components and directives instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-cdk-modules": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-cdk-modules': 'error'
   }
 }
 ```

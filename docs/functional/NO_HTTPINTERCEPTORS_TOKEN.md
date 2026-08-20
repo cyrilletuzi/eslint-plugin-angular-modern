@@ -14,10 +14,10 @@ Use `provideHttpClient(withInterceptors())` with functional interceptors instead
 - in the `functional` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-httpinterceptors-token": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-httpinterceptors-token': 'error'
   }
 }
 ```

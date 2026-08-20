@@ -11,10 +11,10 @@ Use `bootstrapApplication()` instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-platformbrowserdynamic": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-platformbrowserdynamic': 'error'
   }
 }
 ```

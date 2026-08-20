@@ -20,7 +20,7 @@ npm install eslint-plugin-angular-modern --save-dev
 
 ```javascript
 // Before
-const angularEslintInjectionContext = require("angular-eslint-injection-context");
+const angularEslintInjectionContext = require('angular-eslint-injection-context');
 
 module.exports = defineConfig({
   extends: [
@@ -28,12 +28,12 @@ module.exports = defineConfig({
   ],
   rules: {
     // If some individual rules are configured:
-    "angular-eslint-injection-context/inject-in-injection-context": "error",
+    'angular-eslint-injection-context/inject-in-injection-context': 'error',
   },
 });
 
 // After
-const angularModern = require("eslint-plugin-angular-modern");
+const angularModern = require('eslint-plugin-angular-modern');
 
 module.exports = defineConfig({
   extends: [
@@ -41,7 +41,7 @@ module.exports = defineConfig({
   ],
   rules: {
     // If some individual rules are configured:
-    "eslint-plugin-angular-modern/inject-in-injection-context": "error",
+    'eslint-plugin-angular-modern/inject-in-injection-context': 'error',
   },
 });
 ```
@@ -63,7 +63,7 @@ npm install eslint-plugin-angular-modern --save-dev
 
 ```javascript
 // Before
-const angularEslintZoneless = require("angular-eslint-zoneless");
+const angularEslintZoneless = require('angular-eslint-zoneless');
 
 module.exports = defineConfig({
   extends: [
@@ -75,12 +75,12 @@ module.exports = defineConfig({
   ],
   rules: {
     // If some individual rules are configured:
-    "angular-eslint-zoneless/no-asyncpipe": "error",
+    'angular-eslint-zoneless/no-asyncpipe': 'error',
   },
 });
 
 // After
-const angularModern = require("eslint-plugin-angular-modern");
+const angularModern = require('eslint-plugin-angular-modern');
 
 module.exports = defineConfig({
   extends: [
@@ -91,7 +91,7 @@ module.exports = defineConfig({
   ],
   rules: {
     // If some individual rules are configured:
-    "eslint-plugin-angular-modern/no-asyncpipe": "error",
+    'eslint-plugin-angular-modern/no-asyncpipe': 'error',
   },
 });
 ```

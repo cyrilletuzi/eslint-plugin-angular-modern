@@ -13,10 +13,10 @@ Checks that `effect()` is called inside an injection context, or that an explici
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/effect-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/effect-in-injection-context': 'error'
   }
 }
 ```

@@ -17,10 +17,10 @@ Use `reportDownloadProgress()` instead.
 - in the `fetchHttp` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-http-reportprogress": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-http-reportprogress': 'error'
   }
 }
 ```

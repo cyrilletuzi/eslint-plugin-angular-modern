@@ -12,10 +12,10 @@ Resources and signals are designed to be reactive, so waiting manually for the `
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngdocheck": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngdocheck': 'error'
   }
 }
 ```

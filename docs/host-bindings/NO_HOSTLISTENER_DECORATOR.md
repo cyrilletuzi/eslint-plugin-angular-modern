@@ -14,10 +14,10 @@ Use `host` property instead, which is typed checked.
 - in the `hostBindings` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-hostlistener-decorator": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-hostlistener-decorator': 'error'
   }
 }
 ```

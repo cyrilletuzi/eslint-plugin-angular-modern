@@ -15,10 +15,10 @@ In components and directives, a public or protected getter or setter can be boun
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-directive-accessor": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-directive-accessor': 'error'
   }
 }
 ```

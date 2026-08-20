@@ -14,10 +14,10 @@ Use `withInterceptors()` with functional interceptors instead.
 - in the `functional` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-withinterceptorsfromdi": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-withinterceptorsfromdi': 'error'
   }
 }
 ```

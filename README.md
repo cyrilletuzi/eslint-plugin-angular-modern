@@ -42,13 +42,13 @@ npm install eslint-plugin-angular-modern --save-dev
 2. ESLint flat configuration (`eslint.config.js` or equivalent)
 
 ```javascript
-const eslint = require("@eslint/js");
-const { defineConfig } = require("eslint/config");
-const tsEslint = require("typescript-eslint");
-const angularModern = require("eslint-plugin-angular-modern"); // ⬅️ add this
+const eslint = require('@eslint/js');
+const { defineConfig } = require('eslint/config');
+const tsEslint = require('typescript-eslint');
+const angularModern = require('eslint-plugin-angular-modern'); // ⬅️ add this
 
 module.exports = defineConfig({
-  files: ["**/*.ts"],
+  files: ['**/*.ts'],
   languageOptions: {
     parserOptions: {
       projectService: true,
@@ -310,9 +310,9 @@ The presets above target the latest Angular stable version (currently v22). Some
 ```javascript
 module.exports = defineConfig({
   rules: {
-    "eslint-plugin-angular-modern/no-injectable-decorator": "off",
-    "eslint-plugin-angular-modern/no-reactive-forms": "off",
-    "eslint-plugin-angular-modern/no-http-reportprogress": "off",
+    'eslint-plugin-angular-modern/no-injectable-decorator': 'off',
+    'eslint-plugin-angular-modern/no-reactive-forms': 'off',
+    'eslint-plugin-angular-modern/no-http-reportprogress': 'off',
   },
 });
 ```

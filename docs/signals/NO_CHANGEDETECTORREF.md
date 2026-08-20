@@ -12,10 +12,10 @@ With signals, acting explicitly on the change detection is generally not necessa
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-changedetectorref": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-changedetectorref': 'error'
   }
 }
 ```

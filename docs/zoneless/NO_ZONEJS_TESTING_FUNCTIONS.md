@@ -15,10 +15,10 @@ These functions are useless and do not work in a zoneless application.
 
 - in the `recommended` preset
 - in the `zoneless` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-zonejs-testing-functions": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-zonejs-testing-functions': 'error'
   }
 }
 ```

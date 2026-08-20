@@ -14,10 +14,10 @@ Use `CanDeactivateFn` with a functional guard instead.
 - in the `functional` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-candeactivate-class": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-candeactivate-class': 'error'
   }
 }
 ```

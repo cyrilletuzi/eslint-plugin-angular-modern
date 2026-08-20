@@ -6,10 +6,10 @@ Checks that `resource()` is called inside an injection context, or that an expli
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/resource-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/resource-in-injection-context': 'error'
   }
 }
 ```

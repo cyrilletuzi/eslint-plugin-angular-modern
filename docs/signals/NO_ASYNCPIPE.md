@@ -13,10 +13,10 @@ Use `toSignal()` or `rxResource()` instead.
 
 - in the `recommended` preset (see the [README](../../README.md) for the configuration)
 - or just this rule:
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-asyncpipe": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-asyncpipe': 'error'
   }
 }
 ```

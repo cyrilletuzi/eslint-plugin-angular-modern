@@ -14,10 +14,10 @@ Stay on the default fetch based HTTP instead.
 - in the `fetchHttp` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-withxhr": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-withxhr': 'error'
   }
 }
 ```

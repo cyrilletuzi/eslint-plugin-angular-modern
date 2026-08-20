@@ -12,10 +12,10 @@ It is planned for removal because of security issues; in the meantime, use `with
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-httpclientjsonpmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-httpclientjsonpmodule': 'error'
   }
 }
 ```

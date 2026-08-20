@@ -17,10 +17,10 @@ Use the new control flow syntax instead and standalone pipes instead.
 - in the `standalone` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-commonmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-commonmodule': 'error'
   }
 }
 ```

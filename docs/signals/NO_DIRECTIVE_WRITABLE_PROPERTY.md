@@ -14,10 +14,10 @@ In components and directives, a public or protected property can be bound to the
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-directive-writable-property": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-directive-writable-property': 'error'
   }
 }
 ```

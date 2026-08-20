@@ -12,10 +12,10 @@ Use `provideRouter()` instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-routertestingmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-routertestingmodule': 'error'
   }
 }
 ```

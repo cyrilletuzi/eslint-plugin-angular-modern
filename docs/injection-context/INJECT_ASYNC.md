@@ -12,10 +12,10 @@ Checks that `injectAsync()` is called inside an injection context, to avoid the 
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/inject-async-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/inject-async-in-injection-context': 'error'
   }
 }
 ```

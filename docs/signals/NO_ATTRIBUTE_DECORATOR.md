@@ -13,10 +13,10 @@ Use the `ìnput()` signal version instead.
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-attribute-decorator": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-attribute-decorator': 'error'
   }
 }
 ```

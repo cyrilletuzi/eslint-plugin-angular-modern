@@ -10,10 +10,10 @@ Use Material standalone components and directives instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-material-modules": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-material-modules': 'error'
   }
 }
 ```

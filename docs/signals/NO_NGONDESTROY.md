@@ -13,10 +13,10 @@ Signals and resources destroy is automatic. When really needed, use `DestroyRef.
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngondestroy": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngondestroy': 'error'
   }
 }
 ```

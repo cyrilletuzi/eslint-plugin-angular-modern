@@ -14,10 +14,10 @@ Use `CanActivateChildFn` with a functional guard instead.
 - in the `functional` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-canactivatechild-class": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-canactivatechild-class': 'error'
   }
 }
 ```

@@ -13,10 +13,10 @@ Checks that `takeUntilDestroyed()` is called inside an injection context, or tha
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/take-until-destroyed-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/take-until-destroyed-in-injection-context': 'error'
   }
 }
 ```

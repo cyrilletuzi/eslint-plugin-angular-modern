@@ -15,10 +15,10 @@ Use `inject()` instead.
 - in the `dependencyInjection` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-provider-deps": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-provider-deps': 'error'
   }
 }
 ```

@@ -10,10 +10,10 @@ Use a standalone component instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngmodule-component": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngmodule-component': 'error'
   }
 }
 ```

@@ -14,10 +14,10 @@ Use standalone components, directives and pipes instead.
 - in the `standalone` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngmodule': 'error'
   }
 }
 ```

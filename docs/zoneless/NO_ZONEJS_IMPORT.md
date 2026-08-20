@@ -9,10 +9,10 @@ Restrict the import of `zone.js`.
 
 - in the `recommended` preset
 - in the `zoneless` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-zonejs-import": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-zonejs-import': 'error'
   }
 }
 ```

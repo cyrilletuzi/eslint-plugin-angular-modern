@@ -17,10 +17,10 @@ Use `provideRouter()` or `RouterLink` instead.
 - in the `standalone` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-routermodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-routermodule': 'error'
   }
 }
 ```

@@ -12,10 +12,10 @@ Use `withXsrfConfiguration()` instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-httpclientxsrfmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-httpclientxsrfmodule': 'error'
   }
 }
 ```

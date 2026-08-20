@@ -14,10 +14,10 @@ Use native `[style]` instead.
 - in the `stylingBindings` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngstyle": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngstyle': 'error'
   }
 }
 ```

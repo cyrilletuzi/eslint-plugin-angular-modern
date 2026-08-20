@@ -14,10 +14,10 @@ Use the `viewChild()` and `viewChildren()` signal versions instead.
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-view-decorator": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-view-decorator': 'error'
   }
 }
 ```

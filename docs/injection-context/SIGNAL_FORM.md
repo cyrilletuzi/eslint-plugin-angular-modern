@@ -13,10 +13,10 @@ Checks that signal `form()` is called inside an injection context, or that an ex
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/signal-form-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/signal-form-in-injection-context': 'error'
   }
 }
 ```

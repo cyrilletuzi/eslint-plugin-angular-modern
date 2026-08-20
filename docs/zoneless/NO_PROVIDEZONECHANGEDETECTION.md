@@ -10,10 +10,10 @@ Restrict the usage of `provideZoneChangeDetection()`.
 
 - in the `recommended` preset
 - in the `zoneless` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-providezonechangedetection": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-providezonechangedetection': 'error'
   }
 }
 ```

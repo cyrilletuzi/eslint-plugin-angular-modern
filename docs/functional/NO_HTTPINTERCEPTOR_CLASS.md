@@ -14,10 +14,10 @@ Use `HttpInterceptorFn` with a functional interceptor instead.
 - in the `functional` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-httpinterceptor-class": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-httpinterceptor-class': 'error'
   }
 }
 ```

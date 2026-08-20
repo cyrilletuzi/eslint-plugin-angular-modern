@@ -10,10 +10,10 @@ Use a standalone pipe instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngmodule-pipe": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngmodule-pipe': 'error'
   }
 }
 ```

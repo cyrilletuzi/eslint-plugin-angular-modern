@@ -13,10 +13,10 @@ Checks that `toObservable()` is called inside an injection context, or that an e
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/to-observable-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/to-observable-in-injection-context': 'error'
   }
 }
 ```

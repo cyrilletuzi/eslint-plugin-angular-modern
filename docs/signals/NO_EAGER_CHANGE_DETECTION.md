@@ -15,10 +15,10 @@ Use `ChangeDetectionStrategy.OnPush` instead (it is the default in Angular >= 22
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-eager-change-detection": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-eager-change-detection': 'error'
   }
 }
 ```

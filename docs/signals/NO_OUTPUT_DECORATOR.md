@@ -17,10 +17,10 @@ Use the `output()` version instead
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-output-decorator": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-output-decorator': 'error'
   }
 }
 ```

@@ -12,10 +12,10 @@ Restrict the usage of `withModule`.
 - in the `standalone` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-withmodule-testing": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-withmodule-testing': 'error'
   }
 }
 ```

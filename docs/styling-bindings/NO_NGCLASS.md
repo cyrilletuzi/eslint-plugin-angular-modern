@@ -14,10 +14,10 @@ Use native `[class]` instead.
 - in the `stylingBindings` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngclass": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngclass': 'error'
   }
 }
 ```

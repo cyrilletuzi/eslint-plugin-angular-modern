@@ -12,10 +12,10 @@ Restrict the usage of HttpClient `reportUploadProgress` option, which is not sup
 - in the `fetchHttp` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-http-reportuploadprogress": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-http-reportuploadprogress': 'error'
   }
 }
 ```

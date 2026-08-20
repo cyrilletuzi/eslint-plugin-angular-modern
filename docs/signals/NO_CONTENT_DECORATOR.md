@@ -14,10 +14,10 @@ Use the `contentChild()` and `contentChildren()` signal versions instead.
 
 - in the `recommended` preset
 - in the `signals` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-content-decorator": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-content-decorator': 'error'
   }
 }
 ```

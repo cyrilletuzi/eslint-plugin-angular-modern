@@ -11,10 +11,10 @@ Use `provideHttpClientTesting()` instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-httpclienttestingmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-httpclienttestingmodule': 'error'
   }
 }
 ```

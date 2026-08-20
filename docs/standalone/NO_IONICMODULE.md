@@ -10,10 +10,10 @@ Use standalone components and directives instead, and \`provideIonicAngular()\` 
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ionicmodule": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ionicmodule': 'error'
   }
 }
 ```

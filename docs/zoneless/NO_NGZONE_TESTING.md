@@ -8,10 +8,10 @@ It is useless and null in a zoneless application.
 
 - in the `recommended` preset
 - in the `zoneless` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngzone-testing": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngzone-testing': 'error'
   }
 }
 ```

@@ -10,10 +10,10 @@ Use a standalone directive instead.
 
 ## Configuration
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-ngmodule-directive": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-ngmodule-directive': 'error'
   }
 }
 ```

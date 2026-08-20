@@ -29,13 +29,13 @@ myCustomOperator(destroyRef); // outside injection context
 ```
 
 ...the configuration would be:
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/custom-function-in-injection-context": ["error", {
-      "functions": [{
-        "name": "myCustomOperator",
-        "argumentPosition": 0
+  rules: {
+    'eslint-plugin-angular-modern/custom-function-in-injection-context': ['error', {
+      functions: [{
+        name: 'myCustomOperator',
+        argumentPosition: 0
       }]
     }]
   }
@@ -55,14 +55,14 @@ myCustomOperator('test', { injector }); // outside injection context
 ```
 
 ...the configuration would be:
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/custom-function-in-injection-context": ["error", {
-      "functions": [{
-        "name": "myCustomOperator",
-        "argumentPosition": 1,
-        "argumentPropertyName": "injector"
+  rules: {
+    'eslint-plugin-angular-modern/custom-function-in-injection-context': ['error', {
+      functions: [{
+        name: 'myCustomOperator',
+        argumentPosition: 1,
+        argumentPropertyName: 'injector'
       }]
     }]
   }
@@ -187,9 +187,9 @@ function otherCustomOperator(destroyRef?: DestroyRef) {
 ### Routing
 
 These cases are allowed for this configuration:
-```json
+```javascript
 {
-  "allowedSpecialInjectionContexts": ["routing"]
+  allowedSpecialInjectionContexts: ['routing']
 }
 ```
 
@@ -221,9 +221,9 @@ export const routes: Routes = [{
 ### HTTP
 
 These cases are allowed for this configuration:
-```json
+```javascript
 {
-  "allowedSpecialInjectionContexts": ["http"]
+  allowedSpecialInjectionContexts: ['http']
 }
 ```
 
@@ -240,9 +240,9 @@ const authInterceptor: HttpInterceptorFn = () => {
 ### Factories
 
 These cases are allowed for this configuration:
-```json
+```javascript
 {
-  "allowedSpecialInjectionContexts": ["factory"]
+  allowedSpecialInjectionContexts: ['factory']
 }
 ```
 
@@ -273,9 +273,9 @@ const provider: Provider = {
 ### Async application initialization
 
 These cases are allowed for this configuration:
-```json
+```javascript
 {
-  "allowedSpecialInjectionContexts": ["asyncApplicationInitialization"]
+  allowedSpecialInjectionContexts: ['asyncApplicationInitialization']
 }
 ```
 
@@ -288,9 +288,9 @@ These cases are allowed for this configuration:
 ### Sync application initialization
 
 These cases are allowed for this configuration:
-```json
+```javascript
 {
-  "allowedSpecialInjectionContexts": ["syncApplicationInitialization"]
+  allowedSpecialInjectionContexts: ['syncApplicationInitialization']
 }
 ```
 

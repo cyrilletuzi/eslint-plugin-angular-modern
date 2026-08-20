@@ -14,10 +14,10 @@ Use `ResolveFn` with a functional resolver instead.
 - in the `functional` preset
 - or just this rule:
 
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/no-resolve-class": "error"
+  rules: {
+    'eslint-plugin-angular-modern/no-resolve-class': 'error'
   }
 }
 ```

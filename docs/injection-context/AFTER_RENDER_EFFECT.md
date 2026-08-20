@@ -12,10 +12,10 @@ Checks that `afterRenderEffect()` is called inside an injection context, or that
 
 - in the `recommended` preset
 - in the `injectionContext` preset
-```json
+```javascript
 {
-  "rules": {
-    "eslint-plugin-angular-modern/after-render-effect-in-injection-context": "error"
+  rules: {
+    'eslint-plugin-angular-modern/after-render-effect-in-injection-context': 'error'
   }
 }
 ```
