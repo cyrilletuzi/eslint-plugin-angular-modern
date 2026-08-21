@@ -58,7 +58,7 @@ module.exports = defineConfig({
     eslint.configs.recommended,
     tsEslint.configs.strictTypeChecked,
     tsEslint.configs.stylisticTypeChecked,
-    angularModern.configs.recommended, // ⬅️ add this (or one of the other presets below)
+    angularModern.configs.recommended, // ⬅️ add this (or some of the other presets below)
   ],
   rules: {},
 });
