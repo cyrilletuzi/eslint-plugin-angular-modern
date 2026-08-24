@@ -2,7 +2,7 @@
 
 Restrict the usage of writable properties in components and directives.
 
-In components and directives, a public or protected property can be bound to the UI. And in a zoneless application, mutating it will not update the UI anymore. So:
+In components and directives, a property can be bound to the UI. And in a zoneless application, mutating it will not update the UI anymore. So:
 - if it is indeed used in the UI, mark it as `readonly` and use signals
 - it should be rare, but for non-reactive class-only state, use a native private property with `#`
 
