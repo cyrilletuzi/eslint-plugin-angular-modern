@@ -38,4 +38,8 @@ For example, banning `NgClass` is just done by detecting identifiers called `NgC
 
 For the same reason, [typed linting](https://typescript-eslint.io/getting-started/typed-linting) is avoided as much as possible.
 
+## Lint fixers
+
+Lint rules can implement helpers to fix what is reported. But given that most of the rules of this package for which fixes would be relevant are the ones restricting legacy features, this is not a goal of this tool. It is the role of the Angular team to provide automated migrations from legacy to new features. [The list of official migrations is available here](https://angular.dev/reference/migrations), and each rule related to an existing migration states it in its documentation.
+
 [Back to README](../README.md)
