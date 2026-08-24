@@ -9,10 +9,10 @@ export const ruleDefinition: RuleDefinition = {
   meta: {
     type: "problem",
     messages: {
-      [messageId]: `Public and protected properties of components and directives should be readonly, as in a zoneless application, mutating them will not update the UI anymore. Use signals instead.`,
+      [messageId]: `Properties of components and directives should be readonly, as in a zoneless application, mutating them will not update the UI anymore. Use signals instead, or exceptionnaly a native \`#\` private property for non-reactive class-only state.`,
     },
     docs: {
-      description: `Checks that public and protected properties of components and directives are readonly.`,
+      description: `Checks that properties of components and directives are readonly.`,
       url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_DIRECTIVE_WRITABLE_PROPERTY.md',
       recommended: true,
     },
@@ -21,7 +21,7 @@ export const ruleDefinition: RuleDefinition = {
   create(context) {
     return {
       /* React to: explicit `public` properties, explicit `protected` properties, implicit public properties which are not `#private` */
-      "PropertyDefinition[key.type!='PrivateIdentifier'][accessibility!='private'][readonly!=true]"(node: TSESTree.MethodDefinition) {
+      "PropertyDefinition[key.type!='PrivateIdentifier'][readonly!=true]"(node: TSESTree.MethodDefinition) {
         if (isInAngularClass(node, ["Component", "Directive"])) {
           context.report({
             node,

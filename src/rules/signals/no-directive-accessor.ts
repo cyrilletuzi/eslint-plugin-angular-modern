@@ -9,10 +9,10 @@ export const ruleDefinition: RuleDefinition = {
   meta: {
     type: "problem",
     messages: {
-      [messageId]: `Public and protected getters and setters of components and directives should be avoided, as in a zoneless application, their recomputation does not update the UI anymore. Use \`computed()\` instead.`,
+      [messageId]: `Getters and setters of components and directives should be avoided, as in a zoneless application, their recomputation does not update the UI anymore. Use \`computed()\` instead.`,
     },
     docs: {
-      description: `Checks that public and protected accessors of components and directives are not used.`,
+      description: `Checks that accessors of components and directives are not used.`,
       url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_DIRECTIVE_ACCESSOR.md',
       recommended: true,
     },
@@ -20,8 +20,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      /* React to: explicit `public` getters, explicit `protected` getters, implicit public getters which are not `#private` */
-      "MethodDefinition[kind='get'][key.type!='PrivateIdentifier'][accessibility!='private'], MethodDefinition[kind='set'][key.type!='PrivateIdentifier'][accessibility!='private']"(node: TSESTree.MethodDefinition) {
+      "MethodDefinition[kind='get'][key.type!='PrivateIdentifier'], MethodDefinition[kind='set'][key.type!='PrivateIdentifier']"(node: TSESTree.MethodDefinition) {
         if (isInAngularClass(node, ["Component", "Directive"])) {
           context.report({
             node,

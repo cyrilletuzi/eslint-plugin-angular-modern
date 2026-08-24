@@ -1,10 +1,10 @@
 # no-directive-accessor
 
-Restrict the usage of public and protected getters and setters in components and directives.
+Restrict the usage of getters and setters in components and directives.
 
-In components and directives, a public or protected getter or setter can be bound to the UI. And in a zoneless application, a recomputation of it will not update the UI anymore. So:
+In components and directives, a getter or setter can be bound to the UI. And in a zoneless application, a recomputation of it will not update the UI anymore. So:
 - if it is indeed used in the UI, use `computed()` instead
-- if it is only a property for the class itself, mark it as private (note: to use it in tests, TypeScript allows `componentInstance['privateProperty']`)
+- it should be rare, but for non-reactive class-only state, use a native private getter or setter with `#`
 
 ## Documentation
 
@@ -70,6 +70,23 @@ export class Products {
   private products = [];
 
   protected get count(): number {
+    return this.products.length;
+  }
+
+  change(): void {
+    this.products = ['Chocolate'];
+  }
+}
+```
+
+```typescript
+@Component({
+  template: `{{ count }}`,
+})
+export class Products {
+  private products = [];
+
+  private get count(): number {
     return this.products.length;
   }
 
@@ -150,10 +167,15 @@ export class Products {
 ```
 
 ```typescript
-@Component()
-export class Profile {
-  private get name(): string {
-    return 'Elmo';
+@Component({
+  template: `{{ count() }}`,
+})
+export class Products {
+  private readonly products = signal<readonly string[]>([]);
+  private count = computed<number>(() => this.products().length);
+
+  change(): void {
+    this.products.set(['Chocolate']);
   }
 }
 ```
