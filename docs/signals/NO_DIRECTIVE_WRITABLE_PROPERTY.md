@@ -1,10 +1,10 @@
 # no-directive-writable-property
 
-Restrict the usage of writable public and protected properties in components and directives.
+Restrict the usage of writable properties in components and directives.
 
 In components and directives, a public or protected property can be bound to the UI. And in a zoneless application, mutating it will not update the UI anymore. So:
 - if it is indeed used in the UI, mark it as `readonly` and use signals
-- if it is only a property for the class itself, mark it as private (note: to use it in tests, TypeScript allows `componentInstance['privateProperty']`)
+- it should be rare, but for non-reactive class-only state, use a native private property with `#`
 
 ## Documentation
 
@@ -67,6 +67,19 @@ export class Profile {
 ```
 
 ```typescript
+@Component({
+  template: `{{ name }}`,
+})
+export class Profile {
+  private name = 'Elmo';
+
+  change(): void {
+    this.name = 'Cookie Monster';
+  }
+}
+```
+
+```typescript
 @Directive()
 export class Example {
   name = 'Elmo';
@@ -119,12 +132,14 @@ export class Profile {
 ```
 
 ```typescript
-@Component()
+@Component({
+  template: `{{ name() }}`,
+})
 export class Profile {
-  private name = 'Elmo';
+  private readonly name = signal('Elmo');
 
   change(): void {
-    this.name = 'Cookie Monster';
+    this.name.set('Cookie Monster');
   }
 }
 ```

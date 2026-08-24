@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.0 (2026-08-24)
+
+Angular 22.2 now allows TypeScript `private` properties in templates. As a consequence, `no-directive-accessor` and `no-directive-writable-property` rules have been updated to also report TypeScript `private` properties and getters/setters not marked as readonly in components and directives. It should be rare, but for non-reactive class-only state, use native private properties with `#`.
+
 ## 1.7.0 (2026-08-20)
 
 New `standalone` related rules not in the preset:
