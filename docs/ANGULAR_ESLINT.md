@@ -20,6 +20,7 @@ If the project is just using `angular-eslint` recommended preset:
     // When already using `standalone` or `recommended` presets and `strictStandalone`:
     '@angular-eslint/prefer-standalone': 'off',
   },
+}, {
   files: ['**/*.html'],
   rules: {
     // When already using `signals` or `recommended` presets:
@@ -58,6 +59,7 @@ If the project is using other `angular-eslint` rules, the whole list:
     // When already using `hostBindings` or `recommended` presets:
     '@angular-eslint/prefer-host-metadata-property': 'off',
   },
+}, {
   files: ['**/*.html'],
   rules: {
     // When already using `signals` or `recommended` presets:
