@@ -7,7 +7,7 @@ This lint package does not require `angular-eslint`, it only depends on TypeScri
 If the project is just using `angular-eslint` recommended preset:
 
 ```javascript
-{
+defineConfig({
   files: ['**/*.ts'],
   rules: {
     // When already using `signals` or `recommended` presets:
@@ -26,7 +26,7 @@ If the project is just using `angular-eslint` recommended preset:
     // When already using `signals` or `recommended` presets:
     '@angular-eslint/template/no-negated-async': 'off',
   },
-}
+})
 ```
 
 If the project is using other `angular-eslint` rules, the whole list:
