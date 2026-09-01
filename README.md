@@ -60,7 +60,14 @@ module.exports = defineConfig({
     tsEslint.configs.stylisticTypeChecked,
     angularModern.configs.recommended, // ⬅️ add this (or some of the other presets below)
   ],
-  rules: {},
+  rules: {
+    // Optional individual rules:
+    'eslint-plugin-angular-modern/no-material-modules': 'error',
+    'eslint-plugin-angular-modern/no-cdk-modules': 'error',
+    'eslint-plugin-angular-modern/custom-function-in-injection-context': ['error', {
+      functions: [{ name: 'myCustomFunction' }],
+    }],
+  },
 });
 ```
 
