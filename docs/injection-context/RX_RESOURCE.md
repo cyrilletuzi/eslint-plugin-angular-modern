@@ -122,7 +122,7 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class ProductPage {
-  private readonly productResourceRef = rxResource({
+  readonly productResourceRef = rxResource({
     stream: () => getProduct(),
   });
 }
@@ -132,12 +132,12 @@ export class ProductPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly injector = inject(Injector);
+  readonly #injector = inject(Injector);
 
   ngOnInit(): void {
     rxResource({
       stream: () => getProduct(),
-      injector: this.injector,
+      injector: this.#injector,
     });
   }
 }
@@ -150,10 +150,10 @@ export class ProductPage implements OnInit {
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
+    runInInjectionContext(this.#environmentInjector, () => {
       rxResource({
         stream: () => getProduct(),
       });

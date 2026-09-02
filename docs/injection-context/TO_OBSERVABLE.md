@@ -32,10 +32,10 @@ All the invalid cases are without an injector. See the valid cases below to see 
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly id = signal(0);
+  readonly #id = signal(0);
 
   ngOnInit(): void {
-    toObservable(this.id);
+    toObservable(this.#id);
   }
 }
 ```
@@ -46,10 +46,10 @@ export class ProductPage implements OnInit {
   template: `<form (submit)="save()"></form>`
 })
 export class ProductEditPage {
-  private readonly id = signal(0);
+  readonly #id = signal(0);
 
   save(): void {
-    toObservable(this.id);
+    toObservable(this.#id);
   }
 }
 ```
@@ -58,9 +58,9 @@ export class ProductEditPage {
 ```typescript
 @Component() 
 export class ProductPage {
-  private readonly id = signal(0);
-  private readonly dataObservable = someObservable.pipe(
-    switchMap(() => toObservable(this.id)),
+  readonly #id = signal(0);
+  readonly #dataObservable = someObservable.pipe(
+    switchMap(() => toObservable(this.#id)),
   );
 }
 ```
@@ -80,8 +80,8 @@ const myGuard: CanActivateFn = async () => {
 - in non-Angular classes
 ```typescript
 export class Product {
-  private readonly id = signal(0);
-  private readonly idObservable = toObservable(this.id);
+  readonly #id = signal(0);
+  readonly idObservable = toObservable(this.#id);
 }
 ```
 
@@ -99,10 +99,10 @@ function someFunction(): void {
 ```typescript
 @Component()
 export class ProductsPage {
-  private readonly id = signal(0);
+  readonly #id = signal(0);
 
   constructor() {
-    toObservable(this.id);
+    toObservable(this.#id);
   }
 }
 ```
@@ -111,8 +111,8 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class ProductPage {
-  private readonly id = signal(0);
-  private readonly idObservable = toObservable(this.id);
+  readonly #id = signal(0);
+  readonly idObservable = toObservable(this.#id);
 }
 ```
 
@@ -120,11 +120,11 @@ export class ProductPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly injector = inject(Injector);
-  private readonly id = signal(0);
+  readonly #injector = inject(Injector);
+  readonly #id = signal(0);
 
   ngOnInit(): void {
-    toObservable(this.id, { injector: this.injector });
+    toObservable(this.#id, { injector: this.#injector });
   }
 }
 ```
@@ -156,12 +156,12 @@ export const routes: Routes = [{
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly id = signal(0);
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #id = signal(0);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
-      toObservable(this.id)
+    runInInjectionContext(this.#environmentInjector, () => {
+      toObservable(this.#id)
     });
   }
 }

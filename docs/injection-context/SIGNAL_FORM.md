@@ -32,12 +32,12 @@ All the invalid cases are without an injector. See the valid cases below to see 
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly formModel = signal({
+  readonly #formModel = signal({
     name: '',
   });
 
   ngOnInit(): void {
-    form(this.formModel);
+    form(this.#formModel);
   }
 }
 ```
@@ -46,12 +46,12 @@ export class ProductPage implements OnInit {
 ```typescript
 @Component()
 export class ProductEditPage {
-  private readonly formModel = signal({
+  readonly #formModel = signal({
     name: '',
   });
 
   someMethod(): void {
-    form(this.formModel);
+    form(this.#ormModel);
   }
 }
 ```
@@ -60,13 +60,13 @@ export class ProductEditPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly formModel = signal({
+  readonly #formModel = signal({
     name: '',
   });
 
   ngOnInit(): void {
     somePromise().then(() => {
-      form(this.formModel);
+      form(this.#formModel);
     }).catch(() => {});  
   }
 }
@@ -79,13 +79,13 @@ export class ProductPage implements OnInit {
 ```typescript
 @Component()
 export class ProductEditPage {
-  private readonly formModel = signal({
+  readonly #formModel = signal({
     name: '',
   });
 
   async someMethod(): Promise<void> {
     await somePromise();
-    form(this.formModel);
+    form(this.#formModel);
   }
 }
 ```
@@ -93,12 +93,12 @@ export class ProductEditPage {
 - in non-Angular classes
 ```typescript
 export class Product {
-  private readonly formModel = signal({
+  readonly #formModel = signal({
     name: '',
   });
 
   constructor() {
-    form(this.formModel);
+    form(this.#formModel);
   }
 }
 ```
@@ -119,12 +119,12 @@ function someFunction(): void {
 ```typescript
 @Component()
 export class ProductsPage {
-  private readonly formModel = signal({
+  readonly #formModel = signal({
     name: '',
   });
 
   constructor() {
-    form(this.formModel);
+    form(this.#formModel);
   }
 }
 ```
@@ -133,10 +133,10 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class ProductPage {
-  private readonly formModel = signal({
+  readonly #formModel = signal({
     name: '',
   });
-  protected readonly form = form(this.formModel);
+  protected readonly form = form(this.#formModel);
 }
 ```
 
@@ -144,15 +144,15 @@ export class ProductPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly injector = inject(Injector);
-  private readonly formModel = signal({
+  readonly #injector = inject(Injector);
+  readonly #formModel = signal({
     name: '',
   });
 
   ngOnInit(): void {
-    form(this.formModel, { injector: this.injector });
+    form(this.#formModel, { injector: this.#injector });
     // or
-    form(this.formModel, schema, { injector: this.injector });
+    form(this.#formModel, schema, { injector: this.#injector });
   }
 }
 ```
@@ -164,14 +164,14 @@ export class ProductPage implements OnInit {
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
-  private readonly formModel = signal({
+  readonly #environmentInjector = inject(EnvironmentInjector);
+  readonly #formModel = signal({
     name: '',
   });
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
-      form(this.formModel);
+    runInInjectionContext(this.#environmentInjector, () => {
+      form(this.#formModel);
     });
   }
 }

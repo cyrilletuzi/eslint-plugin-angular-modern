@@ -24,7 +24,7 @@ It is useless and does not work in a zoneless application.
 ```typescript
 @Component()
 export class SomeComponent {
-  private readonly ngZone = inject(NgZone);
+  readonly #ngZone = inject(NgZone);
 }
 ```
 

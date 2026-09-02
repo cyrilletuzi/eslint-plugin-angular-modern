@@ -44,4 +44,11 @@ export class SomeComponent {
 }
 ```
 
+```typescript
+@Component()
+export class SomeComponent {
+  readonly #someOption = inject(SOME_TOKEN);
+}
+```
+
 [Back to README](../../README.md)

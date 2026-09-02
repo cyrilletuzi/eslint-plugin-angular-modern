@@ -40,7 +40,14 @@ export class SomeComponent {
 ```typescript
 @Component()
 export class SomeComponent {
-   private readonly someService = inject(SomeService);
+  private readonly someService = inject(SomeService);
+}
+```
+
+```typescript
+@Component()
+export class SomeComponent {
+  readonly #someService = inject(SomeService);
 }
 ```
 

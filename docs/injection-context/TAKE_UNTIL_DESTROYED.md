@@ -58,7 +58,7 @@ export class ProductEditPage {
 ```typescript
 @Component() 
 export class ProductPage {
-  private readonly dataObservable = someObservable.pipe(
+  readonly #dataObservable = someObservable.pipe(
     switchMap(() => someOtherObservable.pipe(takeUntilDestroyed())),
   );
 }
@@ -83,7 +83,7 @@ export class ProductPage {
 - in non-Angular classes
 ```typescript
 export class Product {
-  private readonly obs = someObservable.pipe(takeUntilDestroyed());
+  readonly #obs = someObservable.pipe(takeUntilDestroyed());
 }
 ```
 
@@ -112,7 +112,7 @@ export class ProductPage {
 ```typescript
 @Component()
 export class ProductPage {
-  private readonly obs = getProduct.pipe(takeUntilDestroyed());
+  readonly #obs = getProduct.pipe(takeUntilDestroyed());
 }
 ```
 
@@ -120,11 +120,11 @@ export class ProductPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly destroyRef = inject(DestroyRef);
+  readonly #destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     getProduct().pipe(
-      takeUntilDestroyed(this.destroyRef),
+      takeUntilDestroyed(this.#destroyRef),
     ).subscribe();
   }
 }
@@ -155,10 +155,10 @@ export const routes: Routes = [{
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
+    runInInjectionContext(this.#environmentInjector, () => {
       someObservable.pipe(takeUntilDestroyed()).subscribe();
     });
   }

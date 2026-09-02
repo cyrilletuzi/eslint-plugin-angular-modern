@@ -58,10 +58,10 @@ export class ProfileForm {
   `,
 })
 export class ProfileForm {
-  private readonly formModel = signal({
+  readonly #formModel = signal({
     name: '',
   });
-  protected readonly form = form(this.formModel);
+  protected readonly form = form(this.#formModel);
 }
 ```
 

@@ -55,7 +55,7 @@ export class App {
 ```typescript
 @Component() 
 export class App {
-  private readonly dataObservable = someObservable.pipe(
+  readonly #dataObservable = someObservable.pipe(
     switchMap(() => someOtherObservable.pipe(pendingUntilEvent())),
   );
 }
@@ -80,7 +80,7 @@ export class App {
 - in non-Angular classes
 ```typescript
 export class Product {
-  private readonly obs = someObservable.pipe(pendingUntilEvent());
+  readonly #obs = someObservable.pipe(pendingUntilEvent());
 }
 ```
 
@@ -109,7 +109,7 @@ export class App {
 ```typescript
 @Component()
 export class App {
-  private readonly obs = someObservable.pipe(pendingUntilEvent());
+  readonly #obs = someObservable.pipe(pendingUntilEvent());
 }
 ```
 
@@ -117,11 +117,11 @@ export class App {
 ```typescript
 @Component()
 export class App implements OnInit {
-  private readonly injector = inject(Injector);
+  readonly #injector = inject(Injector);
 
   ngOnInit(): void {
     someObservable.pipe(
-      pendingUntilEvent(this.injector),
+      pendingUntilEvent(this.#injector),
     ).subscribe();
   }
 }
@@ -152,10 +152,10 @@ export const routes: Routes = [{
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
+    runInInjectionContext(this.#environmentInjector, () => {
       someObservable.pipe(pendingUntilEvent()).subscribe();
     });
   }

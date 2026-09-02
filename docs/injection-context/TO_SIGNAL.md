@@ -107,7 +107,7 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class ProductPage {
-  private readonly someSignal = toSignal(someObservable);
+  readonly #someSignal = toSignal(someObservable);
 }
 ```
 
@@ -115,11 +115,11 @@ export class ProductPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly injector = inject(Injector);
+  readonly #injector = inject(Injector);
 
   ngOnInit(): void {
     toSignal(someObservable, {
-      injector: this.injector,
+      injector: this.#injector,
     });
   }
 }
@@ -144,10 +144,10 @@ export class ProductPage implements OnInit {
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
+    runInInjectionContext(this.#environmentInjector, () => {
       toSignal(someObservable);
     });
   }

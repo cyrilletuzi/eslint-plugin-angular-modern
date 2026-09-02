@@ -55,8 +55,8 @@ export class ProductPage {
   imports: [AsyncPipe],
 })
 export class AdminPage implements OnInit {
-  private readonly auth = inject(Auth);
-  protected readonly isAuthenticated = this.auth.isAuthenticatedObservable;
+  readonly #auth = inject(Auth);
+  protected readonly isAuthenticated = this.#auth.isAuthenticatedObservable;
 }
 ```
 
@@ -92,9 +92,9 @@ export class ProductsPage {
   `,
 })
 export class AdminPage implements OnInit {
-  private readonly auth = inject(Auth);
-  private readonly isAuthenticated = toSignal(
-    this.auth.isAuthenticatedObservable,
+  readonly #auth = inject(Auth);
+  readonly isAuthenticated = toSignal(
+    this.#auth.isAuthenticatedObservable,
     { initialValue: false },
   );
 }

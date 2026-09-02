@@ -54,11 +54,11 @@ export class ProductPage {
 ```typescript
 @Component()
 export class AdminPage implements OnInit {
-  private readonly auth = inject(Auth);
-  private readonly isAuthenticated = signal(false);
+  readonly #auth = inject(Auth);
+  readonly isAuthenticated = signal(false);
 
   constructor() {
-    this.auth.isAuthenticatedObservable.pipe(
+    this.#auth.isAuthenticatedObservable.pipe(
       takeUntilDestroyed(),
     ).subscribe((isAuthenticated) => {
       this.isAuthenticated.set(isAuthenticated);
@@ -95,9 +95,9 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class AdminPage implements OnInit {
-  private readonly auth = inject(Auth);
-  private readonly isAuthenticated = toSignal(
-    this.auth.isAuthenticatedObservable,
+  readonly #auth = inject(Auth);
+  readonly isAuthenticated = toSignal(
+    this.#auth.isAuthenticatedObservable,
     { initialValue: false },
   );
 }

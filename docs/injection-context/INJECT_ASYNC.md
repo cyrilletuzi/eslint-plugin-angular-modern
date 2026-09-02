@@ -51,7 +51,7 @@ export class ProductEditPage {
 ```typescript
 @Component() 
 export class ProductPage {
-  private readonly dataObservable = inject(ActivatedRoute).paramMap.pipe(
+  readonly #dataObservable = inject(ActivatedRoute).paramMap.pipe(
     map((paramMap) => paramMap.get('id') ?? '1'),
     switchMap((id) => injectAsync(() => import('./product-api').then((m) => m.ProductApi))),
   );
@@ -72,7 +72,7 @@ const myGuard: CanActivateFn = async () => {
 - in non-Angular classes
 ```typescript
 export class Product {
-  private readonly productApi = injectAsync(() => import('./product-api').then((m) => m.ProductApi));
+  readonly #productApi = injectAsync(() => import('./product-api').then((m) => m.ProductApi));
 }
 ```
 
@@ -102,10 +102,10 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly productApiAsync = injectAsync(() => import('./product-api').then((m) => m.ProductApi));
+  readonly #productApiAsync = injectAsync(() => import('./product-api').then((m) => m.ProductApi));
 
   ngOnInit(): void {
-    productApiAsync().then((productApi) => {
+    this.#productApiAsync().then((productApi) => {
       productApi.getProducts();
     });
   }
@@ -140,10 +140,10 @@ export const routes: Routes = [{
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
+    runInInjectionContext(this.#environmentInjector, () => {
       injectAsync(() => import('./auth').then((m) => m.Auth));
     });
   }

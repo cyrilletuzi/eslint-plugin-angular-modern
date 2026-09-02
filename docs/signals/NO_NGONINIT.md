@@ -36,14 +36,14 @@ Resources and signals are designed to be reactive, so waiting manually for the `
 export class ProductPage implements OnInit {
   readonly id = input.required<number>();
 
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly productApi = inject(ProductApi);
+  readonly #destroyRef = inject(DestroyRef);
+  readonly #productApi = inject(ProductApi);
 
   protected readonly product = signal<Product | undefined>(undefined);
 
   ngOnInit(): void {
-    this.productApi.getProduct(this.id()).pipe(
-      takeUntilDestroyed(this.destroyRef),
+    this.#productApi.getProduct(this.id()).pipe(
+      takeUntilDestroyed(this.#destroyRef),
     ).subscribe({
       next: (product) => {
         this.product.set(product);
@@ -79,14 +79,15 @@ export class ProductsList implements OnInit {
 export class ProductPage {
   readonly id = input.required<number>();
 
-  private readonly productApi = inject(ProductApi);
+  readonly #productApi = inject(ProductApi);
 
+  readonly #resourceRef: ResourceRef<Product | undefined>;
   protected readonly resource: Resource<Product | undefined>;
 
   constructor() {
-    const resourceRef = rxResource({
+    this.#resourceRef = rxResource({
       params: () => this.id(),
-      stream: ({ params }) => this.productApi.getProduct(params),
+      stream: ({ params }) => this.#productApi.getProduct(params),
     });
     this.resource = resourceRef.asReadonly();
   }

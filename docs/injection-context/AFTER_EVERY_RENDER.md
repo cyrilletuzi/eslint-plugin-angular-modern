@@ -52,9 +52,9 @@ export class ProductEditPage {
 
 - in callbacks
 ```typescript
-@Component() 
+@Component()
 export class ProductPage {
-  private readonly dataObservable = someObservable.pipe(
+  readonly #dataObservable = someObservable.pipe(
     tap(() => {
       afterEveryRender(() => {});
     }),
@@ -108,7 +108,7 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class ProductPage {
-  private readonly someProperty = afterEveryRender(() => {});
+  readonly #someProperty = afterEveryRender(() => {});
 }
 ```
 
@@ -116,10 +116,10 @@ export class ProductPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly injector = inject(Injector);
+  readonly #injector = inject(Injector);
 
   ngOnInit(): void {
-    afterEveryRender(() => {}, { injector: this.injector });
+    afterEveryRender(() => {}, { injector: this.#injector });
   }
 }
 ```
@@ -131,10 +131,10 @@ export class ProductPage implements OnInit {
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
+    runInInjectionContext(this.#environmentInjector, () => {
       afterEveryRender(() => {});
     });
   }

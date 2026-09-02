@@ -54,7 +54,7 @@ export class ProductEditPage {
 ```typescript
 @Component() 
 export class ProductPage {
-  private readonly dataObservable = someObservable.pipe(
+  readonly #dataObservable = someObservable.pipe(
     tap(() => {
       effect(() => {});
     }),
@@ -108,7 +108,7 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class ProductPage {
-  private readonly someEffect = effect(() => {});
+  readonly #someEffect = effect(() => {});
 }
 ```
 
@@ -116,10 +116,10 @@ export class ProductPage {
 ```typescript
 @Component()
 export class ProductPage implements OnInit {
-  private readonly injector = inject(Injector);
+  readonly #injector = inject(Injector);
 
   ngOnInit(): void {
-    effect(() => {}, { injector: this.injector });
+    effect(() => {}, { injector: this.#injector });
   }
 }
 ```
@@ -131,10 +131,10 @@ export class ProductPage implements OnInit {
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
+    runInInjectionContext(this.#environmentInjector, () => {
       effect(() => {});
     });
   }

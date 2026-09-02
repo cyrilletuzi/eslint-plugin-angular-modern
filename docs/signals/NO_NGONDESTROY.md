@@ -29,15 +29,15 @@ Signals and resources destroy is automatic. When really needed, use `DestroyRef.
 ```typescript
 @Component()
 export class ProductsPage implements OnDestroy {
-  private readonly subscription: Subscription;
+  readonly #subscription: Subscription;
 
   constructor() {
     const productApi = inject(ProductApi);
-    this.subscription = this.productApi.getProducts().subscribe();
+    this.#subscription = this.productApi.getProducts().subscribe();
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.#subscription.unsubscribe();
   }
 }
 ```

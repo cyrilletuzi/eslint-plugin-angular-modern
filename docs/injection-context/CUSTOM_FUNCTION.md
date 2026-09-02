@@ -122,7 +122,7 @@ const myGuard: CanActivateFn = async () => {
 - in non-Angular classes
 ```typescript
 export class Product {
-  private readonly example = myCustomOperator();
+  readonly #example = myCustomOperator();
 }
 ```
 
@@ -153,7 +153,7 @@ export class ProductsPage {
 ```typescript
 @Component()
 export class ProductPage {
-  private readonly example = myCustomOperator();
+  readonly #example = myCustomOperator();
 }
 ```
 
@@ -161,10 +161,10 @@ export class ProductPage {
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class MyService {
-  private readonly environmentInjector = inject(EnvironmentInjector);
+  readonly #environmentInjector = inject(EnvironmentInjector);
 
   someMethod() {
-    runInInjectionContext(this.environmentInjector, () => {
+    runInInjectionContext(this.#environmentInjector, () => {
       myCustomOperator();
     });
   }

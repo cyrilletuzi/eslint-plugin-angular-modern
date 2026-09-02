@@ -35,7 +35,7 @@ With signals, acting explicitly on the change detection is generally not necessa
 ```typescript
 @Component()
 export class SomeComponent {
-  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  readonly #changeDetectorRef = inject(ChangeDetectorRef);
 }
 ```
 
