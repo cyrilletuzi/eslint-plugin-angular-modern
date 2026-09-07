@@ -66,8 +66,12 @@ If the project is using other `angular-eslint` rules, the whole list:
     '@angular-eslint/template/no-negated-async': 'off',
     // When already using `stylingBindings` or `recommended` presets:
     '@angular-eslint/template/prefer-class-binding': 'off',
+    '@angular-eslint/template/prefer-style-binding': 'off',
   },
 }
 ```
+
+> [!NOTE]
+> List up to date with Angular ESLint v22.4. If a previous version is used, some rules may not exist yet and thus should be removed from the configuration.
 
 [Back to README](../README.md)
