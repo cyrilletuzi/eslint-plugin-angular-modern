@@ -32,6 +32,7 @@ import * as afterNextRenderInInjectionContext from "./rules/injection-context/af
 import * as afterRenderEffectInInjectionContext from "./rules/injection-context/after-render-effect-in-injection-context.js";
 import * as customFunctionInInjectionContext from "./rules/injection-context/custom-function-in-injection-context.js";
 import * as effectInInjectionContext from "./rules/injection-context/effect-in-injection-context.js";
+import * as httpResourceInInjectionContext from "./rules/injection-context/httpresource-in-injection-context.js";
 import * as injectAsyncInInjectionContext from "./rules/injection-context/inject-async-in-injection-context.js";
 import * as injectInInjectionContext from "./rules/injection-context/inject-in-injection-context.js";
 import * as pendingUntilEventInInjectionContext from "./rules/injection-context/pending-until-event-in-injection-context.js";
@@ -163,6 +164,7 @@ const plugin = {
     [toObservableInInjectionContext.ruleName]: toObservableInInjectionContext.ruleDefinition,
     [rxResourceInInjectionContext.ruleName]: rxResourceInInjectionContext.ruleDefinition,
     [resourceInInjectionContext.ruleName]: resourceInInjectionContext.ruleDefinition,
+    [httpResourceInInjectionContext.ruleName]: httpResourceInInjectionContext.ruleDefinition,
     [effectInInjectionContext.ruleName]: effectInInjectionContext.ruleDefinition,
     [afterEveryRenderInInjectionContext.ruleName]: afterEveryRenderInInjectionContext.ruleDefinition,
     [afterNextRenderInInjectionContext.ruleName]: afterNextRenderInInjectionContext.ruleDefinition,
@@ -293,6 +295,7 @@ const injectionContext: ConfigObject = {
     [`${name}/${toObservableInInjectionContext.ruleName}`]: "error",
     [`${name}/${rxResourceInInjectionContext.ruleName}`]: "error",
     [`${name}/${resourceInInjectionContext.ruleName}`]: "error",
+    [`${name}/${httpResourceInInjectionContext.ruleName}`]: "error",
     [`${name}/${effectInInjectionContext.ruleName}`]: "error",
     [`${name}/${afterEveryRenderInInjectionContext.ruleName}`]: "error",
     [`${name}/${afterNextRenderInInjectionContext.ruleName}`]: "error",

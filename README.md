@@ -121,6 +121,7 @@ A feature preset enables the rules for a specific set of features. It is recomme
 - [signal-form-in-injection-context](./docs/injection-context/SIGNAL_FORM.md)
 - [resource-in-injection-context](./docs/injection-context/RESOURCE.md)
 - [rx-resource-in-injection-context](./docs/injection-context/RX_RESOURCE.md)
+- [httpresource-in-injection-context](./docs/injection-context/HTTPRESOURCE.md)
 - [take-until-destroyed-in-injection-context](./docs/injection-context/TAKE_UNTIL_DESTROYED.md)
 - [to-observable-in-injection-context](./docs/injection-context/TO_OBSERVABLE.md)
 - [to-signal-in-injection-context](./docs/injection-context/TO_SIGNAL.md)
