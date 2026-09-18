@@ -3,7 +3,7 @@
 80+ ESLint rules for modern and safe Angular.
 
 > [!NOTE]
-> Find this tool useful? I’m open to freelance & full-time opportunities.
+> I’m open to freelance & full-time opportunities.
 > Feel free to reach out on [LinkedIn](https://www.linkedin.com/in/cyrilletuzi/) or [Bluesky](https://bsky.app/profile/cyrilletuzi.com).
 
 ## Goals
