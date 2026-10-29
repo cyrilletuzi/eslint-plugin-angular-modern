@@ -31,7 +31,7 @@
     "stage-release": "git push origin v$npm_package_version"
   },
   "devDependencies": {
-    "@types/node": "^24.19.2",
+    "@types/node": "~22.20.5",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.13.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
