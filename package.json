@@ -33,9 +33,9 @@
   "devDependencies": {
     "@types/node": "^24.19.2",
     "@typescript/native": "npm:typescript@^7.0.2",
-    "eslint": "^10.12.0",
+    "eslint": "^10.13.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "typescript-eslint": "^8.71.2"
+    "typescript-eslint": "^8.72.1"
   },
   "dependencies": {
     "@typescript-eslint/utils": "^8.58.1"
