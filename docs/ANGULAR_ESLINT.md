@@ -64,6 +64,7 @@ If the project is using other `angular-eslint` rules, the whole list:
   rules: {
     // When already using `signals` or `recommended` presets:
     '@angular-eslint/template/no-negated-async': 'off',
+    '@angular-eslint/template/prefer-let-for-async-pipe': 'off',
     // When already using `stylingBindings` or `recommended` presets:
     '@angular-eslint/template/prefer-class-binding': 'off',
     '@angular-eslint/template/prefer-style-binding': 'off',
@@ -72,6 +73,6 @@ If the project is using other `angular-eslint` rules, the whole list:
 ```
 
 > [!NOTE]
-> List up to date with Angular ESLint v22.5. If a previous version is used, some rules may not exist yet and thus should be removed from the configuration.
+> List up to date with Angular ESLint v22.7. If a previous version is used, some rules may not exist yet and thus should be removed from the configuration.
 
 [Back to README](../README.md)
