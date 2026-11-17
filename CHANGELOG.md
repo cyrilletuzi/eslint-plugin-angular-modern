@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.10.0 (2026-11-17)
+
+- Remove direct dependencies to `typescript-eslint` and `eslint`, mainly to avoid being impacted by their security issues
+- Support for Oxlint, with JSON presets
+
 ## 1.9.0 (2026-09-15)
 
 New rule in `injectionContext` and `recommended` presets:
