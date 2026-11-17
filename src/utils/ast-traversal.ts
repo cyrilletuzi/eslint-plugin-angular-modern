@@ -1,4 +1,4 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 /**
  * Get the nearest ancestor node of a certain type.
@@ -7,7 +7,7 @@ import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
  * ```typescript
  * const classDeclaration = getNearestNodeFrom(
  *   node,
- *   (node) => node.type === AST_NODE_TYPES.ClassDeclaration,
+ *   (node) => node.type === "ClassDeclaration",
  * );
  * ```
  * 
@@ -18,7 +18,7 @@ import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
  * ```typescript
  * const classDeclaration = getNearestNodeFrom(
  *   node,
- *   (node) => node.type === AST_NODE_TYPES.ClassDeclaration,
+ *   (node) => node.type === "ClassDeclaration",
  *   { notInCallback: true },
  * );
  * ```
@@ -28,8 +28,8 @@ export function findNearestAncestorOf<T extends TSESTree.Node>(
   predicate: (parent: TSESTree.Node) => parent is T,
   { notInCallback = false } = {},
 ): T | undefined {
-  while (parent && parent.type !== AST_NODE_TYPES.Program) {
-    if (notInCallback && (parent.type === AST_NODE_TYPES.ArrowFunctionExpression || parent.type === AST_NODE_TYPES.FunctionExpression) && parent.parent.type === AST_NODE_TYPES.CallExpression) {
+  while (parent && parent.type !== "Program") {
+    if (notInCallback && (parent.type === "ArrowFunctionExpression" || parent.type === "FunctionExpression") && parent.parent.type === "CallExpression") {
       return undefined;
     }
 

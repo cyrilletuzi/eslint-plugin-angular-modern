@@ -1,4 +1,4 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { findNearestAncestorOf } from "./ast-traversal";
 import { isAfterAwait } from "./await-detection";
 
@@ -27,18 +27,18 @@ export function isInFunctionWithInjectionContext(node: TSESTree.Node, {
 
   const callExpression = findNearestAncestorOf(
     node,
-    (node) => node.type === AST_NODE_TYPES.CallExpression,
+    (node) => node.type === "CallExpression",
   );
 
   if (
-    callExpression?.callee.type === AST_NODE_TYPES.Identifier &&
+    callExpression?.callee.type === "Identifier" &&
     functionsWithInjectionContext.has(callExpression.callee.name) &&
     !isAfterAwait(node)
   ) {
     return true;
   }
 
-  if (callExpression?.callee.type === AST_NODE_TYPES.MemberExpression) {
+  if (callExpression?.callee.type === "MemberExpression") {
     const staticFunctionsWithInjectionContext: ReadonlyMap<string, string> = new Map([
       // see https://angular.dev/api/core/testing/TestBed#runInInjectionContext
       ["TestBed", "runInInjectionContext"],
@@ -46,9 +46,9 @@ export function isInFunctionWithInjectionContext(node: TSESTree.Node, {
 
     for (const [className, functionName] of staticFunctionsWithInjectionContext) {
       if (
-        callExpression.callee.object.type === AST_NODE_TYPES.Identifier &&
+        callExpression.callee.object.type === "Identifier" &&
         callExpression.callee.object.name === className &&
-        callExpression.callee.property.type === AST_NODE_TYPES.Identifier &&
+        callExpression.callee.property.type === "Identifier" &&
         callExpression.callee.property.name === functionName &&
         !isAfterAwait(node)
       ) {

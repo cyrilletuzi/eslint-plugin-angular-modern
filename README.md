@@ -22,8 +22,8 @@ Another [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-ru
 
 ## Requirements
 
-- TypeScript ESLint v8
-- New flat ESLint configuration (`eslint.config.js` or equivalent)
+- `eslint` >= v8.57 (with the TypeScript parser configured)
+- The new flat configuration (`eslint.config.js` or equivalent)
 
 > [!NOTE]
 > `.eslintrc.json` and other legacy ESLint configurations are not supported.
@@ -57,7 +57,6 @@ module.exports = defineConfig({
   extends: [
     eslint.configs.recommended,
     tsEslint.configs.strictTypeChecked,
-    tsEslint.configs.stylisticTypeChecked,
     angularModern.configs.recommended, // ⬅️ add this (or some of the other presets below)
   ],
   rules: {

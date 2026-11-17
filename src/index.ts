@@ -1,4 +1,4 @@
-import type { ConfigObject, Plugin } from "@eslint/core";
+import type { ESLint, Linter } from "eslint";
 import * as noConstructorInjection from "./rules/dependency-injection/no-constructor-injection.js";
 import * as noInjectDecorator from "./rules/dependency-injection/no-inject-decorator.js";
 import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decorator.js";
@@ -91,7 +91,21 @@ const { name, version } =
   // importing here would bypass the tsconfig `"rootDir": "src"`
   require("./package.json") as typeof import("./package.json");
 
-const plugin = {
+const plugin: ESLint.Plugin & {
+  configs: Record<
+    | "standalone"
+    | "functional"
+    | "stylingBindings"
+    | "hostBindings"
+    | "injectionContext"
+    | "dependencyInjection"
+    | "zoneless"
+    | "signals"
+    | "fetchHttp"
+    | "recommended",
+    Linter.Config
+  >;
+} = {
   configs: {
     get standalone() {
       return standalone;
@@ -226,9 +240,9 @@ const plugin = {
     // Experimental
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
-} satisfies Plugin;
+};
 
-const standalone: ConfigObject = {
+const standalone: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -247,7 +261,7 @@ const standalone: ConfigObject = {
   },
 };
 
-const functional: ConfigObject = {
+const functional: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -263,7 +277,7 @@ const functional: ConfigObject = {
   },
 };
 
-const stylingBindings: ConfigObject = {
+const stylingBindings: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -273,7 +287,7 @@ const stylingBindings: ConfigObject = {
   },
 };
 
-const hostBindings: ConfigObject = {
+const hostBindings: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -283,7 +297,7 @@ const hostBindings: ConfigObject = {
   },
 };
 
-const injectionContext: ConfigObject = {
+const injectionContext: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -305,7 +319,7 @@ const injectionContext: ConfigObject = {
   },
 };
 
-const dependencyInjection: ConfigObject = {
+const dependencyInjection: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -316,7 +330,7 @@ const dependencyInjection: ConfigObject = {
     [`${name}/${noProviderDeps.ruleName}`]: "error",
   },
 };
-const zoneless: ConfigObject = {
+const zoneless: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -329,7 +343,7 @@ const zoneless: ConfigObject = {
   },
 };
 
-const signals: ConfigObject = {
+const signals: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -357,7 +371,7 @@ const signals: ConfigObject = {
   },
 };
 
-const fetchHttp: ConfigObject = {
+const fetchHttp: Linter.Config = {
   plugins: {
     [name]: plugin
   },
@@ -369,7 +383,7 @@ const fetchHttp: ConfigObject = {
   },
 };
 
-const recommended: ConfigObject = {
+const recommended: Linter.Config = {
   plugins: {
     [name]: plugin
   },

@@ -1,4 +1,4 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { findAngularClassDecorator } from "./angular-class-decorator";
 import { findNearestAncestorOf } from "./ast-traversal";
 import { isAfterAwait } from "./await-detection";
@@ -34,12 +34,12 @@ export function isInMethodWithInjectionContext(node: TSESTree.Node, {
   // Check if the method name is one of the accepted ones like `canActivate`
   const methodDefinition = findNearestAncestorOf(
     node,
-    (node) => node.type === AST_NODE_TYPES.MethodDefinition,
+    (node) => node.type === "MethodDefinition",
     { notInCallback: true },
   );
 
   if (
-    methodDefinition?.key.type !== AST_NODE_TYPES.Identifier ||
+    methodDefinition?.key.type !== "Identifier" ||
     !methodsWithInjectionContext.has(methodDefinition.key.name)
   ) {
     return false;
@@ -48,7 +48,7 @@ export function isInMethodWithInjectionContext(node: TSESTree.Node, {
   // Check if we are in an injectable Angular class
   const classDeclaration = findNearestAncestorOf(
     node,
-    (node) => node.type === AST_NODE_TYPES.ClassDeclaration,
+    (node) => node.type === "ClassDeclaration",
   );
 
   if (
@@ -67,7 +67,7 @@ export function isInMethodWithInjectionContext(node: TSESTree.Node, {
     implementName !== undefined &&
     classDeclaration.implements.find(
       ({ expression }) =>
-        expression.type === AST_NODE_TYPES.Identifier &&
+        expression.type === "Identifier" &&
         expression.name === implementName,
     ) !== undefined &&
     !isAfterAwait(node)

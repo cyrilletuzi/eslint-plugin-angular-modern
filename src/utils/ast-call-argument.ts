@@ -1,14 +1,14 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 export function isCalledWithProperty(node: TSESTree.CallExpression, argumentPosition: number, propertyName: string): boolean {
   const argument = node.arguments.at(argumentPosition);
 
-  if ((argument?.type === AST_NODE_TYPES.ObjectExpression &&
+  if ((argument?.type === "ObjectExpression" &&
     argument.properties.find((property) =>
-      property.type === AST_NODE_TYPES.Property &&
-      property.key.type === AST_NODE_TYPES.Identifier &&
+      property.type === "Property" &&
+      property.key.type === "Identifier" &&
       property.key.name === propertyName
-    )) || argument?.type === AST_NODE_TYPES.Identifier
+    )) || argument?.type === "Identifier"
   ) {
     return true;
   }

@@ -1,10 +1,10 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 
 /**
  * Find the property inside a decorator node
  */
 export function getDecoratorProperty(node: TSESTree.Decorator, name: string): TSESTree.Property | undefined {
-  if (node.expression.type !== AST_NODE_TYPES.CallExpression) {
+  if (node.expression.type !== "CallExpression") {
     return undefined;
   }
 
@@ -12,19 +12,19 @@ export function getDecoratorProperty(node: TSESTree.Decorator, name: string): TS
 
   if (
     !config ||
-    config.type !== AST_NODE_TYPES.ObjectExpression
+    config.type !== "ObjectExpression"
   ) {
     return undefined;
   }
 
   const matchedProperty = config.properties.find(
     (property) =>
-      property.type === AST_NODE_TYPES.Property &&
-      property.key.type === AST_NODE_TYPES.Identifier &&
+      property.type === "Property" &&
+      property.key.type === "Identifier" &&
       property.key.name === name,
   );
 
-  if (matchedProperty?.type === AST_NODE_TYPES.Property) {
+  if (matchedProperty?.type === "Property") {
     return matchedProperty;
   }
 
