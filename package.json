@@ -1,10 +1,11 @@
 {
   "name": "eslint-plugin-angular-modern",
   "version": "1.9.0",
-  "description": "ESLint rules for modern and safe Angular.",
+  "description": "ESLint rules for modern and safe Angular. Compatible with Oxlint.",
   "keywords": [
     "angular",
-    "eslint"
+    "eslint",
+    "oxlint"
   ],
   "funding": {
     "type": "github",
@@ -22,7 +23,7 @@
   "author": "Cyrille Tuzi",
   "type": "commonjs",
   "scripts": {
-    "build": "rm -rf dist && tsc && cp src/package.json dist/package.json && cp src/LICENSE dist/LICENSE && cp src/README.md dist/README.md",
+    "build": "rm -rf dist && tsc && cp src/package.json dist/package.json && cp src/LICENSE dist/LICENSE && cp src/README.md dist/README.md && node scripts/build-oxlint-presets.mjs",
     "test": "echo \"Error: no test specified\" && exit 1",
     "release:major": "VERSION=major npm run release",
     "release:minor": "VERSION=minor npm run release",

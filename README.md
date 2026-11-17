@@ -1,6 +1,6 @@
 # eslint-plugin-angular-modern
 
-80+ ESLint rules for modern and safe Angular.
+80+ ESLint rules for modern and safe Angular. Compatible with Oxlint.
 
 > [!NOTE]
 > I’m open to freelance & full-time opportunities.
@@ -22,11 +22,8 @@ Another [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-ru
 
 ## Requirements
 
-- `eslint` >= v8.57 (with the TypeScript parser configured)
-- The new flat configuration (`eslint.config.js` or equivalent)
-
-> [!NOTE]
-> `.eslintrc.json` and other legacy ESLint configurations are not supported.
+- `eslint` >= v8.57 (with the new flat configuration and the TypeScript parser configured)
+- or `oxlint` >= 1.31
 
 > [!IMPORTANT]
 > The default presets target the latest Angular stable version. Some rules may be unsuitable for previous versions, see "Angular versions" section below to adapt the configuration accordingly.
@@ -39,7 +36,11 @@ Another [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-ru
 npm install eslint-plugin-angular-modern --save-dev
 ```
 
-2. ESLint flat configuration (`eslint.config.js` or equivalent)
+2. Configuration
+
+### With ESLint
+
+In ESLint flat configuration (`eslint.config.js` or equivalent):
 
 ```javascript
 const eslint = require('@eslint/js');
@@ -70,10 +71,31 @@ module.exports = defineConfig({
 });
 ```
 
-3. `npm run lint`
-
-> [!NOTE]
+> [!TIP]
 > In VS Code, it may be required to restart for the ESLint extension to apply the new rules.
+
+### With Oxlint
+
+In Oxlint JSON configuration (`.oxlintrc.json` or equivalent):
+
+```jsonc
+{
+  "extends": [
+    "./node_modules/eslint-plugin-angular-modern/oxlint/recommended.json" // ⬅️ add this (or some of the other presets below)
+  ],
+  "rules": {
+    // Optional individual rules:
+    "eslint-plugin-angular-modern/no-material-modules": "error",
+    "eslint-plugin-angular-modern/no-cdk-modules": "error",
+    "eslint-plugin-angular-modern/custom-function-in-injection-context": ["error", {
+      "functions": [{ "name": "myCustomFunction" }]
+    }]
+  }
+}
+```
+
+> [!TIP]
+> Each preset described below is available as a JSON file with the same name, for example `injectionContext` is `./node_modules/eslint-plugin-angular-modern/oxlint/injectionContext.json`.
 
 ## Migration
 
