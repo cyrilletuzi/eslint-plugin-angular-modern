@@ -1,5 +1,5 @@
 import type { RuleDefinition } from "@eslint/core";
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { getDecoratorProperty } from "../../utils/ast-decorator-property";
 
 export const ruleName = "no-injectable-decorator";
@@ -25,7 +25,7 @@ export const ruleDefinition: RuleDefinition = {
 
         /* `providedIn: 'platform'` is the only exception allowed, not expressable with `@Service()` */
         if (
-          providedIn?.value.type === AST_NODE_TYPES.Literal &&
+          providedIn?.value.type === "Literal" &&
           providedIn.value.value === 'platform'
         ) {
           return;

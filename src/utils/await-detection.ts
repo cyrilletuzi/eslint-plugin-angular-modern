@@ -1,11 +1,11 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { findNearestAncestorOf } from "./ast-traversal";
 
 export function isAfterAwait(node: TSESTree.Node): boolean {
   // Check there is an `await` expression in the same block, before the node
   const blockStatement = findNearestAncestorOf(
     node,
-    (node) => node.type === AST_NODE_TYPES.BlockStatement,
+    (node) => node.type === "BlockStatement",
     { notInCallback: true },
   );
 
@@ -15,8 +15,8 @@ export function isAfterAwait(node: TSESTree.Node): boolean {
 
   const awaitExpression = blockStatement.body.find(
     (body) =>
-      body.type === AST_NODE_TYPES.ExpressionStatement &&
-      body.expression.type === AST_NODE_TYPES.AwaitExpression,
+      body.type === "ExpressionStatement" &&
+      body.expression.type === "AwaitExpression",
   );
 
   if (awaitExpression === undefined) {

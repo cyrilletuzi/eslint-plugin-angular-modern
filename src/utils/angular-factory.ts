@@ -1,4 +1,4 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { findAngularClassDecorator } from "./angular-class-decorator";
 import { findNearestAncestorOf } from "./ast-traversal";
 
@@ -8,11 +8,11 @@ function isPropertyInInjectionTokenFactory(
   // Check the property is inside a `new InjectionToken()`
   const newExpression = findNearestAncestorOf(
     property,
-    (node) => node.type === AST_NODE_TYPES.NewExpression,
+    (node) => node.type === "NewExpression",
   );
 
   if (
-    newExpression?.callee.type === AST_NODE_TYPES.Identifier &&
+    newExpression?.callee.type === "Identifier" &&
     newExpression.callee.name === "InjectionToken"
   ) {
     return true;
@@ -26,7 +26,7 @@ function isPropertyInProviderFactory(
 ): boolean {
   // Check the property is called `useFactory`
   if (
-    property.key.type !== AST_NODE_TYPES.Identifier ||
+    property.key.type !== "Identifier" ||
     property.key.name !== "useFactory"
   ) {
     return false;
@@ -35,13 +35,13 @@ function isPropertyInProviderFactory(
   // Check the object contains another property called `provide`
   const objectExpression = findNearestAncestorOf(
     property,
-    (node) => node.type === AST_NODE_TYPES.ObjectExpression,
+    (node) => node.type === "ObjectExpression",
   );
 
   const provideProperty = objectExpression?.properties.find(
     (objectProperty) =>
-      objectProperty.type === AST_NODE_TYPES.Property &&
-      objectProperty.key.type === AST_NODE_TYPES.Identifier &&
+      objectProperty.type === "Property" &&
+      objectProperty.key.type === "Identifier" &&
       objectProperty.key.name === "provide",
   );
 
@@ -57,7 +57,7 @@ function isPropertyInServiceFactory(
 ): boolean {
   // Check the property is called `useFactory`
   if (
-    property.key.type !== AST_NODE_TYPES.Identifier ||
+    property.key.type !== "Identifier" ||
     property.key.name !== "factory"
   ) {
     return false;
@@ -66,7 +66,7 @@ function isPropertyInServiceFactory(
   // Check the property is inside an `Service()`
   const classDeclaration = findNearestAncestorOf(
     property,
-    (node) => node.type === AST_NODE_TYPES.ClassDeclaration,
+    (node) => node.type === "ClassDeclaration",
   );
 
   if (!classDeclaration) {
@@ -85,7 +85,7 @@ function isPropertyInInjectableFactory(
 ): boolean {
   // Check the property is called `useFactory`
   if (
-    property.key.type !== AST_NODE_TYPES.Identifier ||
+    property.key.type !== "Identifier" ||
     property.key.name !== "useFactory"
   ) {
     return false;
@@ -94,7 +94,7 @@ function isPropertyInInjectableFactory(
   // Check the property is inside an `Injectable()`
   const classDeclaration = findNearestAncestorOf(
     property,
-    (node) => node.type === AST_NODE_TYPES.ClassDeclaration,
+    (node) => node.type === "ClassDeclaration",
   );
 
   if (!classDeclaration) {
@@ -111,7 +111,7 @@ function isPropertyInInjectableFactory(
 export function isInFactoryFunction(node: TSESTree.Node): boolean {
   const property = findNearestAncestorOf(
     node,
-    (node) => node.type === AST_NODE_TYPES.Property,
+    (node) => node.type === "Property",
     { notInCallback: true },
   );
 

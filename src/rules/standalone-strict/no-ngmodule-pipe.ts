@@ -1,5 +1,5 @@
 import type { RuleDefinition } from "@eslint/core";
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { getDecoratorProperty } from "../../utils/ast-decorator-property";
 
 export const ruleName = "no-ngmodule-pipe";
@@ -23,7 +23,7 @@ export const ruleDefinition: RuleDefinition = {
         const standalone = getDecoratorProperty(node, "standalone");
 
         if (
-          standalone?.value.type === AST_NODE_TYPES.Literal &&
+          standalone?.value.type === "Literal" &&
           standalone.value.value === false
         ) {
           context.report({

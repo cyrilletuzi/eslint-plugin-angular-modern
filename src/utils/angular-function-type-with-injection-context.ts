@@ -1,4 +1,4 @@
-import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { findNearestAncestorOf } from "./ast-traversal";
 import { isAfterAwait } from "./await-detection";
 
@@ -43,15 +43,15 @@ export function isInFunctionTypeWithInjectionContext(node: TSESTree.Node, {
   // otherwise it would catch the first variable
   const variableDeclarator = findNearestAncestorOf(
     node.parent,
-    (node) => node.type === AST_NODE_TYPES.VariableDeclarator,
+    (node) => node.type === "VariableDeclarator",
     { notInCallback: true },
   );
 
   const typeAnnotation = variableDeclarator?.id.typeAnnotation?.typeAnnotation;
 
   if (
-    typeAnnotation?.type === AST_NODE_TYPES.TSTypeReference &&
-    typeAnnotation.typeName.type === AST_NODE_TYPES.Identifier &&
+    typeAnnotation?.type === "TSTypeReference" &&
+    typeAnnotation.typeName.type === "Identifier" &&
     functionTypesWithInjectionContext.has(typeAnnotation.typeName.name) &&
     !isAfterAwait(node)
   ) {

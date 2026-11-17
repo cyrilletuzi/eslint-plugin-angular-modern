@@ -1,4 +1,4 @@
-import { AST_NODE_TYPES, ASTUtils, type TSESTree } from "@typescript-eslint/utils";
+import type { TSESTree } from "@typescript-eslint/utils";
 import { findNearestAncestorOf } from "./ast-traversal";
 
 export type AngularClassDecorator = "Component" | "Directive" | "Injectable" | "NgModule" | "Pipe" | "Service";
@@ -10,7 +10,7 @@ export type AngularClassDecorator = "Component" | "Directive" | "Injectable" | "
  * ```typescript
  * const classDeclaration = findNearestAncestorOf(
  *   node,
- *   (node) => node.type === AST_NODE_TYPES.ClassDeclaration,
+ *   (node) => node.type === "ClassDeclaration",
  * );
  *
  * if (classDeclaration && findAngularClassDecorator(classDeclaration)) {
@@ -25,12 +25,12 @@ export function findAngularClassDecorator({ decorators }: TSESTree.ClassDeclarat
 
   return decorators
     ?.map(({ expression }): string | undefined => {
-      if (ASTUtils.isIdentifier(expression)) {
+      if (expression.type === "Identifier") {
         return expression.name;
       }
 
-      return expression.type === AST_NODE_TYPES.CallExpression &&
-        ASTUtils.isIdentifier(expression.callee)
+      return expression.type === "CallExpression" &&
+        expression.callee.type === "Identifier"
         ? expression.callee.name
         : undefined;
     })
@@ -42,7 +42,7 @@ export function findAngularClassDecorator({ decorators }: TSESTree.ClassDeclarat
 export function isInAngularClass(node: TSESTree.Node, allowedDecorators?: readonly AngularClassDecorator[]): boolean {
   const classDeclaration = findNearestAncestorOf(
     node,
-    (node) => node.type === AST_NODE_TYPES.ClassDeclaration,
+    (node) => node.type === "ClassDeclaration",
   );
 
   if (
