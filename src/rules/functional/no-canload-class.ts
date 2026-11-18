@@ -12,7 +12,8 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`CanLoad\` is not used.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_CANLOAD_CLASS.md',
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_CANLOAD_CLASS.md',
+      recommended: true,
     },
     schema: [],
   },

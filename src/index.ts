@@ -3,15 +3,6 @@ import * as noConstructorInjection from "./rules/dependency-injection/no-constru
 import * as noInjectDecorator from "./rules/dependency-injection/no-inject-decorator.js";
 import * as noInjectableDecorator from "./rules/dependency-injection/no-injectable-decorator.js";
 import * as noProviderDeps from "./rules/dependency-injection/no-provider-deps.js";
-import * as noBrowseranimationsmodule from "./rules/deprecated/no-browseranimationsmodule.js";
-import * as noCanloadClass from "./rules/deprecated/no-canload-class.js";
-import * as noHttpclientjsonpmodule from "./rules/deprecated/no-httpclientjsonpmodule.js";
-import * as noHttpclientmodule from "./rules/deprecated/no-httpclientmodule.js";
-import * as noHttpclienttestingmodule from "./rules/deprecated/no-httpclienttestingmodule.js";
-import * as noHttpclientxsrfmodule from "./rules/deprecated/no-httpclientxsrfmodule.js";
-import * as noNoopanimationsmodule from "./rules/deprecated/no-noopanimationsmodule.js";
-import * as noPlatformbrowserdynamic from "./rules/deprecated/no-platformbrowserdynamic.js";
-import * as noRoutertestingmodule from "./rules/deprecated/no-routertestingmodule.js";
 import * as noSubscribeInComponentConstructor from "./rules/experimental/no-subscribe-in-component-constructor.js";
 import * as noHttpReportprogress from "./rules/fetch-http/no-http-reportprogress.js";
 import * as noHttpReportuploadprogress from "./rules/fetch-http/no-http-reportuploadprogress.js";
@@ -20,6 +11,7 @@ import * as noWithxhr from "./rules/fetch-http/no-withxhr.js";
 import * as noCanactivateClass from "./rules/functional/no-canactivate-class.js";
 import * as noCanactivatechildClass from "./rules/functional/no-canactivatechild-class.js";
 import * as noCandeactivateClass from "./rules/functional/no-candeactivate-class.js";
+import * as noCanloadClass from "./rules/functional/no-canload-class.js";
 import * as noCanmatchClass from "./rules/functional/no-canmatch-class.js";
 import * as noHttpinterceptorClass from "./rules/functional/no-httpinterceptor-class.js";
 import * as noHttpinterceptorsToken from "./rules/functional/no-httpinterceptors-token.js";
@@ -66,16 +58,24 @@ import * as noNgmoduleComponent from "./rules/standalone-strict/no-ngmodule-comp
 import * as noNgmoduleDirective from "./rules/standalone-strict/no-ngmodule-directive.js";
 import * as noNgmodulePipe from "./rules/standalone-strict/no-ngmodule-pipe.js";
 import * as noApplicationmodule from "./rules/standalone/no-applicationmodule.js";
+import * as noBrowseranimationsmodule from "./rules/standalone/no-browseranimationsmodule.js";
 import * as noBrowsermodule from "./rules/standalone/no-browsermodule.js";
 import * as noBrowsertestingmodule from "./rules/standalone/no-browsertestingmodule.js";
 import * as noCdkModules from "./rules/standalone/no-cdk-modules.js";
 import * as noCommonmodule from "./rules/standalone/no-commonmodule.js";
 import * as noCreatengmodule from "./rules/standalone/no-createngmodule.js";
+import * as noHttpclientjsonpmodule from "./rules/standalone/no-httpclientjsonpmodule.js";
+import * as noHttpclientmodule from "./rules/standalone/no-httpclientmodule.js";
+import * as noHttpclienttestingmodule from "./rules/standalone/no-httpclienttestingmodule.js";
+import * as noHttpclientxsrfmodule from "./rules/standalone/no-httpclientxsrfmodule.js";
 import * as noIonicmodule from "./rules/standalone/no-ionicmodule.js";
 import * as noMaterialModules from "./rules/standalone/no-material-modules.js";
 import * as noNgmodule from "./rules/standalone/no-ngmodule.js";
+import * as noNoopanimationsmodule from "./rules/standalone/no-noopanimationsmodule.js";
 import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
+import * as noPlatformbrowserdynamic from "./rules/standalone/no-platformbrowserdynamic.js";
 import * as noRoutermodule from "./rules/standalone/no-routermodule.js";
+import * as noRoutertestingmodule from "./rules/standalone/no-routertestingmodule.js";
 import * as noServermodule from "./rules/standalone/no-servermodule.js";
 import * as noServiceworkermodule from "./rules/standalone/no-serviceworkermodule.js";
 import * as noWithmoduleTesting from "./rules/standalone/no-withmodule-testing.js";
@@ -143,6 +143,14 @@ const plugin: ESLint.Plugin & {
     // Standalone
     [noApplicationmodule.ruleName]: noApplicationmodule.ruleDefinition,
     [noBrowsermodule.ruleName]: noBrowsermodule.ruleDefinition,
+    [noBrowseranimationsmodule.ruleName]: noBrowseranimationsmodule.ruleDefinition,
+    [noPlatformbrowserdynamic.ruleName]: noPlatformbrowserdynamic.ruleDefinition,
+    [noRoutertestingmodule.ruleName]: noRoutertestingmodule.ruleDefinition,
+    [noHttpclientmodule.ruleName]: noHttpclientmodule.ruleDefinition,
+    [noHttpclientjsonpmodule.ruleName]: noHttpclientjsonpmodule.ruleDefinition,
+    [noHttpclientxsrfmodule.ruleName]: noHttpclientxsrfmodule.ruleDefinition,
+    [noHttpclienttestingmodule.ruleName]: noHttpclienttestingmodule.ruleDefinition,
+    [noNoopanimationsmodule.ruleName]: noNoopanimationsmodule.ruleDefinition,
     [noBrowsertestingmodule.ruleName]: noBrowsertestingmodule.ruleDefinition,
     [noCommonmodule.ruleName]: noCommonmodule.ruleDefinition,
     [noCreatengmodule.ruleName]: noCreatengmodule.ruleDefinition,
@@ -160,6 +168,7 @@ const plugin: ESLint.Plugin & {
     [noCanactivatechildClass.ruleName]: noCanactivatechildClass.ruleDefinition,
     [noCandeactivateClass.ruleName]: noCandeactivateClass.ruleDefinition,
     [noCanmatchClass.ruleName]: noCanmatchClass.ruleDefinition,
+    [noCanloadClass.ruleName]: noCanloadClass.ruleDefinition,
     [noResolveClass.ruleName]: noResolveClass.ruleDefinition,
     [noHttpinterceptorClass.ruleName]: noHttpinterceptorClass.ruleDefinition,
     [noHttpinterceptorsToken.ruleName]: noHttpinterceptorsToken.ruleDefinition,
@@ -227,16 +236,6 @@ const plugin: ESLint.Plugin & {
     [noNgmoduleComponent.ruleName]: noNgmoduleComponent.ruleDefinition,
     [noNgmoduleDirective.ruleName]: noNgmoduleDirective.ruleDefinition,
     [noNgmodulePipe.ruleName]: noNgmodulePipe.ruleDefinition,
-    // Deprecated
-    [noPlatformbrowserdynamic.ruleName]: noPlatformbrowserdynamic.ruleDefinition,
-    [noRoutertestingmodule.ruleName]: noRoutertestingmodule.ruleDefinition,
-    [noHttpclientjsonpmodule.ruleName]: noHttpclientjsonpmodule.ruleDefinition,
-    [noHttpclientmodule.ruleName]: noHttpclientmodule.ruleDefinition,
-    [noHttpclienttestingmodule.ruleName]: noHttpclienttestingmodule.ruleDefinition,
-    [noHttpclientxsrfmodule.ruleName]: noHttpclientxsrfmodule.ruleDefinition,
-    [noBrowseranimationsmodule.ruleName]: noBrowseranimationsmodule.ruleDefinition,
-    [noNoopanimationsmodule.ruleName]: noNoopanimationsmodule.ruleDefinition,
-    [noCanloadClass.ruleName]: noCanloadClass.ruleDefinition,
     // Experimental
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
@@ -249,6 +248,14 @@ const standalone: Linter.Config = {
   rules: {
     [`${name}/${noApplicationmodule.ruleName}`]: "error",
     [`${name}/${noBrowsermodule.ruleName}`]: "error",
+    [`${name}/${noBrowseranimationsmodule.ruleName}`]: "error",
+    [`${name}/${noPlatformbrowserdynamic.ruleName}`]: "error",
+    [`${name}/${noRoutertestingmodule.ruleName}`]: "error",
+    [`${name}/${noHttpclientmodule.ruleName}`]: "error",
+    [`${name}/${noHttpclientjsonpmodule.ruleName}`]: "error",
+    [`${name}/${noHttpclientxsrfmodule.ruleName}`]: "error",
+    [`${name}/${noHttpclienttestingmodule.ruleName}`]: "error",
+    [`${name}/${noNoopanimationsmodule.ruleName}`]: "error",
     [`${name}/${noBrowsertestingmodule.ruleName}`]: "error",
     [`${name}/${noCommonmodule.ruleName}`]: "error",
     [`${name}/${noCreatengmodule.ruleName}`]: "error",
@@ -270,6 +277,7 @@ const functional: Linter.Config = {
     [`${name}/${noCanactivatechildClass.ruleName}`]: "error",
     [`${name}/${noCandeactivateClass.ruleName}`]: "error",
     [`${name}/${noCanmatchClass.ruleName}`]: "error",
+    [`${name}/${noCanloadClass.ruleName}`]: "error",
     [`${name}/${noResolveClass.ruleName}`]: "error",
     [`${name}/${noHttpinterceptorClass.ruleName}`]: "error",
     [`${name}/${noHttpinterceptorsToken.ruleName}`]: "error",

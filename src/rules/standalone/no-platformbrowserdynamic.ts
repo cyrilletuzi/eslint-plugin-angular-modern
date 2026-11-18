@@ -12,7 +12,8 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`platformBrowserDynamic()\` is not used.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_PLATFORMBROWSERDYNAMIC.md',
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md',
+      recommended: true,
     },
     schema: [],
   },

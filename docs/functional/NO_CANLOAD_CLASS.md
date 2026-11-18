@@ -10,6 +10,10 @@ Use `CanMatchFn` with a functional guard instead.
 
 ## Configuration
 
+- in the `recommended` preset
+- in the `functional` preset
+- or just this rule:
+
 ```javascript
 {
   rules: {
@@ -17,9 +21,6 @@ Use `CanMatchFn` with a functional guard instead.
   }
 }
 ```
-
-> [!TIP]
-> This rule is _not_ in the `recommended` or the `functional` presets because `@typescript-eslint/no-deprecated` already reports this. See the [documentation](./DEPRECATED.md).
 
 ## ❌ Invalid
 
