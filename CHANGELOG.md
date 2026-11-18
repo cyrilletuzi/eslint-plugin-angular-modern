@@ -2,7 +2,7 @@
 
 ## 1.11.0 (2026-11-18)
 
-Previously, some rules were not enabled by default because they were already reported by another rule (`@typescript-eslint/no-deprecated`) or by a compiler option (`strictStandalone`). But these alternatives have a cost: `@typescript-eslint/no-deprecated` requires typed linting, and `strictStandalone` is all or nothing, which does not allow a gradual migration. Given the performance impact of these rules is negligible, for simplicity and for this plugin to be self-sufficient, they are now enabled by default.
+Previously, some rules were not enabled by default because they were already reported by another rule or by a compiler option. But these alternatives have a cost: `@typescript-eslint/no-deprecated` requires typed linting, which is not enabled in many projects; and `strictStandalone` is also not enabled in many projects and is all or nothing, which does not allow a gradual migration. Given the performance impact of these rules is negligible, for simplicity and for this plugin to be self-sufficient, they are now enabled by default.
 
 Rules now in the `standalone` and `recommended` presets:
 - [no-ngmodule-component](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_COMPONENT.md)
