@@ -315,7 +315,6 @@ module.exports = defineConfig({
     'eslint-plugin-angular-modern/no-injectable-decorator': 'off',
     'eslint-plugin-angular-modern/no-reactive-forms': 'off',
     'eslint-plugin-angular-modern/no-http-reportprogress': 'off',
-    'eslint-plugin-angular-modern/no-withjsonpsupport': 'off',
   },
 });
 ```
