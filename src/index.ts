@@ -8,6 +8,7 @@ import * as noHttpReportprogress from "./rules/fetch-http/no-http-reportprogress
 import * as noHttpReportuploadprogress from "./rules/fetch-http/no-http-reportuploadprogress.js";
 import * as noHttpxhrbackend from "./rules/fetch-http/no-httpxhrbackend.js";
 import * as noWithxhr from "./rules/fetch-http/no-withxhr.js";
+import * as noWithjsonpsupport from "./rules/fetch-http/no-withjsonpsupport.js";
 import * as noCanactivateClass from "./rules/functional/no-canactivate-class.js";
 import * as noCanactivatechildClass from "./rules/functional/no-canactivatechild-class.js";
 import * as noCandeactivateClass from "./rules/functional/no-candeactivate-class.js";
@@ -235,6 +236,7 @@ const plugin: ESLint.Plugin & {
     [noHttpxhrbackend.ruleName]: noHttpxhrbackend.ruleDefinition,
     [noHttpReportprogress.ruleName]: noHttpReportprogress.ruleDefinition,
     [noHttpReportuploadprogress.ruleName]: noHttpReportuploadprogress.ruleDefinition,
+    [noWithjsonpsupport.ruleName]: noWithjsonpsupport.ruleDefinition,
     // Experimental
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
@@ -390,6 +392,7 @@ const fetchHttp: Linter.Config = {
     [`${name}/${noHttpxhrbackend.ruleName}`]: "error",
     [`${name}/${noHttpReportprogress.ruleName}`]: "error",
     [`${name}/${noHttpReportuploadprogress.ruleName}`]: "error",
+    [`${name}/${noWithjsonpsupport.ruleName}`]: "error",
   },
 };
 

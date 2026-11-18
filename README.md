@@ -291,12 +291,13 @@ Additional individual rules, _not_ included in the preset, are available for som
 { extends: [angularModern.configs.fetchHttp] }
 ```
 
-**These rules enforce to not use XHR HTTP:**
+**These rules enforce to only use the default fetch based HTTP:**
 
 - [no-withxhr](./docs/fetch-http/NO_WITHXHR.md)
 - [no-httpxhrbackend](./docs/fetch-http/NO_HTTPXHRBACKEND.md)
 - [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
 - [no-http-reportuploadprogress](./docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
+- [no-withjsonpsupport](./docs/fetch-http/NO_WITHJSONPSUPPORT.md)
 
 ## Experimental rules
 
@@ -314,6 +315,7 @@ module.exports = defineConfig({
     'eslint-plugin-angular-modern/no-injectable-decorator': 'off',
     'eslint-plugin-angular-modern/no-reactive-forms': 'off',
     'eslint-plugin-angular-modern/no-http-reportprogress': 'off',
+    'eslint-plugin-angular-modern/no-withjsonpsupport': 'off',
   },
 });
 ```
