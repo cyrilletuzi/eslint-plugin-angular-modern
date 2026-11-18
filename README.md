@@ -291,7 +291,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 { extends: [angularModern.configs.fetchHttp] }
 ```
 
-**These rules enforce to only use the default fetch based HTTP:**
+**These rules enforce to use the new default fetch based HTTP:**
 
 - [no-withxhr](./docs/fetch-http/NO_WITHXHR.md)
 - [no-httpxhrbackend](./docs/fetch-http/NO_HTTPXHRBACKEND.md)
