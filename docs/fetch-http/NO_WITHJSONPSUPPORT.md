@@ -4,6 +4,9 @@ Restrict the usage of deprecated `withJsonpSupport()`.
 
 JSONP is deprecated because of security issues. Use regular HTTP requests with CORS instead.
 
+> [!IMPORTANT]
+> When removing `withJsonpSupport()`, also replace all `HttpClient` `.jsonp()` calls with regular requests (for example `.get()`). Without `withJsonpSupport()`, `.jsonp()` calls fail at runtime.
+
 ## Documentation
 
 - [HTTP guide](https://angular.dev/guide/http)

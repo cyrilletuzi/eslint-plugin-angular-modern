@@ -8,7 +8,7 @@ export const ruleDefinition: RuleDefinition = {
   meta: {
     type: "problem",
     messages: {
-      [messageId]: `\`withJsonpSupport()\` is deprecated because of security issues, use regular HTTP requests with CORS instead.`,
+      [messageId]: `\`withJsonpSupport()\` is deprecated because of security issues, use regular HTTP requests with CORS instead (and do not forget to remove \`httpClient.jsonp()\` calls too).`,
     },
     docs: {
       description: `Checks that \`withJsonpSupport()\` is not used.`,
