@@ -3,7 +3,7 @@
     "./dist"
   ],
   // Use project TypeScript version
-  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.path": "node_modules/@typescript/native",
   // Disable random autocomplete for stricter code
   "editor.wordBasedSuggestions": "off",
   // Formatting
