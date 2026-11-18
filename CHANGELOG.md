@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.11.0 (not yet released)
+
+Previously, some rules were not enabled by default because they were already reported by another rule or by a compiler option. But these alternatives have a cost: `@typescript-eslint/no-deprecated` requires typed linting, which is not enabled in many projects; and `strictStandalone` is also not enabled in many projects and is all or nothing, which does not allow a gradual migration. Given the performance impact of these rules is negligible, for simplicity and for this plugin to be self-sufficient, they are now enabled by default.
+
+Rules now in the `standalone` and `recommended` presets:
+- [no-ngmodule-component](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_PIPE.md)
+- [no-platformbrowserdynamic](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md)
+- [no-routertestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_ROUTERTESTINGMODULE.md)
+- [no-httpclientmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTMODULE.md)
+- [no-httpclientjsonpmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTJSONPMODULE.md)
+- [no-httpclientxsrfmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTXSRFMODULE.md)
+- [no-httpclienttestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTTESTINGMODULE.md)
+- [no-browseranimationsmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_BROWSERANIMATIONSMODULE.md)
+- [no-noopanimationsmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NOOPANIMATIONSMODULE.md)
+
+Rule now in the `functional` and `recommended` presets:
+- [no-canload-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_CANLOAD_CLASS.md)
+
 ## 1.10.0 (2026-11-17)
 
 - Remove direct dependencies to `typescript-eslint` and `eslint`, mainly to avoid being impacted by their security issues
@@ -43,7 +63,7 @@ New `functional` preset (included in `recommended`) with the following new rules
 - [no-withinterceptorsfromdi](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_WITHINTERCEPTORSFROMDI.md)
 
 New related rules not in the preset:
-- [no-canload-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_CANLOAD_CLASS.md)
+- [no-canload-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_CANLOAD_CLASS.md)
 
 ## 1.4.0 (2026-08-17)
 
@@ -85,17 +105,17 @@ New `standalone` preset (included in `recommended`) with the following new rules
 
 New related rules not in the preset:
 - [no-material-modules](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_MATERIAL_MODULES.md)
-- [no-ngmodule-component](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
-- [no-ngmodule-directive](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
-- [no-ngmodule-pipe](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone-strict/NO_NGMODULE_PIPE.md)
-- [no-platformbrowserdynamic](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_PLATFORMBROWSERDYNAMIC.md)
-- [no-routertestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_ROUTERTESTINGMODULE.md)
-- [no-httpclientmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_HTTPCLIENTMODULE.md)
-- [no-httpclientjsonpmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_HTTPCLIENTJSONPMODULE.md)
-- [no-httpclientxsrfmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_HTTPCLIENTXSRFMODULE.md)
-- [no-browseranimationsmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_BROWSERANIMATIONSMODULE.md)
-- [no-noopanimationsmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_NOOPANIMATIONSMODULE.md)
-- [no-httpclienttestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_HTTPCLIENTTESTINGMODULE.md)
+- [no-ngmodule-component](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_PIPE.md)
+- [no-platformbrowserdynamic](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md)
+- [no-routertestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_ROUTERTESTINGMODULE.md)
+- [no-httpclientmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTMODULE.md)
+- [no-httpclientjsonpmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTJSONPMODULE.md)
+- [no-httpclientxsrfmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTXSRFMODULE.md)
+- [no-browseranimationsmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_BROWSERANIMATIONSMODULE.md)
+- [no-noopanimationsmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NOOPANIMATIONSMODULE.md)
+- [no-httpclienttestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTTESTINGMODULE.md)
 
 ## 1.0.1 (2026-08-10)
 
@@ -118,11 +138,11 @@ From `angular-eslint-injection-context`:
 - [custom-function-in-injection-context](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/injection-context/CUSTOM_FUNCTION.md)
 
 From `angular-eslint-zoneless`:
-- [no-zonejs-import](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/rules/NO_ZONEJS_IMPORT.md)
-- [no-providezonechangedetection](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/rules/NO_PROVIDEZONECHANGEDETECTION.md)
-- [no-ngzone](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/rules/NO_NGZONE.md)
-- [no-ngzone-testing](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/rules/NO_NGZONE_TESTING.md)
-- [no-zonejs-testing-functions](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/rules/NO_ZONEJS_TESTING_FUNCTIONS.md)
+- [no-zonejs-import](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/zoneless/NO_ZONEJS_IMPORT.md)
+- [no-providezonechangedetection](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/zoneless/NO_PROVIDEZONECHANGEDETECTION.md)
+- [no-ngzone](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/zoneless/NO_NGZONE.md)
+- [no-ngzone-testing](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/zoneless/NO_NGZONE_TESTING.md)
+- [no-zonejs-testing-functions](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/zoneless/NO_ZONEJS_TESTING_FUNCTIONS.md)
 - [no-directive-writable-property](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_DIRECTIVE_WRITABLE_PROPERTY.md)
 - [no-directive-accessor](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_DIRECTIVE_ACCESSOR.md)
 - [no-eager-change-detection](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_EAGER_CHANGE_DETECTION.md)

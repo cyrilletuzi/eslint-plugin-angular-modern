@@ -13,7 +13,8 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`standalone: false\` is not used in a component.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone-strict/NO_NGMODULE_COMPONENT.md',
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_COMPONENT.md',
+      recommended: true,
     },
     schema: [],
   },

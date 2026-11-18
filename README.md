@@ -48,17 +48,11 @@ const angularModern = require('eslint-plugin-angular-modern'); // ⬅️ add thi
 
 module.exports = defineConfig({
   files: ['**/*.ts'],
-  languageOptions: {
-    parserOptions: {
-      projectService: true,
-    },
-  },
   extends: [
     angularModern.configs.recommended, // ⬅️ add this (or some of the other presets below)
   ],
+  // Optional individual rules:
   rules: {
-    '@typescript-eslint/no-deprecated': 'error', // ⬅️ add this
-    // Optional individual rules:
     'eslint-plugin-angular-modern/no-material-modules': 'error',
     'eslint-plugin-angular-modern/no-cdk-modules': 'error',
     'eslint-plugin-angular-modern/custom-function-in-injection-context': ['error', {
@@ -77,15 +71,11 @@ In Oxlint JSON configuration (`.oxlintrc.json` or equivalent):
 
 ```jsonc
 {
-  "options": {
-    "typeAware": true
-  },
   "extends": [
     "./node_modules/eslint-plugin-angular-modern/oxlint/recommended.json" // ⬅️ add this (or some of the other presets below)
   ],
+  // Optional individual rules:
   "rules": {
-    "typescript/no-deprecated": "error",  // ⬅️ add this
-    // Optional individual rules:
     "eslint-plugin-angular-modern/no-material-modules": "error",
     "eslint-plugin-angular-modern/no-cdk-modules": "error",
     "eslint-plugin-angular-modern/custom-function-in-injection-context": ["error", {
@@ -225,21 +215,27 @@ For other functions requiring the injection context (custom ones or from librari
 **These rules enforce a standalone application to not use NgModules:**
 
 - [no-ngmodule](./docs/standalone/NO_NGMODULE.md)
+- [no-ngmodule-component](./docs/standalone/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](./docs/standalone/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](./docs/standalone/NO_NGMODULE_PIPE.md)
 - [no-createngmodule](./docs/standalone/NO_CREATENGMODULE.md)
 - [no-platformbrowser](./docs/standalone/NO_PLATFORMBROWSER.md)
+- [no-platformbrowserdynamic](./docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md)
 - [no-browsermodule](./docs/standalone/NO_BROWSERMODULE.md)
+- [no-routertestingmodule](./docs/standalone/NO_ROUTERTESTINGMODULE.md)
 - [no-browsertestingmodule](./docs/standalone/NO_BROWSERTESTINGMODULE.md)
 - [no-applicationmodule](./docs/standalone/NO_APPLICATIONMODULE.md)
 - [no-commonmodule](./docs/standalone/NO_COMMONMODULE.md)
 - [no-routermodule](./docs/standalone/NO_ROUTERMODULE.md)
+- [no-browseranimationsmodule](./docs/standalone/NO_BROWSERANIMATIONSMODULE.md)
+- [no-noopanimationsmodule](./docs/standalone/NO_NOOPANIMATIONSMODULE.md)
+- [no-httpclientmodule](./docs/standalone/NO_HTTPCLIENTMODULE.md)
+- [no-httpclientjsonpmodule](./docs/standalone/NO_HTTPCLIENTJSONPMODULE.md)
+- [no-httpclientxsrfmodule](./docs/standalone/NO_HTTPCLIENTXSRFMODULE.md)
+- [no-httpclienttestingmodule](./docs/standalone/NO_HTTPCLIENTTESTINGMODULE.md)
 - [no-serviceworkermodule](./docs/standalone/NO_SERVICEWORKERMODULE.md)
 - [no-servermodule](./docs/standalone/NO_SERVERMODULE.md)
 - [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
-
-> [!TIP]
-> To fully enforce standalone, 2 other checks must be enabled too:
-> - the `strictStandalone` Angular compiler option: [documentation](./docs/standalone-strict/STRICT_STANDALONE.md)
-> - the `@typescript-eslint/no-deprecated` rule: [documentation](./docs/deprecated/DEPRECATED.md)
 
 #### Libraries modules
 
@@ -261,6 +257,7 @@ Additional individual rules, _not_ included in the preset, are available for som
 - [no-canactivatechild-class](./docs/functional/NO_CANACTIVATECHILD_CLASS.md)
 - [no-candeactivate-class](./docs/functional/NO_CANDEACTIVATE_CLASS.md)
 - [no-canmatch-class](./docs/functional/NO_CANMATCH_CLASS.md)
+- [no-canload-class](./docs/functional/NO_CANLOAD_CLASS.md)
 - [no-resolve-class](./docs/functional/NO_RESOLVE_CLASS.md)
 - [no-httpinterceptor-class](./docs/functional/NO_HTTPINTERCEPTOR_CLASS.md)
 - [no-httpinterceptors-token](./docs/functional/NO_HTTPINTERCEPTORS_TOKEN.md)
@@ -301,35 +298,9 @@ Additional individual rules, _not_ included in the preset, are available for som
 - [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
 - [no-http-reportuploadprogress](./docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
 
-## Other rules
+## Experimental rules
 
-The following invidiual rules are _not_ enabled in presets.
-
-### Rules already reported by `strictStandalone`
-
-See [the documentation](./docs/standalone-strict/STRICT_STANDALONE.md) to enable Angular `strictStandalone` compiler option.
-
-- [no-ngmodule-component](./docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
-- [no-ngmodule-directive](./docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
-- [no-ngmodule-pipe](./docs/standalone-strict/NO_NGMODULE_PIPE.md)
-
-### Rules already reported by `@typescript-eslint/no-deprecated`
-
-See [the documentation](./docs/deprecated/DEPRECATED.md) to enable `@typescript-eslint/no-deprecated` rule.
-
-- [no-platformbrowserdynamic](./docs/deprecated/NO_PLATFORMBROWSERDYNAMIC.md)
-- [no-routertestingmodule](./docs/deprecated/NO_ROUTERTESTINGMODULE.md)
-- [no-httpclientmodule](./docs/deprecated/NO_HTTPCLIENTMODULE.md)
-- [no-httpclientjsonpmodule](./docs/deprecated/NO_HTTPCLIENTJSONPMODULE.md)
-- [no-httpclientxsrfmodule](./docs/deprecated/NO_HTTPCLIENTXSRFMODULE.md)
-- [no-httpclienttestingmodule](./docs/deprecated/NO_HTTPCLIENTTESTINGMODULE.md)
-- [no-browseranimationsmodule](./docs/deprecated/NO_BROWSERANIMATIONSMODULE.md)
-- [no-noopanimationsmodule](./docs/deprecated/NO_NOOPANIMATIONSMODULE.md)
-- [no-canload-class](./docs/deprecated/NO_CANLOAD_CLASS.md)
-
-### Experimental
-
-Rules still being tested.
+Rules still being tested, _not_ enabled in presets.
 
 - [no-subscribe-in-component-constructor](./docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
 

@@ -17,7 +17,7 @@ defineConfig({
     '@angular-eslint/use-lifecycle-interface': 'off',
     // When already using `dependencyInjection` or `recommended` presets:
     '@angular-eslint/prefer-inject': 'off',
-    // When already using `standalone` or `recommended` presets and `strictStandalone`:
+    // When already using `standalone` or `recommended` presets:
     '@angular-eslint/prefer-standalone': 'off',
   },
 }, {
@@ -52,7 +52,7 @@ If the project is using other `angular-eslint` rules, the whole list:
     '@angular-eslint/prefer-service-decorator': 'off',
     '@angular-eslint/prefer-inject': 'off',
     '@angular-eslint/use-injectable-provided-in': 'off',
-    // When already using `standalone` or `recommended` presets and `strictStandalone`:
+    // When already using `standalone` or `recommended` presets:
     '@angular-eslint/prefer-standalone': 'off',
     // When already using `injectionContext` or `recommended` presets:
     '@angular-eslint/no-implicit-take-until-destroyed': 'off',

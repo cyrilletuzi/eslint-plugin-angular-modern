@@ -12,7 +12,7 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`withInterceptorsFromDi()\` is not used.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_WITHINTERCEPTORSFROMDI.md',
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_WITHINTERCEPTORSFROMDI.md',
       recommended: true,
     },
     schema: [],

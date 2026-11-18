@@ -13,7 +13,8 @@ export const ruleDefinition: RuleDefinition = {
     },
     docs: {
       description: `Checks that \`BrowserAnimationsModule\` is not used.`,
-      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/deprecated/NO_BROWSERANIMATIONSMODULE.md',
+      url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_BROWSERANIMATIONSMODULE.md',
+      recommended: true,
     },
     schema: [],
   },

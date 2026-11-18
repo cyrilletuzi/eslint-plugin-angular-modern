@@ -10,6 +10,10 @@ Use a standalone pipe instead.
 
 ## Configuration
 
+- in the `recommended` preset
+- in the `standalone` preset
+- or just this rule:
+
 ```javascript
 {
   rules: {
@@ -17,9 +21,6 @@ Use a standalone pipe instead.
   }
 }
 ```
-
-> [!TIP]
-> This rule is _not_ in the `recommended` or the `standalone` presets because Angular `strictStandalone` compiler option already reports this. See the [documentation](./STRICT_STANDALONE.md).
 
 ## ❌ Invalid
 
