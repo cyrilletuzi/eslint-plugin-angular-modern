@@ -13,6 +13,7 @@ export const ruleDefinition: RuleDefinition = {
     docs: {
       description: `Checks that \`fixture.ngZone\` is not used.`,
       url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/zoneless/NO_NGZONE_TESTING.md',
+      recommended: true,
     },
     schema: [],
   },

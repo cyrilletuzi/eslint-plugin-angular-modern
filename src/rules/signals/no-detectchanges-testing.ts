@@ -14,6 +14,7 @@ export const ruleDefinition: RuleDefinition = {
     docs: {
       description: `Checks that \`fixture.detectChanges()\` is not called.`,
       url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/signals/NO_DETECTCHANGES_TESTING.md',
+      recommended: true,
     },
     schema: [],
   },
