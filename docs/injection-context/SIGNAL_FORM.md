@@ -51,7 +51,7 @@ export class ProductEditPage {
   });
 
   someMethod(): void {
-    form(this.#ormModel);
+    form(this.#formModel);
   }
 }
 ```
