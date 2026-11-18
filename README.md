@@ -291,12 +291,13 @@ Additional individual rules, _not_ included in the preset, are available for som
 { extends: [angularModern.configs.fetchHttp] }
 ```
 
-**These rules enforce to not use XHR HTTP:**
+**These rules enforce to use the new default fetch based HTTP:**
 
 - [no-withxhr](./docs/fetch-http/NO_WITHXHR.md)
 - [no-httpxhrbackend](./docs/fetch-http/NO_HTTPXHRBACKEND.md)
 - [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
 - [no-http-reportuploadprogress](./docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
+- [no-withjsonpsupport](./docs/fetch-http/NO_WITHJSONPSUPPORT.md)
 
 ## Experimental rules
 

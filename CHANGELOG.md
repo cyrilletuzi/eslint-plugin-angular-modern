@@ -2,6 +2,9 @@
 
 ## 1.11.0 (not yet released)
 
+New rule in the `fetchHttp` and `recommended` presets:
+- [no-withjsonpsupport](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/fetch-http/NO_WITHJSONPSUPPORT.md)
+
 Previously, some rules were not enabled by default because they were already reported by another rule or by a compiler option. But these alternatives have a cost: `@typescript-eslint/no-deprecated` requires typed linting, which is not enabled in many projects; and `strictStandalone` is also not enabled in many projects and is all or nothing, which does not allow a gradual migration. Given the performance impact of these rules is negligible, for simplicity and for this plugin to be self-sufficient, they are now enabled by default.
 
 Rules now in the `standalone` and `recommended` presets:
