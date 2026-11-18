@@ -9,6 +9,9 @@ import * as noHttpReportuploadprogress from "./rules/fetch-http/no-http-reportup
 import * as noHttpxhrbackend from "./rules/fetch-http/no-httpxhrbackend.js";
 import * as noWithxhr from "./rules/fetch-http/no-withxhr.js";
 import * as noWithjsonpsupport from "./rules/fetch-http/no-withjsonpsupport.js";
+import * as noComponentAnimations from "./rules/native-animations/no-component-animations.js";
+import * as noAnimationsImport from "./rules/native-animations/no-animations-import.js";
+import * as noPlatformbrowserAnimationsImport from "./rules/native-animations/no-platformbrowser-animations-import.js";
 import * as noCanactivateClass from "./rules/functional/no-canactivate-class.js";
 import * as noCanactivatechildClass from "./rules/functional/no-canactivatechild-class.js";
 import * as noCandeactivateClass from "./rules/functional/no-candeactivate-class.js";
@@ -103,6 +106,7 @@ const plugin: ESLint.Plugin & {
     | "zoneless"
     | "signals"
     | "fetchHttp"
+    | "nativeAnimations"
     | "recommended",
     Linter.Config
   >;
@@ -134,6 +138,9 @@ const plugin: ESLint.Plugin & {
     },
     get fetchHttp() {
       return fetchHttp;
+    },
+    get nativeAnimations() {
+      return nativeAnimations;
     },
     get recommended() {
       return recommended;
@@ -237,6 +244,10 @@ const plugin: ESLint.Plugin & {
     [noHttpReportprogress.ruleName]: noHttpReportprogress.ruleDefinition,
     [noHttpReportuploadprogress.ruleName]: noHttpReportuploadprogress.ruleDefinition,
     [noWithjsonpsupport.ruleName]: noWithjsonpsupport.ruleDefinition,
+    // Native animations
+    [noComponentAnimations.ruleName]: noComponentAnimations.ruleDefinition,
+    [noAnimationsImport.ruleName]: noAnimationsImport.ruleDefinition,
+    [noPlatformbrowserAnimationsImport.ruleName]: noPlatformbrowserAnimationsImport.ruleDefinition,
     // Experimental
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
@@ -396,6 +407,17 @@ const fetchHttp: Linter.Config = {
   },
 };
 
+const nativeAnimations: Linter.Config = {
+  plugins: {
+    [name]: plugin
+  },
+  rules: {
+    [`${name}/${noComponentAnimations.ruleName}`]: "error",
+    [`${name}/${noAnimationsImport.ruleName}`]: "error",
+    [`${name}/${noPlatformbrowserAnimationsImport.ruleName}`]: "error",
+  },
+};
+
 const recommended: Linter.Config = {
   plugins: {
     [name]: plugin
@@ -410,6 +432,7 @@ const recommended: Linter.Config = {
     ...zoneless.rules,
     ...signals.rules,
     ...fetchHttp.rules,
+    ...nativeAnimations.rules,
   },
 };
 

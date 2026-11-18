@@ -23,7 +23,7 @@ Another [blog post](https://dev.to/cyrilletuzi/angular-injection-context-lint-ru
 ## Requirements
 
 - `eslint` >= v8.57 (with the new flat configuration and the TypeScript parser configured)
-- or `oxlint` >= 1.31
+- or `oxlint` >= 1.43
 
 > [!IMPORTANT]
 > The default presets target the latest Angular stable version. Some rules may be unsuitable for previous versions, see "Angular versions" section below to adapt the configuration accordingly.
@@ -115,6 +115,7 @@ A feature preset enables the rules for a specific set of features. It is recomme
 - **styling bindings**: no legacy styling bindings
 - **host bindings**: no legacy host bindings
 - **fetch HTTP**: no XHR HTTP
+- **native animations**: no legacy animations
 
 ### Injection context preset
 
@@ -298,6 +299,18 @@ Additional individual rules, _not_ included in the preset, are available for som
 - [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
 - [no-http-reportuploadprogress](./docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
 - [no-withjsonpsupport](./docs/fetch-http/NO_WITHJSONPSUPPORT.md)
+
+### Native animations preset
+
+```javascript
+{ extends: [angularModern.configs.nativeAnimations] }
+```
+
+**These rules enforce native CSS animations:**
+
+- [no-component-animations](./docs/native-animations/NO_COMPONENT_ANIMATIONS.md)
+- [no-animations-import](./docs/native-animations/NO_ANIMATIONS_IMPORT.md)
+- [no-platformbrowser-animations-import](./docs/native-animations/NO_PLATFORMBROWSER_ANIMATIONS_IMPORT.md)
 
 ## Experimental rules
 
