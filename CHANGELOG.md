@@ -85,9 +85,9 @@ New `standalone` preset (included in `recommended`) with the following new rules
 
 New related rules not in the preset:
 - [no-material-modules](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_MATERIAL_MODULES.md)
-- [no-ngmodule-component](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
-- [no-ngmodule-directive](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
-- [no-ngmodule-pipe](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone-strict/NO_NGMODULE_PIPE.md)
+- [no-ngmodule-component](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_PIPE.md)
 - [no-platformbrowserdynamic](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md)
 - [no-routertestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_ROUTERTESTINGMODULE.md)
 - [no-httpclientmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTMODULE.md)

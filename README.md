@@ -215,6 +215,9 @@ For other functions requiring the injection context (custom ones or from librari
 **These rules enforce a standalone application to not use NgModules:**
 
 - [no-ngmodule](./docs/standalone/NO_NGMODULE.md)
+- [no-ngmodule-component](./docs/standalone/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](./docs/standalone/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](./docs/standalone/NO_NGMODULE_PIPE.md)
 - [no-createngmodule](./docs/standalone/NO_CREATENGMODULE.md)
 - [no-platformbrowser](./docs/standalone/NO_PLATFORMBROWSER.md)
 - [no-platformbrowserdynamic](./docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md)
@@ -233,9 +236,6 @@ For other functions requiring the injection context (custom ones or from librari
 - [no-serviceworkermodule](./docs/standalone/NO_SERVICEWORKERMODULE.md)
 - [no-servermodule](./docs/standalone/NO_SERVERMODULE.md)
 - [no-withmodule-testing](./docs/standalone/NO_WITHMODULE_TESTING.md)
-
-> [!TIP]
-> To fully enforce standalone, the `strictStandalone` Angular compiler option should be enabled: [documentation](./docs/standalone-strict/STRICT_STANDALONE.md)
 
 #### Libraries modules
 
@@ -298,21 +298,9 @@ Additional individual rules, _not_ included in the preset, are available for som
 - [no-http-reportprogress](./docs/fetch-http/NO_HTTP_REPORTPROGRESS.md)
 - [no-http-reportuploadprogress](./docs/fetch-http/NO_HTTP_REPORTUPLOADPROGRESS.md)
 
-## Other rules
+## Experimental rules
 
-The following invidiual rules are _not_ enabled in presets.
-
-### Rules already reported by `strictStandalone`
-
-See [the documentation](./docs/standalone-strict/STRICT_STANDALONE.md) to enable Angular `strictStandalone` compiler option.
-
-- [no-ngmodule-component](./docs/standalone-strict/NO_NGMODULE_COMPONENT.md)
-- [no-ngmodule-directive](./docs/standalone-strict/NO_NGMODULE_DIRECTIVE.md)
-- [no-ngmodule-pipe](./docs/standalone-strict/NO_NGMODULE_PIPE.md)
-
-### Experimental
-
-Rules still being tested.
+Rules still being tested, _not_ enabled in presets.
 
 - [no-subscribe-in-component-constructor](./docs/experimental/NO_SUBSCRIBE_IN_COMPONENT_CONSTRUCTOR.md)
 

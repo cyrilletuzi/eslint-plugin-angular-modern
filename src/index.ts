@@ -54,9 +54,6 @@ import * as noNgoninit from "./rules/signals/no-ngoninit.js";
 import * as noOutputDecorator from "./rules/signals/no-output-decorator.js";
 import * as noReactiveForms from "./rules/signals/no-reactive-forms.js";
 import * as noViewDecorator from "./rules/signals/no-view-decorator.js";
-import * as noNgmoduleComponent from "./rules/standalone-strict/no-ngmodule-component.js";
-import * as noNgmoduleDirective from "./rules/standalone-strict/no-ngmodule-directive.js";
-import * as noNgmodulePipe from "./rules/standalone-strict/no-ngmodule-pipe.js";
 import * as noApplicationmodule from "./rules/standalone/no-applicationmodule.js";
 import * as noBrowseranimationsmodule from "./rules/standalone/no-browseranimationsmodule.js";
 import * as noBrowsermodule from "./rules/standalone/no-browsermodule.js";
@@ -70,6 +67,9 @@ import * as noHttpclienttestingmodule from "./rules/standalone/no-httpclienttest
 import * as noHttpclientxsrfmodule from "./rules/standalone/no-httpclientxsrfmodule.js";
 import * as noIonicmodule from "./rules/standalone/no-ionicmodule.js";
 import * as noMaterialModules from "./rules/standalone/no-material-modules.js";
+import * as noNgmoduleComponent from "./rules/standalone/no-ngmodule-component.js";
+import * as noNgmoduleDirective from "./rules/standalone/no-ngmodule-directive.js";
+import * as noNgmodulePipe from "./rules/standalone/no-ngmodule-pipe.js";
 import * as noNgmodule from "./rules/standalone/no-ngmodule.js";
 import * as noNoopanimationsmodule from "./rules/standalone/no-noopanimationsmodule.js";
 import * as noPlatformbrowser from "./rules/standalone/no-platformbrowser.js";
@@ -155,6 +155,9 @@ const plugin: ESLint.Plugin & {
     [noCommonmodule.ruleName]: noCommonmodule.ruleDefinition,
     [noCreatengmodule.ruleName]: noCreatengmodule.ruleDefinition,
     [noNgmodule.ruleName]: noNgmodule.ruleDefinition,
+    [noNgmoduleComponent.ruleName]: noNgmoduleComponent.ruleDefinition,
+    [noNgmoduleDirective.ruleName]: noNgmoduleDirective.ruleDefinition,
+    [noNgmodulePipe.ruleName]: noNgmodulePipe.ruleDefinition,
     [noPlatformbrowser.ruleName]: noPlatformbrowser.ruleDefinition,
     [noRoutermodule.ruleName]: noRoutermodule.ruleDefinition,
     [noServiceworkermodule.ruleName]: noServiceworkermodule.ruleDefinition,
@@ -232,10 +235,6 @@ const plugin: ESLint.Plugin & {
     [noHttpxhrbackend.ruleName]: noHttpxhrbackend.ruleDefinition,
     [noHttpReportprogress.ruleName]: noHttpReportprogress.ruleDefinition,
     [noHttpReportuploadprogress.ruleName]: noHttpReportuploadprogress.ruleDefinition,
-    // Strict standalone
-    [noNgmoduleComponent.ruleName]: noNgmoduleComponent.ruleDefinition,
-    [noNgmoduleDirective.ruleName]: noNgmoduleDirective.ruleDefinition,
-    [noNgmodulePipe.ruleName]: noNgmodulePipe.ruleDefinition,
     // Experimental
     [noSubscribeInComponentConstructor.ruleName]: noSubscribeInComponentConstructor.ruleDefinition,
   },
@@ -260,6 +259,9 @@ const standalone: Linter.Config = {
     [`${name}/${noCommonmodule.ruleName}`]: "error",
     [`${name}/${noCreatengmodule.ruleName}`]: "error",
     [`${name}/${noNgmodule.ruleName}`]: "error",
+    [`${name}/${noNgmoduleComponent.ruleName}`]: "error",
+    [`${name}/${noNgmoduleDirective.ruleName}`]: "error",
+    [`${name}/${noNgmodulePipe.ruleName}`]: "error",
     [`${name}/${noPlatformbrowser.ruleName}`]: "error",
     [`${name}/${noRoutermodule.ruleName}`]: "error",
     [`${name}/${noServiceworkermodule.ruleName}`]: "error",
