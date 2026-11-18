@@ -43,9 +43,7 @@ npm install eslint-plugin-angular-modern --save-dev
 In ESLint flat configuration (`eslint.config.js` or equivalent):
 
 ```javascript
-const eslint = require('@eslint/js');
 const { defineConfig } = require('eslint/config');
-const tsEslint = require('typescript-eslint');
 const angularModern = require('eslint-plugin-angular-modern'); // ⬅️ add this
 
 module.exports = defineConfig({
@@ -56,11 +54,10 @@ module.exports = defineConfig({
     },
   },
   extends: [
-    eslint.configs.recommended,
-    tsEslint.configs.strictTypeChecked,
     angularModern.configs.recommended, // ⬅️ add this (or some of the other presets below)
   ],
   rules: {
+    '@typescript-eslint/no-deprecated': 'error', // ⬅️ add this
     // Optional individual rules:
     'eslint-plugin-angular-modern/no-material-modules': 'error',
     'eslint-plugin-angular-modern/no-cdk-modules': 'error',
@@ -80,10 +77,14 @@ In Oxlint JSON configuration (`.oxlintrc.json` or equivalent):
 
 ```jsonc
 {
+  "options": {
+    "typeAware": true
+  },
   "extends": [
     "./node_modules/eslint-plugin-angular-modern/oxlint/recommended.json" // ⬅️ add this (or some of the other presets below)
   ],
   "rules": {
+    "typescript/no-deprecated": "error",  // ⬅️ add this
     // Optional individual rules:
     "eslint-plugin-angular-modern/no-material-modules": "error",
     "eslint-plugin-angular-modern/no-cdk-modules": "error",
