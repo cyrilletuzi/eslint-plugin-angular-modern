@@ -2,6 +2,11 @@
 
 ## 1.11.0 (not yet released)
 
+New `nativeAnimations` preset (included in `recommended`) with the following new rules:
+- [no-component-animations](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/native-animations/NO_COMPONENT_ANIMATIONS.md)
+- [no-animations-import](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/native-animations/NO_ANIMATIONS_IMPORT.md)
+- [no-platformbrowser-animations-import](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/native-animations/NO_PLATFORMBROWSER_ANIMATIONS_IMPORT.md)
+
 New rule in the `fetchHttp` and `recommended` presets:
 - [no-withjsonpsupport](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/fetch-http/NO_WITHJSONPSUPPORT.md)
 
