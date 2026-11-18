@@ -1,6 +1,6 @@
 # eslint-plugin-angular-modern
 
-80+ ESLint rules for modern and safe Angular. Compatible with Oxlint.
+90+ ESLint rules for modern and safe Angular. Compatible with Oxlint.
 
 > [!NOTE]
 > I’m open to freelance & full-time opportunities.
@@ -55,6 +55,7 @@ module.exports = defineConfig({
   rules: {
     'eslint-plugin-angular-modern/no-material-modules': 'error',
     'eslint-plugin-angular-modern/no-cdk-modules': 'error',
+    'eslint-plugin-angular-modern/no-ionicmodule': 'error',
     'eslint-plugin-angular-modern/custom-function-in-injection-context': ['error', {
       functions: [{ name: 'myCustomFunction' }],
     }],
@@ -78,6 +79,7 @@ In Oxlint JSON configuration (`.oxlintrc.json` or equivalent):
   "rules": {
     "eslint-plugin-angular-modern/no-material-modules": "error",
     "eslint-plugin-angular-modern/no-cdk-modules": "error",
+    "eslint-plugin-angular-modern/no-ionicmodule": "error",
     "eslint-plugin-angular-modern/custom-function-in-injection-context": ["error", {
       "functions": [{ "name": "myCustomFunction" }]
     }]
