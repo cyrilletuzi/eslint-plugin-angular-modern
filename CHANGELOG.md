@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.11.0 (2026-11-18)
+
+Previously, some rules were not enabled by default because they were already reported by another rule (`@typescript-eslint/no-deprecated`) or by a compiler option (`strictStandalone`). But these alternatives have a cost: `@typescript-eslint/no-deprecated` requires typed linting, and `strictStandalone` is all or nothing, which does not allow a gradual migration. Given the performance impact of these rules is negligible, for simplicity and for this plugin to be self-sufficient, they are now enabled by default.
+
+Rules now in the `standalone` and `recommended` presets:
+- [no-ngmodule-component](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_COMPONENT.md)
+- [no-ngmodule-directive](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_DIRECTIVE.md)
+- [no-ngmodule-pipe](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NGMODULE_PIPE.md)
+- [no-platformbrowserdynamic](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_PLATFORMBROWSERDYNAMIC.md)
+- [no-routertestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_ROUTERTESTINGMODULE.md)
+- [no-httpclientmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTMODULE.md)
+- [no-httpclientjsonpmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTJSONPMODULE.md)
+- [no-httpclientxsrfmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTXSRFMODULE.md)
+- [no-httpclienttestingmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_HTTPCLIENTTESTINGMODULE.md)
+- [no-browseranimationsmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_BROWSERANIMATIONSMODULE.md)
+- [no-noopanimationsmodule](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_NOOPANIMATIONSMODULE.md)
+
+Rule now in the `functional` and `recommended` presets:
+- [no-canload-class](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/functional/NO_CANLOAD_CLASS.md)
+
 ## 1.10.0 (2026-11-17)
 
 - Remove direct dependencies to `typescript-eslint` and `eslint`, mainly to avoid being impacted by their security issues
