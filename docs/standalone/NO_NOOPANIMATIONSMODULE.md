@@ -2,7 +2,7 @@
 
 Restrict the usage of deprecated `NoopAnimationsModule`.
 
-It is planned for removal; in the meantime, use `provideAnimations()` or `provideAnimationsAsync()` instead.
+It is planned for removal; in the meantime, use `provideNoopAnimations()` or `provideAnimationsAsync('noop')` instead.
 
 ## Documentation
 
