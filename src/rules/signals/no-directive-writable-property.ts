@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { isInAngularClass } from "../../utils/angular-class-decorator";
+import { addAngularClassDecoratorImport, angularClassDecoratorImportSelector, isInImportedAngularClass, type AngularClassDecoratorImports } from "../../utils/angular-class-decorator";
 
 export const ruleName = "no-directive-writable-property";
 const messageId = "noDirectiveWritableProperty";
@@ -19,10 +19,15 @@ export const ruleDefinition: RuleDefinition = {
     schema: [],
   },
   create(context) {
+    const angularDecorators: AngularClassDecoratorImports = new Map();
+
     return {
+      [angularClassDecoratorImportSelector](node: TSESTree.ImportSpecifier) {
+        addAngularClassDecoratorImport(angularDecorators, node);
+      },
       /* React to: explicit `public` properties, explicit `protected` properties, implicit public properties which are not `#private` */
       "PropertyDefinition[key.type!='PrivateIdentifier'][readonly!=true]"(node: TSESTree.MethodDefinition) {
-        if (isInAngularClass(node, ["Component", "Directive"])) {
+        if (isInImportedAngularClass(node, angularDecorators, ["Component", "Directive"])) {
           context.report({
             node,
             messageId,
