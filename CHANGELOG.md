@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+Rules now check that the Angular APIs really come from Angular imports:
+- no more false positives on APIs with the same names from other libraries (for example NestJS `@Injectable()` and constructor injection, Vitest `inject()`), or on unrelated local code with the same names
+- aliased imports are now reported too (for example `import { Input as NgInput } from '@angular/core'`)
+- `no-material-modules` now also reports Material modules without the `Mat` prefix, like `NativeDateModule` and the date adapters modules
+
+Linting is also faster, especially on large files.
+
 ## 1.11.0 (2026-11-18)
 
 New `nativeAnimations` preset (included in `recommended`) with the following new rules:
