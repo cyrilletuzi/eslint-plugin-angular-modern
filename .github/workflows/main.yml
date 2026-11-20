@@ -60,4 +60,4 @@ jobs:
           npm ci --no-audit --no-fund --prefer-offline --ignore-scripts --allow-git=none --allow-remote=none --allow-file=none --allow-directory=none
           npm run build
       - name: Compare performance on valid code
-        run: node scripts/benchmark.mjs base/dist dist
+        run: node scripts/benchmark.mjs base/dist dist >> "$GITHUB_STEP_SUMMARY"

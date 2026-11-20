@@ -5,7 +5,6 @@
 
 import * as parser from "@typescript-eslint/parser";
 import { Linter } from "eslint";
-import { appendFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -176,27 +175,16 @@ const afterRules = median(times.after) - parsing;
 const change = median(times.after.map((after, round) => (after - times.baseline[round]) / (times.before[round] - times.baseline[round]))) - 1;
 const lines = files.reduce((total, code) => total + code.split("\n").length, 0);
 
-const failed = change > maxSlowdown;
-const percent = Math.abs(change * 100).toFixed(0);
-const headline = `Rules ${percent}% ${change > 0 ? "slower" : "faster"} on valid code (${beforeRules.toFixed(0)} ms → ${afterRules.toFixed(0)} ms)`;
-
-const summary = `### Performance on valid Angular code
+console.log(`### Performance on valid Angular code
 
 ${files.length} files, ${lines} lines, all ${Object.keys(after.rules).length} rules enabled (parsing excluded).
 
 | Before | After | Change |
 | --- | --- | --- |
 | ${beforeRules.toFixed(0)} ms | ${afterRules.toFixed(0)} ms | ${change > 0 ? "+" : ""}${(change * 100).toFixed(0)}% |
-${failed ? `\n❌ The rules are more than ${maxSlowdown * 100}% slower on valid code.\n` : ""}`;
+`);
 
-if (process.env.GITHUB_STEP_SUMMARY) {
-  /* In GitHub Actions: the table goes to the job summary, and an annotation shows the result in the checks of the pull request */
-  appendFileSync(process.env.GITHUB_STEP_SUMMARY, summary);
-  console.log(`::${failed ? "error" : "notice"} title=Performance check::${headline}`);
-} else {
-  console.log(summary);
-}
-
-if (failed) {
+if (change > maxSlowdown) {
+  console.log(`❌ The rules are more than ${maxSlowdown * 100}% slower on valid code.`);
   process.exit(1);
 }
