@@ -105,7 +105,7 @@ testRule(rule, {
     // One report per writable property, `readonly` and `#private` ones are skipped
     { code: `import { Component } from "@angular/core"; @Component() class A { a = 1; readonly b = 2; c = 3; #d = 4; }`, errors: [{ messageId }, { messageId }] },
     // Class expression nested in a component: the nearest `ClassDeclaration` is the component
-    // SUSPECTED BUG: the outer property is writable (1 report) but a property of an unrelated inner class expression is reported too (1 report)
+    // ACCEPTED FALSE POSITIVE: the outer property is rightly reported, but a property of an unrelated inner class expression is reported too (not used in Angular code)
     { code: `import { Component } from "@angular/core"; @Component() class A { b = class { c = 1; }; }`, errors: [{ messageId }, { messageId }] },
     // Aliased Angular decorator is checked
     { code: `import { Component as NgComponent } from '@angular/core'; @NgComponent({}) export class A { name = ''; }`, errors: [{ messageId }] },

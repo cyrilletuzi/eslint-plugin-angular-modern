@@ -97,7 +97,7 @@ testRule(rule, {
     // Getter and setter pair: one report each
     { code: `import { Component } from "@angular/core"; @Component() class A { get a() { return 1; } set a(value: number) {} }`, errors: [{ messageId }, { messageId }] },
     // Class expression nested in a component: the nearest `ClassDeclaration` is the component
-    // SUSPECTED BUG: an accessor of an unrelated inner class expression is reported
+    // ACCEPTED FALSE POSITIVE: an accessor of an unrelated inner class expression is reported (not used in Angular code)
     { code: `import { Component } from "@angular/core"; @Component() class A { readonly b = class { get c() { return 1; } }; }`, errors: [{ messageId }] },
     // Aliased Angular decorator is checked
     { code: `import { Directive as NgDirective } from '@angular/core'; @NgDirective() export class A { get value() { return 1; } }`, errors: [{ messageId }] },
