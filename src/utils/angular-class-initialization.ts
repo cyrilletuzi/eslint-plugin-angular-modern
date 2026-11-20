@@ -5,7 +5,8 @@ import { findNearestAncestorOf } from "./ast-traversal";
 function isInProperty(node: TSESTree.Node): boolean {
   const propertyDefinition = findNearestAncestorOf(
     node,
-    (node) => node.type === "PropertyDefinition",
+    /* Auto-accessors (`accessor a = inject(A)`) are initialized at construction too */
+    (node) => node.type === "PropertyDefinition" || node.type === "AccessorProperty",
     { notInCallback: true },
   );
   if (propertyDefinition) {

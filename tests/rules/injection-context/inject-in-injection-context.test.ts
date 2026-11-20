@@ -95,6 +95,8 @@ describe("class initialization (constructor and field initializers)", () => {
       `@Component() class A { constructor() { const f = () => inject(A); } }`,
       `@Component() class A { constructor() { function f() { return inject(A); } } }`,
       `@Component() class A { constructor() { this.f = () => inject(A); } }`,
+      // Auto-accessor (`accessor` keyword) initializers run at construction too
+      `@Component() class A { accessor a = inject(A); }`,
     ],
     invalid: [
       // Not an Angular class
@@ -104,8 +106,6 @@ describe("class initialization (constructor and field initializers)", () => {
       { code: `@ng.Component() class A { a = inject(A); }`, errors },
       // SUSPECTED BUG: class expressions are not detected
       { code: `const A = @Component() class { a = inject(A); };`, errors },
-      // SUSPECTED BUG: auto-accessors are field initializers too
-      { code: `@Component() class A { accessor a = inject(A); }`, errors },
       // Methods other than the constructor
       { code: `@Component() class A { ngOnInit() { inject(A); } }`, errors },
       { code: `@Component() class A { method() { inject(A); } }`, errors },

@@ -21,8 +21,7 @@ testRule(rule, {
     // The object is a `MemberExpression`, not an `Identifier`
     // ACCEPTED FALSE NEGATIVE: with a namespace import, `core.ChangeDetectionStrategy.Default` is not reported
     `import { ChangeDetectionStrategy } from "@angular/core"; @Component({ changeDetection: core.ChangeDetectionStrategy.Default }) class A {}`,
-    // Raw enum value
-    // SUSPECTED BUG: the raw value of `ChangeDetectionStrategy.Default` (`1`) is not reported
+    // ACCEPTED FALSE NEGATIVE: the raw enum value of `ChangeDetectionStrategy.Default` (`1`) is not reported (unrealistic, the enum is always used)
     `@Component({ changeDetection: 1 }) class A {}`,
     // Destructuring
     `import { ChangeDetectionStrategy } from "@angular/core"; const { Default } = ChangeDetectionStrategy;`,

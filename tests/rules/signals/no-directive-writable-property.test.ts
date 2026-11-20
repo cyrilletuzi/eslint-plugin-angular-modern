@@ -39,7 +39,7 @@ testRule(rule, {
     // Index signature (`TSIndexSignature`)
     `import { Component } from "@angular/core"; @Component() class A { [key: string]: unknown; }`,
     // Auto-accessor (`AccessorProperty`)
-    // SUSPECTED BUG: an auto-accessor is writable, but is not reported
+    // ACCEPTED FALSE NEGATIVE: an auto-accessor (`accessor` keyword) is writable, but is not reported (not used in Angular code)
     `import { Component } from "@angular/core"; @Component() class A { accessor a = 1; }`,
     // Constructor parameter property (`TSParameterProperty`)
     // SUSPECTED BUG: a writable parameter property is not reported
