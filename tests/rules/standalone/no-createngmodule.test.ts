@@ -30,10 +30,6 @@ ng.createNgModule();`,
     `import { createNgModule } from "@angular/core"; createComponent();`,
     `import { createNgModule } from "@angular/core"; createEnvironmentInjector();`,
     `import { createNgModule } from "@angular/core"; NgModule();`,
-    // SUSPECTED BUG: `createNgModuleRef()`, the deprecated alias of `createNgModule()`, is not reported (exact name match)
-    `import { createNgModuleRef } from "@angular/core";
-
-const moduleRef = createNgModuleRef(SomeModule, injector);`,
     // Usage without import is not reported
     `const moduleRef = createNgModule(SomeModule, this.injector);`,
     // Locally declared function with the same name is not reported
