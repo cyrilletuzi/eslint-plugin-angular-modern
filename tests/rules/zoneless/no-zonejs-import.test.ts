@@ -5,15 +5,11 @@ const error = { messageId: "noZonejsImport" };
 
 testRule(rule, {
   valid: [
-    // Other modules (exact source match)
+    // Other modules, including names starting with `zone.js`
     `import "zone";`,
     `import "zone.jsx";`,
     `import "@angular/core";`,
     `import { NgZone } from "@angular/core";`,
-    // SUSPECTED BUG: zone.js sub-entry points (e.g. the classic test.ts import) are not reported (exact source match)
-    `import "zone.js/testing";`,
-    `import "zone.js/plugins/zone-error";`,
-    `import "zone.js/dist/zone";`,
     // Not an ImportDeclaration: dynamic import, require, re-exports
     `import("zone.js");`,
     `require("zone.js");`,
@@ -62,5 +58,9 @@ import { bootstrapApplication } from "@angular/platform-browser";`,
 import "zone.js";`,
       errors: [error, error],
     },
+    // Sub-entry points (e.g. the classic `test.ts` import)
+    { code: `import "zone.js/testing";`, errors: [error] },
+    { code: `import "zone.js/plugins/zone-error";`, errors: [error] },
+    { code: `import "zone.js/dist/zone";`, errors: [error] },
   ],
 });
