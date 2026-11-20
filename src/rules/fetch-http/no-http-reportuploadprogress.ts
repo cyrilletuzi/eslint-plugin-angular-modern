@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { isInAngularHttpClientMethodCall, isInAngularHttpClientOptionsVariable } from "../../utils/angular-http-client";
+import { isInAngularHttpClientMethodCall, isInAngularHttpClientOptionsVariable, isInAngularHttpRequestConstructor } from "../../utils/angular-http-client";
 
 export const ruleName = "no-http-reportuploadprogress";
 const messageId = "noHttpReportuploadprogress";
@@ -37,6 +37,14 @@ export const ruleDefinition: RuleDefinition = {
 
         /* Case 2: literal object in variable with `HttpClientCommonOptions` or `HttpRequestOptions` type */
         if (isInAngularHttpClientOptionsVariable(object)) {
+          context.report({
+            node,
+            messageId,
+          });
+        }
+
+        /* Case 3: literal object in a `new HttpRequest()` */
+        if (isInAngularHttpRequestConstructor(object)) {
           context.report({
             node,
             messageId,

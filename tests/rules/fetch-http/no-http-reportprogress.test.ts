@@ -33,8 +33,6 @@ testRule(rule, {
     `this.httpClient.get('/api', { ...{ reportProgress: true } });`,
     `this.httpClient.get('/api', [{ reportProgress: true }]);`,
     `this.httpClient.get('/api', cond ? { reportProgress: true } : {});`,
-    // SUSPECTED BUG: `new HttpRequest(...)` is a NewExpression, so its options object is not checked although it is a classic usage of `reportProgress`
-    `const req = new HttpRequest('POST', '/api', body, { reportProgress: true });`,
     /* Case 2 negative: variable without type or with another type */
     `const options = { reportProgress: true };`,
     `const options: Options = { reportProgress: true };`,
@@ -50,6 +48,8 @@ testRule(rule, {
     `const options: HttpRequestOptions = { context: { reportProgress: true } };`,
     /* Case 2 negative: typed class property (PropertyDefinition, not VariableDeclarator) */
     `class A { options: HttpRequestOptions = { reportProgress: true }; }`,
+    /* Case 3 negative: another class */
+    `const req = new OtherRequest('POST', '/api', body, { reportProgress: true });`,
   ],
   invalid: [
     /* Case 1: each HTTP method */
@@ -87,5 +87,8 @@ testRule(rule, {
     },
     // Quoted `reportProgress` key
     { code: `this.httpClient.get('/api', { 'reportProgress': true });`, errors: [error] },
+    /* Case 3: `new HttpRequest()`, options as 4th argument (with body) or 3rd argument (without body) */
+    { code: `const req = new HttpRequest('POST', '/api', body, { reportProgress: true });`, errors: [error] },
+    { code: `const req = new HttpRequest('GET', '/api', { reportProgress: true });`, errors: [error] },
   ],
 });
