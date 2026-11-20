@@ -38,7 +38,8 @@ export function isInAngularClassInitialization(node: TSESTree.Node): boolean {
 
     if (
       classDeclaration &&
-      findAngularClassDecorator(classDeclaration)
+      /* An abstract class can only be instantiated by a child class, which is supposed to be an Angular class */
+      (classDeclaration.abstract || findAngularClassDecorator(classDeclaration))
     ) {
       return true;
     }

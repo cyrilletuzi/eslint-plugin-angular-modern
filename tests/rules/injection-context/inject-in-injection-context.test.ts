@@ -130,10 +130,17 @@ describe("class initialization (constructor and field initializers)", () => {
 
 describe("inheritance", () => {
   testRule(rule, withImport(importDeclaration, {
-    valid: [],
+    valid: [
+      // Abstract base classes can only be instantiated by a child class, supposed to be an Angular class
+      `abstract class Base { a = inject(A); } @Component() class Child extends Base {}`,
+      `export abstract class Base { a = inject(A); }`,
+      `export abstract class Base { constructor() { inject(A); } }`,
+    ],
     invalid: [
-      // SUSPECTED BUG: undecorated base classes are in an injection context when instantiated by a decorated child class
-      { code: `abstract class Base { a = inject(A); } @Component() class Child extends Base {}`, errors },
+      // ACCEPTED FALSE POSITIVE: a non-abstract undecorated base class is not recognized as instantiated by a decorated child class (it may be instantiated elsewhere)
+      { code: `class Base { a = inject(A); } @Component() class Child extends Base {}`, errors },
+      // Methods of an abstract class are not an injection context
+      { code: `export abstract class Base { m() { inject(A); } }`, errors },
     ],
   }));
 });
