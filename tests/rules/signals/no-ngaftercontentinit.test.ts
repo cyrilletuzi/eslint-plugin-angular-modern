@@ -17,10 +17,6 @@ testRule(rule, {
     // Only `MethodDefinition` is targeted: a property holding an arrow function is ignored
     // SUSPECTED BUG: a hook defined as an arrow function property is still called by Angular, but is not reported
     `@Component() class A { ngAfterContentInit = (): void => {}; }`,
-    // Only an `Identifier` key is targeted: string literal and computed keys are ignored
-    // SUSPECTED BUG: `'ngAfterContentInit'()` and `['ngAfterContentInit']()` define the same hook, but are not reported
-    `@Component() class A { 'ngAfterContentInit'(): void {} }`,
-    `@Component() class A { ['ngAfterContentInit'](): void {} }`,
     // A native private method (`PrivateIdentifier` key) is a different member, not a hook
     `@Component() class A { #ngAfterContentInit(): void {} }`,
     // Abstract method (`TSAbstractMethodDefinition`) is not targeted
@@ -76,5 +72,8 @@ testRule(rule, {
       `,
       errors: [{ messageId }],
     },
+    // Quoted and computed string keys define the same hook
+    { code: `@Component() class A { 'ngAfterContentInit'(): void {} }`, errors: [{ messageId }] },
+    { code: `@Component() class A { ['ngAfterContentInit'](): void {} }`, errors: [{ messageId }] },
   ],
 });

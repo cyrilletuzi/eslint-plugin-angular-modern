@@ -1,4 +1,5 @@
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getKeyName } from "./ast-property-key";
 import { findAngularClassDecorator } from "./angular-class-decorator";
 import { findNearestAncestorOf } from "./ast-traversal";
 import { isAfterAwait } from "./await-detection";
@@ -38,9 +39,11 @@ export function isInMethodWithInjectionContext(node: TSESTree.Node, {
     { notInCallback: true },
   );
 
+  const methodName = methodDefinition ? getKeyName(methodDefinition.key) : undefined;
+
   if (
-    methodDefinition?.key.type !== "Identifier" ||
-    !methodsWithInjectionContext.has(methodDefinition.key.name)
+    methodName === undefined ||
+    !methodsWithInjectionContext.has(methodName)
   ) {
     return false;
   }
@@ -60,7 +63,7 @@ export function isInMethodWithInjectionContext(node: TSESTree.Node, {
 
   // Check if the class implements the according accepted interface
   const implementName = methodsAndInterfacesWithInjectionContextMap.get(
-    methodDefinition.key.name,
+    methodName,
   );
 
   if (

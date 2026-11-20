@@ -50,8 +50,6 @@ testRule(rule, {
     `const options: HttpRequestOptions = { context: { reportProgress: true } };`,
     /* Case 2 negative: typed class property (PropertyDefinition, not VariableDeclarator) */
     `class A { options: HttpRequestOptions = { reportProgress: true }; }`,
-    // SUSPECTED BUG: string-quoted `'reportProgress'` key is not matched (selector requires an Identifier key)
-    `this.httpClient.get('/api', { 'reportProgress': true });`,
   ],
   invalid: [
     /* Case 1: each HTTP method */
@@ -87,5 +85,7 @@ testRule(rule, {
       code: `http.get('/a', { reportProgress: true }); http.post('/b', body, { reportProgress: true });`,
       errors: [error, error],
     },
+    // Quoted `reportProgress` key
+    { code: `this.httpClient.get('/api', { 'reportProgress': true });`, errors: [error] },
   ],
 });

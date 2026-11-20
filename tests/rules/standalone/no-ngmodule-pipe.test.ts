@@ -85,16 +85,7 @@ export class SomeClass {}`,
 
 @Pipe({ standalone: !true })
 export class SomeClass {}`,
-    // Key is not an Identifier named standalone
-    // SUSPECTED BUG: quoted key is a Literal, not an Identifier (false negative)
-    `import { Pipe } from "@angular/core";
-
-@Pipe({ "standalone": false })
-export class SomeClass {}`,
-    `import { Pipe } from "@angular/core";
-
-@Pipe({ ["standalone"]: false })
-export class SomeClass {}`,
+    // Key not named standalone
     `import { Pipe } from "@angular/core";
 
 @Pipe({ isStandalone: false })
@@ -220,6 +211,16 @@ export class SomeClass {}`,
     { code: `import { Pipe as NgPipe } from "@angular/core";
 
 @NgPipe({ standalone: false })
+export class SomeClass {}`, errors: [error] },
+    // Quoted `standalone` key
+    { code: `import { Pipe } from "@angular/core";
+
+@Pipe({ "standalone": false })
+export class SomeClass {}`, errors: [error] },
+    // Computed key with a string
+    { code: `import { Pipe } from "@angular/core";
+
+@Pipe({ ["standalone"]: false })
 export class SomeClass {}`, errors: [error] },
   ],
 });

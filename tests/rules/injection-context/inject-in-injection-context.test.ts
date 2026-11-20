@@ -307,14 +307,15 @@ describe("factories", () => {
       // KNOWN BUG: nested functions which can be run later, outside of the injection context
       `const p = { provide: T, useFactory: () => () => inject(A) };`,
       `const T = new InjectionToken('t', { factory: () => () => inject(A) });`,
+      // Quoted and computed string `useFactory` keys
+      `const p = { provide: T, 'useFactory': () => inject(A) };`,
+      `const p = { provide: T, ['useFactory']: () => inject(A) };`,
     ],
     invalid: [
       // `useFactory` without `provide`
       { code: `const p = { useFactory: () => inject(A) };`, errors },
       // Other property names
       { code: `const p = { provide: T, factory: () => inject(A) };`, errors },
-      { code: `const p = { provide: T, ['useFactory']: () => inject(A) };`, errors },
-      { code: `const p = { provide: T, 'useFactory': () => inject(A) };`, errors },
       // Not an `InjectionToken`
       { code: `const T = new Other('t', { factory: () => inject(A) });`, errors },
       { code: `const T = new ng.InjectionToken('t', { factory: () => inject(A) });`, errors },

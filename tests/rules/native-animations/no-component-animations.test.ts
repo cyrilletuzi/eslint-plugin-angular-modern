@@ -29,8 +29,6 @@ testRule(rule, {
     `import { Component } from "@angular/core"; const config = { animations: [trigger('fade', [])] };`,
     /* Look-alike decorator name */
     `import { Component } from "@angular/core"; @Components({ animations: [] }) class A {}`,
-    // SUSPECTED BUG: string-quoted `'animations'` key is not found by getDecoratorProperty (only Identifier keys)
-    `import { Component } from "@angular/core"; @Component({ 'animations': [] }) class A {}`,
     /* Same name imported from another library is not reported */
     `import { Component } from "other-lib"; @Component({ animations: [] }) class A {}`,
   ],
@@ -59,5 +57,7 @@ testRule(rule, {
       code: `import { Component } from "@angular/core"; @Component({ animations: [] }) class A {} @Component({}) class B {} @Component({ animations: [] }) class C {}`,
       errors: [error, error],
     },
+    // Quoted `animations` key
+    { code: `import { Component } from "@angular/core"; @Component({ 'animations': [] }) class A {}`, errors: [error] },
   ],
 });

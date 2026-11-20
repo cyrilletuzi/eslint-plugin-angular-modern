@@ -29,10 +29,6 @@ testRule(rule, {
     `const p = { ...base, deps: [B] };`,
     /* Member access */
     `provider.deps = [B];`,
-    // SUSPECTED BUG: string-quoted `'deps'` key is not matched (selector requires an Identifier key)
-    `const p = { provide: A, useFactory: () => '', 'deps': [B] };`,
-    // SUSPECTED BUG: string-quoted `'provide'` key is not detected as a provider
-    `const p = { 'provide': A, useFactory: () => '', deps: [B] };`,
   ],
   invalid: [
     /* Classic factory provider */
@@ -69,5 +65,9 @@ testRule(rule, {
       code: `const providers = [{ provide: A, deps: [] }, { provide: B, deps: [] }];`,
       errors: [error, error],
     },
+    // Quoted `deps` key
+    { code: `const p = { provide: A, useFactory: () => '', 'deps': [B] };`, errors: [error] },
+    // Quoted `provide` key
+    { code: `const p = { 'provide': A, useFactory: () => '', deps: [B] };`, errors: [error] },
   ],
 });

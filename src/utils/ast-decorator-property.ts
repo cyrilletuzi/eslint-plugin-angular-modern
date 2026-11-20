@@ -1,4 +1,5 @@
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getKeyName } from "./ast-property-key";
 
 /**
  * Find the property inside a decorator node
@@ -20,8 +21,7 @@ export function getDecoratorProperty(node: TSESTree.Decorator, name: string): TS
   const matchedProperty = config.properties.find(
     (property) =>
       property.type === "Property" &&
-      property.key.type === "Identifier" &&
-      property.key.name === name,
+      getKeyName(property.key) === name,
   );
 
   if (matchedProperty?.type === "Property") {

@@ -85,16 +85,7 @@ export class SomeClass {}`,
 
 @Directive({ standalone: !true })
 export class SomeClass {}`,
-    // Key is not an Identifier named standalone
-    // SUSPECTED BUG: quoted key is a Literal, not an Identifier (false negative)
-    `import { Directive } from "@angular/core";
-
-@Directive({ "standalone": false })
-export class SomeClass {}`,
-    `import { Directive } from "@angular/core";
-
-@Directive({ ["standalone"]: false })
-export class SomeClass {}`,
+    // Key not named standalone
     `import { Directive } from "@angular/core";
 
 @Directive({ isStandalone: false })
@@ -220,6 +211,16 @@ export class SomeClass {}`,
     { code: `import { Directive as NgDirective } from "@angular/core";
 
 @NgDirective({ standalone: false })
+export class SomeClass {}`, errors: [error] },
+    // Quoted `standalone` key
+    { code: `import { Directive } from "@angular/core";
+
+@Directive({ "standalone": false })
+export class SomeClass {}`, errors: [error] },
+    // Computed key with a string
+    { code: `import { Directive } from "@angular/core";
+
+@Directive({ ["standalone"]: false })
 export class SomeClass {}`, errors: [error] },
   ],
 });

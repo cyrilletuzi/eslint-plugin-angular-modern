@@ -19,7 +19,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "MethodDefinition[key.type='Identifier'][key.name='ngDoCheck']"(node: TSESTree.MethodDefinition) {
+      "MethodDefinition[key.type='Identifier'][key.name='ngDoCheck'], MethodDefinition[key.type='Literal'][key.value='ngDoCheck']"(node: TSESTree.MethodDefinition) {
         context.report({
           node,
           messageId,

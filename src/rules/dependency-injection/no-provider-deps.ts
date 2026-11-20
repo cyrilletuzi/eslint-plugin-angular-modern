@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getKeyName } from "../../utils/ast-property-key";
 
 export const ruleName = "no-provider-deps";
 const messageId = "noProviderDeps";
@@ -19,14 +20,13 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Property[key.type='Identifier'][key.name='deps']"(node: TSESTree.Property) {
+      "Property[key.type='Identifier'][key.name='deps'], Property[key.type='Literal'][key.value='deps']"(node: TSESTree.Property) {
         if (
           node.parent.type === 'ObjectExpression' &&
           node.parent.properties.some(
             property =>
               property.type === 'Property' &&
-              property.key.type === 'Identifier' &&
-              property.key.name === 'provide',
+              getKeyName(property.key) === 'provide',
           )
         ) {
           context.report({

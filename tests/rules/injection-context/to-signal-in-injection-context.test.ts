@@ -23,10 +23,11 @@ describe("`manualCleanup` in the second argument", () => {
       `toSignal(obs, { initialValue: 0, manualCleanup: true });`,
       // SUSPECTED BUG: the value is not checked
       `toSignal(obs, { manualCleanup: false });`,
+      // Quoted `manualCleanup` key
+      `toSignal(obs, { 'manualCleanup': true });`,
     ],
     invalid: [
       { code: `toSignal(obs, { initialValue: 0 });`, errors },
-      { code: `toSignal(obs, { 'manualCleanup': true });`, errors },
     ],
   }));
 });

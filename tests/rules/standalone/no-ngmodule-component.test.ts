@@ -87,16 +87,7 @@ export class SomeClass {}`,
 
 @Component({ standalone: !true })
 export class SomeClass {}`,
-    // Key is not an Identifier named standalone
-    // SUSPECTED BUG: quoted key is a Literal, not an Identifier (false negative)
-    `import { Component } from "@angular/core";
-
-@Component({ "standalone": false })
-export class SomeClass {}`,
-    `import { Component } from "@angular/core";
-
-@Component({ ["standalone"]: false })
-export class SomeClass {}`,
+    // Key not named standalone
     `import { Component } from "@angular/core";
 
 @Component({ isStandalone: false })
@@ -223,6 +214,16 @@ export class SomeClass {}`,
     { code: `import { Component as NgComponent } from "@angular/core";
 
 @NgComponent({ standalone: false })
+export class SomeClass {}`, errors: [error] },
+    // Quoted `standalone` key
+    { code: `import { Component } from "@angular/core";
+
+@Component({ "standalone": false })
+export class SomeClass {}`, errors: [error] },
+    // Computed key with a string
+    { code: `import { Component } from "@angular/core";
+
+@Component({ ["standalone"]: false })
 export class SomeClass {}`, errors: [error] },
   ],
 });

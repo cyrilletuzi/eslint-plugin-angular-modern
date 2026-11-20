@@ -13,6 +13,9 @@ testRule(rule, {
     `import { Injectable } from '@angular/core'; @Injectable({ providedIn: 'platform' }) class A {}`,
     `import { Injectable } from '@angular/core'; @Injectable({ providedIn: "platform" }) class A {}`,
     "import { Injectable } from '@angular/core'; @Injectable({ providedIn: `platform` }) class A {}",
+    /* Quoted key */
+    `import { Injectable } from '@angular/core'; @Injectable({ 'providedIn': 'platform' }) class A {}`,
+    `import { Injectable } from '@angular/core'; @Injectable({ "providedIn": 'platform' }) class A {}`,
     /* Exception with other properties */
     `import { Injectable } from '@angular/core'; @Injectable({ useFactory: () => '', providedIn: 'platform' }) class A {}`,
     /* Decorator without call (selector requires `expression.callee`) */
@@ -52,8 +55,8 @@ testRule(rule, {
     { code: `import { Injectable } from '@angular/core'; const config = { providedIn: 'platform' } as const; @Injectable(config) class A {}`, errors: [error] },
     /* Spread config */
     { code: `import { Injectable } from '@angular/core'; @Injectable({ ...config }) class A {}`, errors: [error] },
-    // SUSPECTED BUG: string-quoted key `'providedIn'` is not found by getDecoratorProperty (only Identifier keys)
-    { code: `import { Injectable } from '@angular/core'; @Injectable({ 'providedIn': 'platform' }) class A {}`, errors: [error] },
+    /* Quoted key with another value than 'platform' */
+    { code: `import { Injectable } from '@angular/core'; @Injectable({ 'providedIn': 'root' }) class A {}`, errors: [error] },
     /* Generic call */
     { code: `import { Injectable } from '@angular/core'; @Injectable<unknown>() class A {}`, errors: [error] },
     /* Exported class, decorator among others */
