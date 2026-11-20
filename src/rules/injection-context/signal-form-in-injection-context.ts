@@ -28,7 +28,8 @@ export const ruleDefinition: RuleDefinition = {
           if (
             /* Takes an `Injector` in second or third argument object: `form(source, { injector })` or `form(source, schema, { injector })` */
             !(node.arguments.length === 3 && isCalledWithProperty(node, 2, 'injector')) &&
-            !isCalledWithProperty(node, 1, 'injector') &&
+            /* With 3 arguments, the second one is the schema, not the options */
+            !(node.arguments.length < 3 && isCalledWithProperty(node, 1, 'injector')) &&
             !isInInjectionContext(node)
           ) {
             context.report({
