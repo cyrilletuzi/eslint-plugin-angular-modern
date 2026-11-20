@@ -24,7 +24,9 @@
   "type": "commonjs",
   "scripts": {
     "build": "rm -rf dist && tsc && cp src/package.json dist/package.json && cp src/LICENSE dist/LICENSE && cp src/README.md dist/README.md && node scripts/build-oxlint-presets.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:types": "tsc -p tests",
     "release:major": "VERSION=major npm run release",
     "release:minor": "VERSION=minor npm run release",
     "release:patch": "VERSION=patch npm run release",
@@ -37,6 +39,10 @@
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.15.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "typescript-eslint": "^8.73.0"
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^5.1.0"
+  },
+  "allowScripts": {
+    "fsevents": false
   }
 }

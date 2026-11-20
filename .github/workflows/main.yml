@@ -9,7 +9,7 @@ jobs:
   build:
     name: Build check
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@v7
         with:
@@ -25,3 +25,5 @@ jobs:
         run: npm audit signatures
       - name: Build check
         run: npm run build
+      - name: Tests
+        run: npm test
