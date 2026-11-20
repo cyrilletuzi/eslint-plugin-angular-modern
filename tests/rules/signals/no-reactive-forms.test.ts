@@ -42,8 +42,8 @@ testRule(rule, {
     `${importAll} @Component({ imports: [FormsModule] }) class A {}`,
     // Look-alike names (typo in doc example, case, prefix/suffix)
     `${importAll} @Component({ imports: [ReactiveFormModule, reactiveFormsModule, MyFormControl, FormControls, formGroup] }) class A {}`,
-    // Other reactive forms APIs are not in the list
-    // SUSPECTED BUG: reactive forms directives and helpers (`FormControlDirective`, `FormGroupDirective`, `FormControlName`, `FormGroupName`, `FormArrayName`, `AbstractControl`) are not reported
+    // Other forms APIs are deliberately not reported
+    // Directives are only usable through `ReactiveFormsModule` (already reported), and `AbstractControl` / `Validators` are shared with template-driven forms
     `import { FormControlDirective, FormGroupDirective, FormControlName, FormGroupName, FormArrayName, AbstractControl, Validators } from "@angular/forms"; const a = [FormControlDirective, FormGroupDirective, FormControlName, FormGroupName, FormArrayName, AbstractControl, Validators];`,
     // A string is not a usage
     `${importAll} const a = "FormControl";`,
