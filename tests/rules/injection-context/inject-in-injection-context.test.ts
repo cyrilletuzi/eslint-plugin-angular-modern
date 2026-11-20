@@ -411,7 +411,7 @@ describe("assertInInjectionContext()", () => {
       // Conditional assertion
       `function f(injector) { if (!injector) { assertInInjectionContext(f); } return inject(A); }`,
       `function f(injector) { if (!injector) { other(); assertInInjectionContext(f); } return inject(A); }`,
-      // SUSPECTED BUG: the assertion is not required to be before the call
+      // The assertion declares that the function must be called in an injection context, wherever it is placed: misuse fails either way
       `function f() { const a = inject(A); assertInInjectionContext(f); return a; }`,
       // KNOWN BUG: assertion only covers the synchronous part of the function
       `async function f() { assertInInjectionContext(f); await something(); return inject(A); }`,
