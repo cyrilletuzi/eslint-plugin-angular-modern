@@ -43,6 +43,8 @@ testRule(rule, {
     `describe("x", () => { @Component() class Host { m() { this.cdr.detectChanges(); } } });`,
     // ACCEPTED FALSE NEGATIVE: computed access with a string is not reported (unnecessary computed access, already flagged by `dot-notation`)
     `fixture["detectChanges"]();`,
+    // Pipes can inject `ChangeDetectorRef` too, so it is not a testing issue
+    `@Pipe({ name: "a" }) class A { transform() { this.cdr.detectChanges(); } }`,
   ],
   invalid: [
     // Doc example
@@ -71,15 +73,13 @@ testRule(rule, {
     { code: `class A { m() { this.fixture.detectChanges(); } }`, errors: [{ messageId }] },
     { code: `@Injectable() class A { m() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
     { code: `@NgModule() class A { m() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
-    // SUSPECTED BUG: a pipe can inject `ChangeDetectorRef`, but `detectChanges()` there is reported as a testing issue
-    { code: `@Pipe({ name: "a" }) class A { transform() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
     // Nested plain class declaration inside a component: the nearest `ClassDeclaration` is not Angular
     { code: `@Component() class A { m() { class B { n() { this.cdr.detectChanges(); } } } }`, errors: [{ messageId }] },
     // Decorated class expression: only `ClassDeclaration` is looked up
     // ACCEPTED FALSE POSITIVE: a decorated class expression is not recognized as an Angular class, only class declarations are (not used in Angular code)
     { code: `const A = @Component() class { m() { this.cdr.detectChanges(); } };`, errors: [{ messageId }] },
     // Decorator callee is a `MemberExpression`
-    // SUSPECTED BUG: `@core.Component()` (namespace import) is not recognized as a component
+    // ACCEPTED FALSE POSITIVE: `@core.Component()` (namespace import) is not recognized as a component (not used in Angular code)
     { code: `@core.Component() class A { m() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
     // The selector matches any `MemberExpression` child of a `CallExpression`, including arguments
   ],
