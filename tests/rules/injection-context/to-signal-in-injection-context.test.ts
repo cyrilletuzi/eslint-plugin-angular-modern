@@ -21,13 +21,15 @@ describe("`manualCleanup` in the second argument", () => {
     valid: [
       `toSignal(obs, { manualCleanup: true });`,
       `toSignal(obs, { initialValue: 0, manualCleanup: true });`,
-      // SUSPECTED BUG: the value is not checked
-      `toSignal(obs, { manualCleanup: false });`,
+      // Value in a variable: assumed to be enabled
+      `toSignal(obs, { manualCleanup: isManual });`,
       // Quoted `manualCleanup` key
       `toSignal(obs, { 'manualCleanup': true });`,
     ],
     invalid: [
       { code: `toSignal(obs, { initialValue: 0 });`, errors },
+      // `false` is the default value, so an injection context is still required
+      { code: `toSignal(obs, { manualCleanup: false });`, errors },
     ],
   }));
 });
