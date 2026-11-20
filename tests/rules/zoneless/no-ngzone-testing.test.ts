@@ -18,8 +18,6 @@ testRule(rule, {
     `fixture.ngzone;`,
     // Computed member with an Identifier: the property is a variable, not the ngZone property
     `fixture[ngZone];`,
-    // SUSPECTED BUG: computed access with a string literal is not reported (computed=false required, property is a Literal)
-    `fixture["ngZone"];`,
     // SUSPECTED BUG: destructuring is not a MemberExpression (false negative)
     `const { ngZone } = fixture;`,
     // Identifier not in a member expression
@@ -34,6 +32,8 @@ testRule(rule, {
     // Strings and comments
     `const name = "fixture.ngZone";`,
     `// fixture.ngZone`,
+    // ACCEPTED FALSE NEGATIVE: computed access with a string is not reported (unnecessary computed access, already flagged by `dot-notation`)
+    `fixture["ngZone"];`,
   ],
   invalid: [
     // Doc example

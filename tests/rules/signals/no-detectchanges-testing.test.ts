@@ -21,9 +21,7 @@ testRule(rule, {
     `new Foo(fixture.detectChanges);`,
     /* A `.detectChanges` reference passed as an argument is not a call */
     `spyOn(fixture.detectChanges);`,
-    // Computed access (`computed=true`)
-    // SUSPECTED BUG: `fixture["detectChanges"]()` is not reported
-    `fixture["detectChanges"]();`,
+    // Computed access with a variable: not the `detectChanges` property
     `fixture[detectChanges]();`,
     // Native private method (`PrivateIdentifier` property)
     `class A { #detectChanges() {} m() { this.#detectChanges(); } }`,
@@ -43,6 +41,8 @@ testRule(rule, {
     `@Component() class A { readonly b = class { m() { this.cdr.detectChanges(); } }; }`,
     // Component test host declared in a test file
     `describe("x", () => { @Component() class Host { m() { this.cdr.detectChanges(); } } });`,
+    // ACCEPTED FALSE NEGATIVE: computed access with a string is not reported (unnecessary computed access, already flagged by `dot-notation`)
+    `fixture["detectChanges"]();`,
   ],
   invalid: [
     // Doc example

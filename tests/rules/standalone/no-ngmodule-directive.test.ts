@@ -197,16 +197,6 @@ export class A {
 }`,
       errors: [error],
     },
-    // SUSPECTED BUG: a computed key referencing a variable named `standalone` matches (key.type is Identifier, `computed` is not checked)
-    {
-      code: `import { Directive } from "@angular/core";
-
-const standalone = "other";
-
-@Directive({ [standalone]: false })
-export class SomeClass {}`,
-      errors: [error],
-    },
     // Aliased import is reported
     { code: `import { Directive as NgDirective } from "@angular/core";
 
@@ -221,6 +211,13 @@ export class SomeClass {}`, errors: [error] },
     { code: `import { Directive } from "@angular/core";
 
 @Directive({ ["standalone"]: false })
+export class SomeClass {}`, errors: [error] },
+    // ACCEPTED FALSE POSITIVE: a computed key with a variable named `standalone` is matched as the `standalone` property (a dynamic key in a static Angular configuration is a bad practice)
+    { code: `import { Directive } from "@angular/core";
+
+const standalone = "other";
+
+@Directive({ [standalone]: false })
 export class SomeClass {}`, errors: [error] },
   ],
 });

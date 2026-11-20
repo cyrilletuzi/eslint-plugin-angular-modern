@@ -32,8 +32,6 @@ testRule(rule, {
     `import { Component } from "@angular/core"; @Component() class A { constructor() { const B = class { method() { obs.subscribe(); } }; } }`,
     /* Undecorated class declared inside the component constructor: nearest ClassDeclaration is not the component */
     `import { Component } from "@angular/core"; @Component() class A { constructor() { class B { constructor() { obs.subscribe(); } } } }`,
-    /* Computed access is not matched */
-    `import { Component } from "@angular/core"; @Component() class A { constructor() { this.obs['subscribe'](); } }`,
     /* `subscribe` not called (parent is not a CallExpression) */
     `import { Component } from "@angular/core"; @Component() class A { constructor() { const s = this.obs.subscribe; } }`,
     `import { Component } from "@angular/core"; @Component() class A { constructor() { this.obs.subscribe.bind(this.obs); } }`,
@@ -49,6 +47,8 @@ testRule(rule, {
     `@Component({}) export class A { constructor() { obs.subscribe(); } }`,
     /* A `.subscribe` reference passed as an argument is not a call */
     `import { Component } from "@angular/core"; @Component() class A { constructor() { foo(this.obs.subscribe); } }`,
+    /* ACCEPTED FALSE NEGATIVE: computed access with a string is not reported (unnecessary computed access, already flagged by `dot-notation`) */
+    `import { Component } from "@angular/core"; @Component() class A { constructor() { this.obs['subscribe'](); } }`,
   ],
   invalid: [
     /* Basic case */

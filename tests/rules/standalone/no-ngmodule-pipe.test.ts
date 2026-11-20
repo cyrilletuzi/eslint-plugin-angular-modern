@@ -197,16 +197,6 @@ export class A {
 }`,
       errors: [error],
     },
-    // SUSPECTED BUG: a computed key referencing a variable named `standalone` matches (key.type is Identifier, `computed` is not checked)
-    {
-      code: `import { Pipe } from "@angular/core";
-
-const standalone = "other";
-
-@Pipe({ [standalone]: false })
-export class SomeClass {}`,
-      errors: [error],
-    },
     // Aliased import is reported
     { code: `import { Pipe as NgPipe } from "@angular/core";
 
@@ -221,6 +211,13 @@ export class SomeClass {}`, errors: [error] },
     { code: `import { Pipe } from "@angular/core";
 
 @Pipe({ ["standalone"]: false })
+export class SomeClass {}`, errors: [error] },
+    // ACCEPTED FALSE POSITIVE: a computed key with a variable named `standalone` is matched as the `standalone` property (a dynamic key in a static Angular configuration is a bad practice)
+    { code: `import { Pipe } from "@angular/core";
+
+const standalone = "other";
+
+@Pipe({ [standalone]: false })
 export class SomeClass {}`, errors: [error] },
   ],
 });
