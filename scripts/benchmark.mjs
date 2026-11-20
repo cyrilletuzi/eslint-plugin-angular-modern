@@ -20,7 +20,7 @@ const { default: before } = await import(pathToFileURL(resolve(beforePath, "inde
 const { default: after } = await import(pathToFileURL(resolve(afterPath, "index.js")).href);
 
 /* Above this slowdown of the rules, the check fails (shared CI runners are noisy, so it must not fail on noise) */
-const maxSlowdown = 0.25;
+const maxSlowdown = 0.2;
 /* Minimum for consistent results (less makes the results biased or too noisy) */
 const warmupRounds = 3;
 const rounds = 12;
