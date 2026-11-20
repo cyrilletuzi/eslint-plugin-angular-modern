@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedReferences } from "../../utils/angular-import";
 
 export const ruleName = "no-eager-change-detection";
 const messageId = "noEagerChangeDetection";
@@ -19,11 +20,22 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "MemberExpression[object.type='Identifier'][object.name='ChangeDetectionStrategy'][property.type='Identifier'][property.name=/^(Eager|Default)$/]"(node: TSESTree.MemberExpression) {
-        context.report({
-          node,
-          messageId,
-        });
+      "ImportDeclaration[source.value='@angular/core'] > ImportSpecifier[imported.name='ChangeDetectionStrategy']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at usage sites */
+        for (const reference of getImportedReferences(context, importNode)) {
+          const node = reference.parent;
+          if (
+            node.type === "MemberExpression" &&
+            node.object === reference &&
+            node.property.type === "Identifier" &&
+            (node.property.name === "Eager" || node.property.name === "Default")
+          ) {
+            context.report({
+              node,
+              messageId,
+            });
+          }
+        }
       },
     };
   },

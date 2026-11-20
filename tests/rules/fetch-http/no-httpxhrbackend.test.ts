@@ -11,39 +11,32 @@ testRule(rule, {
     `const p = { provide: HttpBackend, useClass: FetchBackend };`,
     /* Look-alike names */
     `const a = HttpXhrBackendX; const b = MyHttpXhrBackend; const c = httpXhrBackend;`,
-    /* String, not an Identifier */
-    `const a = 'HttpXhrBackend';`,
+    /* String, not a usage */
+    `import { HttpXhrBackend } from '@angular/common/http'; const a = 'HttpXhrBackend';`,
     /* Usage through an alias: only the original name is detected */
     `const p = { provide: HttpBackend, useClass: XhrBackend };`,
+    // Not reported: the import itself, only usages are reported
+    `import { HttpXhrBackend } from '@angular/common/http';`,
+    /* Not reported: namespace import member */
+    `import { HttpXhrBackend } from '@angular/common/http'; const b = http.HttpXhrBackend;`,
+    // Not reported: re-export without import (not a usage)
+    `export { HttpXhrBackend } from '@angular/common/http';`,
+    // Not reported: unrelated object key with the same name
+    `import { HttpXhrBackend } from '@angular/common/http'; const o = { HttpXhrBackend: true };`,
   ],
   invalid: [
-    /* Import: both the imported and local Identifiers of the ImportSpecifier are visited */
-    // SUSPECTED BUG: the import is reported twice (imported + local Identifiers), unlike other rules which ignore import specifiers
-    { code: `import { HttpXhrBackend } from '@angular/common/http';`, errors: [error, error] },
     /* Aliased import: only the imported name is reported, not the alias usage */
     {
       code: `import { HttpXhrBackend as XhrBackend } from '@angular/common/http'; const p = { provide: HttpBackend, useClass: XhrBackend };`,
       errors: [error],
     },
     /* Provider usage */
-    { code: `const p = { provide: HttpBackend, useClass: HttpXhrBackend };`, errors: [error] },
-    { code: `const p = { provide: HttpBackend, useExisting: HttpXhrBackend };`, errors: [error] },
+    { code: `import { HttpXhrBackend } from '@angular/common/http'; const p = { provide: HttpBackend, useClass: HttpXhrBackend };`, errors: [error] },
+    { code: `import { HttpXhrBackend } from '@angular/common/http'; const p = { provide: HttpBackend, useExisting: HttpXhrBackend };`, errors: [error] },
     /* Injection and instantiation */
-    { code: `const b = inject(HttpXhrBackend);`, errors: [error] },
-    { code: `const b = new HttpXhrBackend(factory);`, errors: [error] },
+    { code: `import { HttpXhrBackend } from '@angular/common/http'; const b = inject(HttpXhrBackend);`, errors: [error] },
+    { code: `import { HttpXhrBackend } from '@angular/common/http'; const b = new HttpXhrBackend(factory);`, errors: [error] },
     /* Type usage */
-    { code: `let b: HttpXhrBackend;`, errors: [error] },
-    /* Namespace member: the property Identifier is matched */
-    { code: `const b = http.HttpXhrBackend;`, errors: [error] },
-    /* Re-export: both the local and exported Identifiers are visited */
-    // SUSPECTED BUG: reported twice for a single re-export
-    { code: `export { HttpXhrBackend } from '@angular/common/http';`, errors: [error, error] },
-    /* Import and usage */
-    {
-      code: `import { HttpXhrBackend } from '@angular/common/http'; const p = { provide: HttpBackend, useClass: HttpXhrBackend };`,
-      errors: [error, error, error],
-    },
-    // SUSPECTED BUG: any Identifier with this name is reported, even an unrelated object key
-    { code: `const o = { HttpXhrBackend: true };`, errors: [error] },
+    { code: `import { HttpXhrBackend } from '@angular/common/http'; let b: HttpXhrBackend;`, errors: [error] },
   ],
 });

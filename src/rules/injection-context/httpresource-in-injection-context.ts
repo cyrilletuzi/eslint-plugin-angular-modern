@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedFunctionCalls } from "../../utils/angular-import";
 import { isInInjectionContext } from "../../utils/angular-injection-context";
 import { isCalledWithProperty } from "../../utils/ast-call-argument";
 
@@ -21,16 +22,19 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "CallExpression[callee.type='Identifier'][callee.name='httpResource']"(node: TSESTree.CallExpression) {
-        if (
-          /* Takes an `Injector` in second argument: `httpResource(() => '/some/api/path', { injector })` */
-          !isCalledWithProperty(node, 1, 'injector') &&
-          !isInInjectionContext(node)
-        ) {
-          context.report({
-            node,
-            messageId,
-          });
+      "ImportDeclaration[source.value='@angular/common/http'] > ImportSpecifier[imported.name='httpResource']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at call sites */
+        for (const node of getImportedFunctionCalls(context, importNode)) {
+          if (
+            /* Takes an `Injector` in second argument: `httpResource(() => '/some/api/path', { injector })` */
+            !isCalledWithProperty(node, 1, 'injector') &&
+            !isInInjectionContext(node)
+          ) {
+            context.report({
+              node,
+              messageId,
+            });
+          }
         }
       },
     };

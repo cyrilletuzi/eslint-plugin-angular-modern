@@ -14,18 +14,14 @@ testRule(rule, {
     `register(fakeAsync);`,
     // `new` is a NewExpression, not a CallExpression (fakeAsync)
     `new fakeAsync();`,
-    // Callee is not an Identifier: method calls on any object (fakeAsync)
+    // Method calls on any object are not reported (fakeAsync)
     `obj.fakeAsync();`,
     `this.fakeAsync();`,
     `obj["fakeAsync"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.fakeAsync()` is not reported (callee is a MemberExpression)
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.fakeAsync()` is not reported (unrealistic in Angular code)
     `import * as ng from "@angular/core/testing";
 
 ng.fakeAsync();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { fakeAsync as alias } from "@angular/core/testing";
-
-it("should...", alias(() => {}));`,
     // String / comment (fakeAsync)
     `const name = "fakeAsync()";`,
     `// fakeAsync()`,
@@ -38,20 +34,14 @@ it("should...", alias(() => {}));`,
     `register(discardPeriodicTasks);`,
     // `new` is a NewExpression, not a CallExpression (discardPeriodicTasks)
     `new discardPeriodicTasks();`,
-    // Callee is not an Identifier: method calls on any object (discardPeriodicTasks)
+    // Method calls on any object are not reported (discardPeriodicTasks)
     `obj.discardPeriodicTasks();`,
     `this.discardPeriodicTasks();`,
     `obj["discardPeriodicTasks"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.discardPeriodicTasks()` is not reported (callee is a MemberExpression)
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.discardPeriodicTasks()` is not reported (unrealistic in Angular code)
     `import * as ng from "@angular/core/testing";
 
 ng.discardPeriodicTasks();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { discardPeriodicTasks as alias } from "@angular/core/testing";
-
-it("should...", () => {
-  alias();
-});`,
     // String / comment (discardPeriodicTasks)
     `const name = "discardPeriodicTasks()";`,
     `// discardPeriodicTasks()`,
@@ -64,20 +54,14 @@ it("should...", () => {
     `register(flush);`,
     // `new` is a NewExpression, not a CallExpression (flush)
     `new flush();`,
-    // Callee is not an Identifier: method calls on any object (flush)
+    // Method calls on any object are not reported (flush)
     `obj.flush();`,
     `this.flush();`,
     `obj["flush"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.flush()` is not reported (callee is a MemberExpression)
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.flush()` is not reported (unrealistic in Angular code)
     `import * as ng from "@angular/core/testing";
 
 ng.flush();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { flush as alias } from "@angular/core/testing";
-
-it("should...", () => {
-  alias();
-});`,
     // String / comment (flush)
     `const name = "flush()";`,
     `// flush()`,
@@ -90,20 +74,14 @@ it("should...", () => {
     `register(flushMicrotasks);`,
     // `new` is a NewExpression, not a CallExpression (flushMicrotasks)
     `new flushMicrotasks();`,
-    // Callee is not an Identifier: method calls on any object (flushMicrotasks)
+    // Method calls on any object are not reported (flushMicrotasks)
     `obj.flushMicrotasks();`,
     `this.flushMicrotasks();`,
     `obj["flushMicrotasks"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.flushMicrotasks()` is not reported (callee is a MemberExpression)
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.flushMicrotasks()` is not reported (unrealistic in Angular code)
     `import * as ng from "@angular/core/testing";
 
 ng.flushMicrotasks();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { flushMicrotasks as alias } from "@angular/core/testing";
-
-it("should...", () => {
-  alias();
-});`,
     // String / comment (flushMicrotasks)
     `const name = "flushMicrotasks()";`,
     `// flushMicrotasks()`,
@@ -116,20 +94,14 @@ it("should...", () => {
     `register(resetFakeAsyncZone);`,
     // `new` is a NewExpression, not a CallExpression (resetFakeAsyncZone)
     `new resetFakeAsyncZone();`,
-    // Callee is not an Identifier: method calls on any object (resetFakeAsyncZone)
+    // Method calls on any object are not reported (resetFakeAsyncZone)
     `obj.resetFakeAsyncZone();`,
     `this.resetFakeAsyncZone();`,
     `obj["resetFakeAsyncZone"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.resetFakeAsyncZone()` is not reported (callee is a MemberExpression)
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.resetFakeAsyncZone()` is not reported (unrealistic in Angular code)
     `import * as ng from "@angular/core/testing";
 
 ng.resetFakeAsyncZone();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { resetFakeAsyncZone as alias } from "@angular/core/testing";
-
-beforeEach(() => {
-  alias();
-});`,
     // String / comment (resetFakeAsyncZone)
     `const name = "resetFakeAsyncZone()";`,
     `// resetFakeAsyncZone()`,
@@ -142,20 +114,14 @@ beforeEach(() => {
     `register(tick);`,
     // `new` is a NewExpression, not a CallExpression (tick)
     `new tick();`,
-    // Callee is not an Identifier: method calls on any object (tick)
+    // Method calls on any object are not reported (tick)
     `obj.tick();`,
     `this.tick();`,
     `obj["tick"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.tick()` is not reported (callee is a MemberExpression)
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.tick()` is not reported (unrealistic in Angular code)
     `import * as ng from "@angular/core/testing";
 
 ng.tick();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { tick as alias } from "@angular/core/testing";
-
-it("should...", () => {
-  alias(100);
-});`,
     // String / comment (tick)
     `const name = "tick()";`,
     `// tick()`,
@@ -168,24 +134,22 @@ it("should...", () => {
     `register(waitForAsync);`,
     // `new` is a NewExpression, not a CallExpression (waitForAsync)
     `new waitForAsync();`,
-    // Callee is not an Identifier: method calls on any object (waitForAsync)
+    // Method calls on any object are not reported (waitForAsync)
     `obj.waitForAsync();`,
     `this.waitForAsync();`,
     `obj["waitForAsync"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.waitForAsync()` is not reported (callee is a MemberExpression)
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.waitForAsync()` is not reported (unrealistic in Angular code)
     `import * as ng from "@angular/core/testing";
 
 ng.waitForAsync();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { waitForAsync as alias } from "@angular/core/testing";
-
-beforeEach(alias(() => {
-  TestBed.configureTestingModule({});
-}));`,
     // String / comment (waitForAsync)
     `const name = "waitForAsync()";`,
     `// waitForAsync()`,
-    // Look-alike names (exact name match only)
+    // Same name imported from another library is not reported
+    `import { flush } from "some-lib";
+
+flush();`,
+    // Look-alike names are not reported
     `fakeAsyncTest();`,
     `flushAll();`,
     `flushPromises();`,
@@ -198,6 +162,53 @@ beforeEach(alias(() => {
     `jasmine.clock().tick(100);`,
     `testScheduler.flush();`,
     `vi.advanceTimersByTime(100);`,
+    // Usage without import is not reported (not an Angular function) (fakeAsync)
+    `it("should...", fakeAsync(() => {}));`,
+    // Locally declared function with the same name is not reported (fakeAsync)
+    `function fakeAsync() {}
+fakeAsync();`,
+    // Usage without import is not reported (not an Angular function) (discardPeriodicTasks)
+    `it("should...", () => {
+  discardPeriodicTasks();
+});`,
+    // Locally declared function with the same name is not reported (discardPeriodicTasks)
+    `function discardPeriodicTasks() {}
+discardPeriodicTasks();`,
+    // Usage without import is not reported (not an Angular function) (flush)
+    `it("should...", () => {
+  flush();
+});`,
+    // Locally declared function with the same name is not reported (flush)
+    `function flush() {}
+flush();`,
+    // Usage without import is not reported (not an Angular function) (flushMicrotasks)
+    `it("should...", () => {
+  flushMicrotasks();
+});`,
+    // Locally declared function with the same name is not reported (flushMicrotasks)
+    `function flushMicrotasks() {}
+flushMicrotasks();`,
+    // Usage without import is not reported (not an Angular function) (resetFakeAsyncZone)
+    `beforeEach(() => {
+  resetFakeAsyncZone();
+});`,
+    // Locally declared function with the same name is not reported (resetFakeAsyncZone)
+    `function resetFakeAsyncZone() {}
+resetFakeAsyncZone();`,
+    // Usage without import is not reported (not an Angular function) (tick)
+    `it("should...", () => {
+  tick(100);
+});`,
+    // Locally declared function with the same name is not reported (tick)
+    `function tick() {}
+tick();`,
+    // Usage without import is not reported (not an Angular function) (waitForAsync)
+    `beforeEach(waitForAsync(() => {
+  TestBed.configureTestingModule({});
+}));`,
+    // Locally declared function with the same name is not reported (waitForAsync)
+    `function waitForAsync() {}
+waitForAsync();`,
   ],
   invalid: [
     // Realistic usage with import: only the call is reported (fakeAsync)
@@ -207,52 +218,55 @@ beforeEach(alias(() => {
 it("should...", fakeAsync(() => {}));`,
       errors: [error],
     },
-    // Usage without import (name-based) (fakeAsync)
-    {
-      code: `it("should...", fakeAsync(() => {}));`,
-      errors: [error],
-    },
     // Bare call, with arguments (fakeAsync)
     {
-      code: `fakeAsync();`,
+      code: `import { fakeAsync } from "@angular/core/testing";
+
+fakeAsync();`,
       errors: [error],
     },
     {
-      code: `fakeAsync(a, b);`,
+      code: `import { fakeAsync } from "@angular/core/testing";
+
+fakeAsync(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression (fakeAsync)
     {
-      code: `fakeAsync?.();`,
+      code: `import { fakeAsync } from "@angular/core/testing";
+
+fakeAsync?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function (fakeAsync)
     {
-      code: `async function f() {
+      code: `import { fakeAsync } from "@angular/core/testing";
+
+async function f() {
   await fakeAsync();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[fakeAsync()]] });`,
+      code: `import { fakeAsync } from "@angular/core/testing";
+
+const f = () => ({ providers: [[fakeAsync()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee (fakeAsync)
+    // Call on the result: only the inner call is reported (fakeAsync)
     {
-      code: `fakeAsync()();`,
+      code: `import { fakeAsync } from "@angular/core/testing";
+
+fakeAsync()();`,
       errors: [error],
     },
     // Each call is reported (fakeAsync)
     {
-      code: `fakeAsync();
+      code: `import { fakeAsync } from "@angular/core/testing";
+
+fakeAsync();
 fakeAsync();`,
       errors: [error, error],
-    },
-    // Locally declared function with the same name (no import source check) (fakeAsync)
-    {
-      code: `function fakeAsync() {}
-fakeAsync();`,
-      errors: [error],
     },
     // Realistic usage with import: only the call is reported (discardPeriodicTasks)
     {
@@ -263,54 +277,55 @@ it("should...", () => {
 });`,
       errors: [error],
     },
-    // Usage without import (name-based) (discardPeriodicTasks)
-    {
-      code: `it("should...", () => {
-  discardPeriodicTasks();
-});`,
-      errors: [error],
-    },
     // Bare call, with arguments (discardPeriodicTasks)
     {
-      code: `discardPeriodicTasks();`,
+      code: `import { discardPeriodicTasks } from "@angular/core/testing";
+
+discardPeriodicTasks();`,
       errors: [error],
     },
     {
-      code: `discardPeriodicTasks(a, b);`,
+      code: `import { discardPeriodicTasks } from "@angular/core/testing";
+
+discardPeriodicTasks(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression (discardPeriodicTasks)
     {
-      code: `discardPeriodicTasks?.();`,
+      code: `import { discardPeriodicTasks } from "@angular/core/testing";
+
+discardPeriodicTasks?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function (discardPeriodicTasks)
     {
-      code: `async function f() {
+      code: `import { discardPeriodicTasks } from "@angular/core/testing";
+
+async function f() {
   await discardPeriodicTasks();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[discardPeriodicTasks()]] });`,
+      code: `import { discardPeriodicTasks } from "@angular/core/testing";
+
+const f = () => ({ providers: [[discardPeriodicTasks()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee (discardPeriodicTasks)
+    // Call on the result: only the inner call is reported (discardPeriodicTasks)
     {
-      code: `discardPeriodicTasks()();`,
+      code: `import { discardPeriodicTasks } from "@angular/core/testing";
+
+discardPeriodicTasks()();`,
       errors: [error],
     },
     // Each call is reported (discardPeriodicTasks)
     {
-      code: `discardPeriodicTasks();
+      code: `import { discardPeriodicTasks } from "@angular/core/testing";
+
+discardPeriodicTasks();
 discardPeriodicTasks();`,
       errors: [error, error],
-    },
-    // Locally declared function with the same name (no import source check) (discardPeriodicTasks)
-    {
-      code: `function discardPeriodicTasks() {}
-discardPeriodicTasks();`,
-      errors: [error],
     },
     // Realistic usage with import: only the call is reported (flush)
     {
@@ -321,54 +336,55 @@ it("should...", () => {
 });`,
       errors: [error],
     },
-    // Usage without import (name-based) (flush)
-    {
-      code: `it("should...", () => {
-  flush();
-});`,
-      errors: [error],
-    },
     // Bare call, with arguments (flush)
     {
-      code: `flush();`,
+      code: `import { flush } from "@angular/core/testing";
+
+flush();`,
       errors: [error],
     },
     {
-      code: `flush(a, b);`,
+      code: `import { flush } from "@angular/core/testing";
+
+flush(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression (flush)
     {
-      code: `flush?.();`,
+      code: `import { flush } from "@angular/core/testing";
+
+flush?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function (flush)
     {
-      code: `async function f() {
+      code: `import { flush } from "@angular/core/testing";
+
+async function f() {
   await flush();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[flush()]] });`,
+      code: `import { flush } from "@angular/core/testing";
+
+const f = () => ({ providers: [[flush()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee (flush)
+    // Call on the result: only the inner call is reported (flush)
     {
-      code: `flush()();`,
+      code: `import { flush } from "@angular/core/testing";
+
+flush()();`,
       errors: [error],
     },
     // Each call is reported (flush)
     {
-      code: `flush();
+      code: `import { flush } from "@angular/core/testing";
+
+flush();
 flush();`,
       errors: [error, error],
-    },
-    // Locally declared function with the same name (no import source check) (flush)
-    {
-      code: `function flush() {}
-flush();`,
-      errors: [error],
     },
     // Realistic usage with import: only the call is reported (flushMicrotasks)
     {
@@ -379,54 +395,55 @@ it("should...", () => {
 });`,
       errors: [error],
     },
-    // Usage without import (name-based) (flushMicrotasks)
-    {
-      code: `it("should...", () => {
-  flushMicrotasks();
-});`,
-      errors: [error],
-    },
     // Bare call, with arguments (flushMicrotasks)
     {
-      code: `flushMicrotasks();`,
+      code: `import { flushMicrotasks } from "@angular/core/testing";
+
+flushMicrotasks();`,
       errors: [error],
     },
     {
-      code: `flushMicrotasks(a, b);`,
+      code: `import { flushMicrotasks } from "@angular/core/testing";
+
+flushMicrotasks(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression (flushMicrotasks)
     {
-      code: `flushMicrotasks?.();`,
+      code: `import { flushMicrotasks } from "@angular/core/testing";
+
+flushMicrotasks?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function (flushMicrotasks)
     {
-      code: `async function f() {
+      code: `import { flushMicrotasks } from "@angular/core/testing";
+
+async function f() {
   await flushMicrotasks();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[flushMicrotasks()]] });`,
+      code: `import { flushMicrotasks } from "@angular/core/testing";
+
+const f = () => ({ providers: [[flushMicrotasks()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee (flushMicrotasks)
+    // Call on the result: only the inner call is reported (flushMicrotasks)
     {
-      code: `flushMicrotasks()();`,
+      code: `import { flushMicrotasks } from "@angular/core/testing";
+
+flushMicrotasks()();`,
       errors: [error],
     },
     // Each call is reported (flushMicrotasks)
     {
-      code: `flushMicrotasks();
+      code: `import { flushMicrotasks } from "@angular/core/testing";
+
+flushMicrotasks();
 flushMicrotasks();`,
       errors: [error, error],
-    },
-    // Locally declared function with the same name (no import source check) (flushMicrotasks)
-    {
-      code: `function flushMicrotasks() {}
-flushMicrotasks();`,
-      errors: [error],
     },
     // Realistic usage with import: only the call is reported (resetFakeAsyncZone)
     {
@@ -437,54 +454,55 @@ beforeEach(() => {
 });`,
       errors: [error],
     },
-    // Usage without import (name-based) (resetFakeAsyncZone)
-    {
-      code: `beforeEach(() => {
-  resetFakeAsyncZone();
-});`,
-      errors: [error],
-    },
     // Bare call, with arguments (resetFakeAsyncZone)
     {
-      code: `resetFakeAsyncZone();`,
+      code: `import { resetFakeAsyncZone } from "@angular/core/testing";
+
+resetFakeAsyncZone();`,
       errors: [error],
     },
     {
-      code: `resetFakeAsyncZone(a, b);`,
+      code: `import { resetFakeAsyncZone } from "@angular/core/testing";
+
+resetFakeAsyncZone(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression (resetFakeAsyncZone)
     {
-      code: `resetFakeAsyncZone?.();`,
+      code: `import { resetFakeAsyncZone } from "@angular/core/testing";
+
+resetFakeAsyncZone?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function (resetFakeAsyncZone)
     {
-      code: `async function f() {
+      code: `import { resetFakeAsyncZone } from "@angular/core/testing";
+
+async function f() {
   await resetFakeAsyncZone();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[resetFakeAsyncZone()]] });`,
+      code: `import { resetFakeAsyncZone } from "@angular/core/testing";
+
+const f = () => ({ providers: [[resetFakeAsyncZone()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee (resetFakeAsyncZone)
+    // Call on the result: only the inner call is reported (resetFakeAsyncZone)
     {
-      code: `resetFakeAsyncZone()();`,
+      code: `import { resetFakeAsyncZone } from "@angular/core/testing";
+
+resetFakeAsyncZone()();`,
       errors: [error],
     },
     // Each call is reported (resetFakeAsyncZone)
     {
-      code: `resetFakeAsyncZone();
+      code: `import { resetFakeAsyncZone } from "@angular/core/testing";
+
+resetFakeAsyncZone();
 resetFakeAsyncZone();`,
       errors: [error, error],
-    },
-    // Locally declared function with the same name (no import source check) (resetFakeAsyncZone)
-    {
-      code: `function resetFakeAsyncZone() {}
-resetFakeAsyncZone();`,
-      errors: [error],
     },
     // Realistic usage with import: only the call is reported (tick)
     {
@@ -495,54 +513,55 @@ it("should...", () => {
 });`,
       errors: [error],
     },
-    // Usage without import (name-based) (tick)
-    {
-      code: `it("should...", () => {
-  tick(100);
-});`,
-      errors: [error],
-    },
     // Bare call, with arguments (tick)
     {
-      code: `tick();`,
+      code: `import { tick } from "@angular/core/testing";
+
+tick();`,
       errors: [error],
     },
     {
-      code: `tick(a, b);`,
+      code: `import { tick } from "@angular/core/testing";
+
+tick(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression (tick)
     {
-      code: `tick?.();`,
+      code: `import { tick } from "@angular/core/testing";
+
+tick?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function (tick)
     {
-      code: `async function f() {
+      code: `import { tick } from "@angular/core/testing";
+
+async function f() {
   await tick();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[tick()]] });`,
+      code: `import { tick } from "@angular/core/testing";
+
+const f = () => ({ providers: [[tick()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee (tick)
+    // Call on the result: only the inner call is reported (tick)
     {
-      code: `tick()();`,
+      code: `import { tick } from "@angular/core/testing";
+
+tick()();`,
       errors: [error],
     },
     // Each call is reported (tick)
     {
-      code: `tick();
+      code: `import { tick } from "@angular/core/testing";
+
+tick();
 tick();`,
       errors: [error, error],
-    },
-    // Locally declared function with the same name (no import source check) (tick)
-    {
-      code: `function tick() {}
-tick();`,
-      errors: [error],
     },
     // Realistic usage with import: only the call is reported (waitForAsync)
     {
@@ -553,64 +572,69 @@ beforeEach(waitForAsync(() => {
 }));`,
       errors: [error],
     },
-    // Usage without import (name-based) (waitForAsync)
-    {
-      code: `beforeEach(waitForAsync(() => {
-  TestBed.configureTestingModule({});
-}));`,
-      errors: [error],
-    },
     // Bare call, with arguments (waitForAsync)
     {
-      code: `waitForAsync();`,
+      code: `import { waitForAsync } from "@angular/core/testing";
+
+waitForAsync();`,
       errors: [error],
     },
     {
-      code: `waitForAsync(a, b);`,
+      code: `import { waitForAsync } from "@angular/core/testing";
+
+waitForAsync(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression (waitForAsync)
     {
-      code: `waitForAsync?.();`,
+      code: `import { waitForAsync } from "@angular/core/testing";
+
+waitForAsync?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function (waitForAsync)
     {
-      code: `async function f() {
+      code: `import { waitForAsync } from "@angular/core/testing";
+
+async function f() {
   await waitForAsync();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[waitForAsync()]] });`,
+      code: `import { waitForAsync } from "@angular/core/testing";
+
+const f = () => ({ providers: [[waitForAsync()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee (waitForAsync)
+    // Call on the result: only the inner call is reported (waitForAsync)
     {
-      code: `waitForAsync()();`,
+      code: `import { waitForAsync } from "@angular/core/testing";
+
+waitForAsync()();`,
       errors: [error],
     },
     // Each call is reported (waitForAsync)
     {
-      code: `waitForAsync();
+      code: `import { waitForAsync } from "@angular/core/testing";
+
+waitForAsync();
 waitForAsync();`,
       errors: [error, error],
     },
-    // Locally declared function with the same name (no import source check) (waitForAsync)
-    {
-      code: `function waitForAsync() {}
-waitForAsync();`,
-      errors: [error],
-    },
     // Doc examples: nested calls inside fakeAsync() are each reported
     {
-      code: `it("should...", fakeAsync(() => {
+      code: `import { fakeAsync, discardPeriodicTasks } from "@angular/core/testing";
+
+it("should...", fakeAsync(() => {
   discardPeriodicTasks();
 }));`,
       errors: [error, error],
     },
     {
-      code: `it("should...", fakeAsync(() => {
+      code: `import { fakeAsync, flush, flushMicrotasks, tick } from "@angular/core/testing";
+
+it("should...", fakeAsync(() => {
   tick();
   flushMicrotasks();
   flush();
@@ -618,7 +642,9 @@ waitForAsync();`,
       errors: [error, error, error, error],
     },
     {
-      code: `it("should...", fakeAsync(() => {
+      code: `import { fakeAsync, waitForAsync } from "@angular/core/testing";
+
+it("should...", fakeAsync(() => {
   waitForAsync();
 }));`,
       errors: [error, error],
@@ -628,6 +654,67 @@ waitForAsync();`,
       code: `import { fakeAsync, discardPeriodicTasks, flush, flushMicrotasks, resetFakeAsyncZone, tick, waitForAsync } from "@angular/core/testing";
 
 fakeAsync(() => {});`,
+      errors: [error],
+    },
+    // Aliased import is reported (fakeAsync)
+    {
+      code: `import { fakeAsync as alias } from "@angular/core/testing";
+
+it("should...", alias(() => {}));`,
+      errors: [error],
+    },
+    // Aliased import is reported (discardPeriodicTasks)
+    {
+      code: `import { discardPeriodicTasks as alias } from "@angular/core/testing";
+
+it("should...", () => {
+  alias();
+});`,
+      errors: [error],
+    },
+    // Aliased import is reported (flush)
+    {
+      code: `import { flush as alias } from "@angular/core/testing";
+
+it("should...", () => {
+  alias();
+});`,
+      errors: [error],
+    },
+    // Aliased import is reported (flushMicrotasks)
+    {
+      code: `import { flushMicrotasks as alias } from "@angular/core/testing";
+
+it("should...", () => {
+  alias();
+});`,
+      errors: [error],
+    },
+    // Aliased import is reported (resetFakeAsyncZone)
+    {
+      code: `import { resetFakeAsyncZone as alias } from "@angular/core/testing";
+
+beforeEach(() => {
+  alias();
+});`,
+      errors: [error],
+    },
+    // Aliased import is reported (tick)
+    {
+      code: `import { tick as alias } from "@angular/core/testing";
+
+it("should...", () => {
+  alias(100);
+});`,
+      errors: [error],
+    },
+    // Aliased import is reported (waitForAsync)
+    {
+      code: `import { waitForAsync as alias } from "@angular/core/testing";
+
+beforeEach(alias(() => {
+  TestBed.configureTestingModule({});
+}));`,
       errors: [error],
     },
   ],

@@ -6,100 +6,96 @@ const messageId = "noContentDecorator";
 testRule(rule, {
   valid: [
     // Signal-based replacement
-    `@Component() class A { readonly a = contentChild(Child); }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { readonly a = contentChild(Child); }`,
     // Other Angular decorators must not match
-    `@Component() class A { @HostListener("click") onClick(): void {} }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { @HostListener("click") onClick(): void {} }`,
     // `ContentChild`: importing it is not reported, only using it as a decorator
     `import { ContentChild } from "@angular/core";`,
     // `ContentChild`: called outside of a decorator
-    `const a = ContentChild(Child);`,
-    `@Component() class A { a = ContentChild(Child); }`,
-    // `ContentChild`: used as a decorator without call (`Decorator > Identifier`, not `Decorator > CallExpression`)
-    `@Component() class A { @ContentChild a; }`,
+    `import { ContentChild } from "@angular/core"; const a = ContentChild(Child);`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { a = ContentChild(Child); }`,
+    // `ContentChild`: used as a decorator without call is not reported
+    `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChild a; }`,
     // `ContentChild`: look-alike names
-    `@Component() class A { @contentChild(Child) a; }`,
-    `@Component() class A { @ContentChilds(Child) a; }`,
-    `@Component() class A { @MyContentChild(Child) a; }`,
-    // `ContentChild`: callee is a `MemberExpression`, not an `Identifier`
-    // SUSPECTED BUG: with a namespace import (`import * as core from "@angular/core"`), the decorator is not reported
-    `@Component() class A { @core.ContentChild(Child) a; }`,
-    // `ContentChild`: aliased import
-    // SUSPECTED BUG: with an aliased import, the decorator is not reported
-    `import { ContentChild as NgContentChild } from "@angular/core"; @Component() class A { @NgContentChild(Child) a; }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { @contentChild(Child) a; }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChilds(Child) a; }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { @MyContentChild(Child) a; }`,
+    // `ContentChild`: namespace member
+    // ACCEPTED FALSE NEGATIVE: with a namespace import (`import * as core from "@angular/core"`), the decorator is not reported
+    `import { ContentChild } from "@angular/core"; @Component() class A { @core.ContentChild(Child) a; }`,
     // `ContentChild`: the decorator is a call of a call (callee is a `CallExpression`)
-    `@Component() class A { @ContentChild(Child)() a; }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChild(Child)() a; }`,
     // `ContentChildren`: importing it is not reported, only using it as a decorator
     `import { ContentChildren } from "@angular/core";`,
     // `ContentChildren`: called outside of a decorator
-    `const a = ContentChildren(Child);`,
-    `@Component() class A { a = ContentChildren(Child); }`,
-    // `ContentChildren`: used as a decorator without call (`Decorator > Identifier`, not `Decorator > CallExpression`)
-    `@Component() class A { @ContentChildren a; }`,
+    `import { ContentChildren } from "@angular/core"; const a = ContentChildren(Child);`,
+    `import { ContentChildren } from "@angular/core"; @Component() class A { a = ContentChildren(Child); }`,
+    // `ContentChildren`: used as a decorator without call is not reported
+    `import { ContentChildren } from "@angular/core"; @Component() class A { @ContentChildren a; }`,
     // `ContentChildren`: look-alike names
-    `@Component() class A { @contentChildren(Child) a; }`,
-    `@Component() class A { @ContentChildrens(Child) a; }`,
-    `@Component() class A { @MyContentChildren(Child) a; }`,
-    // `ContentChildren`: callee is a `MemberExpression`, not an `Identifier`
-    // SUSPECTED BUG: with a namespace import (`import * as core from "@angular/core"`), the decorator is not reported
-    `@Component() class A { @core.ContentChildren(Child) a; }`,
-    // `ContentChildren`: aliased import
-    // SUSPECTED BUG: with an aliased import, the decorator is not reported
-    `import { ContentChildren as NgContentChildren } from "@angular/core"; @Component() class A { @NgContentChildren(Child) a; }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { @contentChildren(Child) a; }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChildrens(Child) a; }`,
+    `import { ContentChild } from "@angular/core"; @Component() class A { @MyContentChildren(Child) a; }`,
+    // `ContentChildren`: namespace member
+    // ACCEPTED FALSE NEGATIVE: with a namespace import (`import * as core from "@angular/core"`), the decorator is not reported
+    `import { ContentChildren } from "@angular/core"; @Component() class A { @core.ContentChildren(Child) a; }`,
     // `ContentChildren`: the decorator is a call of a call (callee is a `CallExpression`)
-    `@Component() class A { @ContentChildren(Child)() a; }`,
+    `import { ContentChildren } from "@angular/core"; @Component() class A { @ContentChildren(Child)() a; }`,
+    // Same name imported from another library is not reported
+    `import { ContentChild } from "other-lib"; class A { @ContentChild(Child) a; }`,
+    // Same name imported from another library is not reported
+    `import { ContentChildren } from "other-lib"; class A { @ContentChildren(Child) a; }`,
   ],
   invalid: [
     // `ContentChild`: on a property in a component
-    { code: `@Component() class A { @ContentChild(Child) a; }`, errors: [{ messageId }] },
-    // `ContentChild`: in a directive, with modifiers
-    { code: `@Directive() class A { @ContentChild(Child) protected readonly a!: string; }`, errors: [{ messageId }] },
-    // `ContentChild`: without arguments
-    { code: `@Component() class A { @ContentChild() a; }`, errors: [{ messageId }] },
-    // `ContentChild`: with an options object
-    { code: `@Component() class A { @ContentChild(Child, { foo: true }) a; }`, errors: [{ messageId }] },
-    // `ContentChild`: on a setter and on a method
-    { code: `@Component() class A { @ContentChild(Child) set a(value: string) {} }`, errors: [{ messageId }] },
-    { code: `@Component() class A { @ContentChild(Child) a(): void {} }`, errors: [{ messageId }] },
-    // `ContentChild`: on a constructor parameter
-    { code: `@Component() class A { constructor(@ContentChild(Child) a: string) {} }`, errors: [{ messageId }] },
-    // `ContentChild`: on a class
-    { code: `@ContentChild(Child) class A {}`, errors: [{ messageId }] },
-    // `ContentChild`: not restricted to Angular classes, nor to `@angular/core` imports
-    { code: `class A { @ContentChild(Child) a; }`, errors: [{ messageId }] },
-    { code: `import { ContentChild } from "other-lib"; class A { @ContentChild(Child) a; }`, errors: [{ messageId }] },
-    // `ContentChild`: in a class expression
-    { code: `const A = class { @ContentChild(Child) a; };`, errors: [{ messageId }] },
-    // `ContentChild`: with the import, only the decorator is reported
     { code: `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChild(Child) a; }`, errors: [{ messageId }] },
+    // `ContentChild`: in a directive, with modifiers
+    { code: `import { ContentChild } from "@angular/core"; @Directive() class A { @ContentChild(Child) protected readonly a!: string; }`, errors: [{ messageId }] },
+    // `ContentChild`: without arguments
+    { code: `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChild() a; }`, errors: [{ messageId }] },
+    // `ContentChild`: with an options object
+    { code: `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChild(Child, { foo: true }) a; }`, errors: [{ messageId }] },
+    // `ContentChild`: on a setter and on a method
+    { code: `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChild(Child) set a(value: string) {} }`, errors: [{ messageId }] },
+    { code: `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChild(Child) a(): void {} }`, errors: [{ messageId }] },
+    // `ContentChild`: on a constructor parameter
+    { code: `import { ContentChild } from "@angular/core"; @Component() class A { constructor(@ContentChild(Child) a: string) {} }`, errors: [{ messageId }] },
+    // `ContentChild`: on a class
+    { code: `import { ContentChild } from "@angular/core"; @ContentChild(Child) class A {}`, errors: [{ messageId }] },
+    // `ContentChild`: not restricted to Angular classes
+    { code: `import { ContentChild } from "@angular/core"; class A { @ContentChild(Child) a; }`, errors: [{ messageId }] },
+    // `ContentChild`: in a class expression
+    { code: `import { ContentChild } from "@angular/core"; const A = class { @ContentChild(Child) a; };`, errors: [{ messageId }] },
     // `ContentChild`: one report per decorator, also combined with other decorators
-    { code: `@Component() class A { @ContentChild(Child) a; @ContentChild(Child) b; }`, errors: [{ messageId }, { messageId }] },
-    { code: `@Component() class A { @HostBinding() @ContentChild(Child) a; }`, errors: [{ messageId }] },
+    { code: `import { ContentChild } from "@angular/core"; @Component() class A { @ContentChild(Child) a; @ContentChild(Child) b; }`, errors: [{ messageId }, { messageId }] },
+    { code: `import { ContentChild } from "@angular/core"; @Component() class A { @HostBinding() @ContentChild(Child) a; }`, errors: [{ messageId }] },
     // `ContentChildren`: on a property in a component
-    { code: `@Component() class A { @ContentChildren(Child) a; }`, errors: [{ messageId }] },
-    // `ContentChildren`: in a directive, with modifiers
-    { code: `@Directive() class A { @ContentChildren(Child) protected readonly a!: string; }`, errors: [{ messageId }] },
-    // `ContentChildren`: without arguments
-    { code: `@Component() class A { @ContentChildren() a; }`, errors: [{ messageId }] },
-    // `ContentChildren`: with an options object
-    { code: `@Component() class A { @ContentChildren(Child, { foo: true }) a; }`, errors: [{ messageId }] },
-    // `ContentChildren`: on a setter and on a method
-    { code: `@Component() class A { @ContentChildren(Child) set a(value: string) {} }`, errors: [{ messageId }] },
-    { code: `@Component() class A { @ContentChildren(Child) a(): void {} }`, errors: [{ messageId }] },
-    // `ContentChildren`: on a constructor parameter
-    { code: `@Component() class A { constructor(@ContentChildren(Child) a: string) {} }`, errors: [{ messageId }] },
-    // `ContentChildren`: on a class
-    { code: `@ContentChildren(Child) class A {}`, errors: [{ messageId }] },
-    // `ContentChildren`: not restricted to Angular classes, nor to `@angular/core` imports
-    { code: `class A { @ContentChildren(Child) a; }`, errors: [{ messageId }] },
-    { code: `import { ContentChildren } from "other-lib"; class A { @ContentChildren(Child) a; }`, errors: [{ messageId }] },
-    // `ContentChildren`: in a class expression
-    { code: `const A = class { @ContentChildren(Child) a; };`, errors: [{ messageId }] },
-    // `ContentChildren`: with the import, only the decorator is reported
     { code: `import { ContentChildren } from "@angular/core"; @Component() class A { @ContentChildren(Child) a; }`, errors: [{ messageId }] },
+    // `ContentChildren`: in a directive, with modifiers
+    { code: `import { ContentChildren } from "@angular/core"; @Directive() class A { @ContentChildren(Child) protected readonly a!: string; }`, errors: [{ messageId }] },
+    // `ContentChildren`: without arguments
+    { code: `import { ContentChildren } from "@angular/core"; @Component() class A { @ContentChildren() a; }`, errors: [{ messageId }] },
+    // `ContentChildren`: with an options object
+    { code: `import { ContentChildren } from "@angular/core"; @Component() class A { @ContentChildren(Child, { foo: true }) a; }`, errors: [{ messageId }] },
+    // `ContentChildren`: on a setter and on a method
+    { code: `import { ContentChildren } from "@angular/core"; @Component() class A { @ContentChildren(Child) set a(value: string) {} }`, errors: [{ messageId }] },
+    { code: `import { ContentChildren } from "@angular/core"; @Component() class A { @ContentChildren(Child) a(): void {} }`, errors: [{ messageId }] },
+    // `ContentChildren`: on a constructor parameter
+    { code: `import { ContentChildren } from "@angular/core"; @Component() class A { constructor(@ContentChildren(Child) a: string) {} }`, errors: [{ messageId }] },
+    // `ContentChildren`: on a class
+    { code: `import { ContentChildren } from "@angular/core"; @ContentChildren(Child) class A {}`, errors: [{ messageId }] },
+    // `ContentChildren`: not restricted to Angular classes
+    { code: `import { ContentChildren } from "@angular/core"; class A { @ContentChildren(Child) a; }`, errors: [{ messageId }] },
+    // `ContentChildren`: in a class expression
+    { code: `import { ContentChildren } from "@angular/core"; const A = class { @ContentChildren(Child) a; };`, errors: [{ messageId }] },
     // `ContentChildren`: one report per decorator, also combined with other decorators
-    { code: `@Component() class A { @ContentChildren(Child) a; @ContentChildren(Child) b; }`, errors: [{ messageId }, { messageId }] },
-    { code: `@Component() class A { @HostBinding() @ContentChildren(Child) a; }`, errors: [{ messageId }] },
+    { code: `import { ContentChildren } from "@angular/core"; @Component() class A { @ContentChildren(Child) a; @ContentChildren(Child) b; }`, errors: [{ messageId }, { messageId }] },
+    { code: `import { ContentChildren } from "@angular/core"; @Component() class A { @HostBinding() @ContentChildren(Child) a; }`, errors: [{ messageId }] },
     // Both names in the same class
-    { code: `@Component() class A { @ContentChild(Child) a; @ContentChildren(Child) b; }`, errors: [{ messageId }, { messageId }] },
+    { code: `import { ContentChild, ContentChildren } from "@angular/core"; @Component() class A { @ContentChild(Child) a; @ContentChildren(Child) b; }`, errors: [{ messageId }, { messageId }] },
+    // `ContentChild`: aliased import is reported
+    { code: `import { ContentChild as NgContentChild } from "@angular/core"; @Component() class A { @NgContentChild(Child) a; }`, errors: [{ messageId }] },
+    // `ContentChildren`: aliased import is reported
+    { code: `import { ContentChildren as NgContentChildren } from "@angular/core"; @Component() class A { @NgContentChildren(Child) a; }`, errors: [{ messageId }] },
   ],
 });

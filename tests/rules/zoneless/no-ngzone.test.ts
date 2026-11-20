@@ -5,25 +5,16 @@ const error = { messageId: "noNgzone" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { NgZone } from "@angular/core";`,
     `import { Other, NgZone } from "@angular/core";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { NgZone } from "@angular/core";`,
     `import { type NgZone } from "@angular/core";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { NgZone as Alias } from "@angular/core";`,
     `import { Other as NgZone } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { NgZone as Alias } from "@angular/core";
-
-@Component({
-  template: "",
-})
-export class SomeComponent {
-  private readonly zone = inject(Alias);
-}`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `@Component({
   template: "",
 })
@@ -60,10 +51,39 @@ export class SomeComponent {
 export class SomeComponent {
   private readonly zone = inject(provideZoneChangeDetection);
 }`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "NgZone";`,
-    `// NgZone`,
-    `const value = ng["NgZone"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { NgZone } from "@angular/core"; const name = "NgZone";`,
+    `import { NgZone } from "@angular/core"; // NgZone`,
+    `import { NgZone } from "@angular/core"; const value = ng["NgZone"];`,
+    // Usage without import is not reported
+    `@Component({
+  template: "",
+})
+export class SomeComponent {
+  private readonly zone = inject(NgZone);
+}`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/core";
+
+const a = ng.NgZone;`,
+    `import { NgZone } from "@angular/core"; const a = foo.bar.NgZone;`,
+    // Not reported: local declaration with the same name
+    `class NgZone {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as NgZone } from "other-lib";
+
+const a = NgZone;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import NgZone from "@angular/core";`,
+    `import * as NgZone from "@angular/core";`,
+    `import { NgZone } from "@angular/core"; import NgZone = require("@angular/core");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { NgZone as Alias } from "@angular/core";`,
+    `export * as NgZone from "@angular/core";`,
+    // Not reported: re-export without import (not a usage)
+    `export { NgZone } from "@angular/core";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { NgZone } from "@angular/core"; const a = { NgZone: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -71,16 +91,6 @@ export class SomeComponent {
       code: `import { NgZone } from "@angular/core";
 
 @Component({
-  template: "",
-})
-export class SomeComponent {
-  private readonly zone = inject(NgZone);
-}`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `@Component({
   template: "",
 })
 export class SomeComponent {
@@ -96,100 +106,48 @@ const a = NgZone;
 const b = [NgZone];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/core";
-
-const a = ng.NgZone;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.NgZone;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `NgZone.toString();`,
+      code: `import { NgZone } from "@angular/core"; NgZone.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: NgZone;`,
+      code: `import { NgZone } from "@angular/core"; let a: NgZone;`,
       errors: [error],
     },
     {
-      code: `type T = typeof NgZone;`,
+      code: `import { NgZone } from "@angular/core"; type T = typeof NgZone;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { NgZone } from "@angular/core";
+
+function f() {
   return () => ({ imports: [[NgZone]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class NgZone {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is NgZone: the specifier is not reported, but usages are
-    {
-      code: `import { Other as NgZone } from "other-lib";
-
-const a = NgZone;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import NgZone from "@angular/core";`,
-      errors: [error],
-    },
-    {
-      code: `import * as NgZone from "@angular/core";`,
-      errors: [error],
-    },
-    {
-      code: `import NgZone = require("@angular/core");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { NgZone as Alias } from "@angular/core";`,
-      errors: [error],
-    },
-    {
-      code: `export * as NgZone from "@angular/core";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { NgZone } from "@angular/core";`,
-      errors: [error, error],
     },
     {
       code: `import { NgZone } from "@angular/core";
 
 export { NgZone };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { NgZone: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { NgZone };`,
-      errors: [error, error],
+      code: `import { NgZone } from "@angular/core"; const a = { NgZone };`,
+      errors: [error],
     },
     {
-      code: `const { NgZone } = a;`,
-      errors: [error, error],
+      code: `import { NgZone } from "@angular/core"; const { NgZone } = a;`,
+      errors: [error],
     },
     // Constructor parameter type
     {
-      code: `@Component({ template: "" })
+      code: `import { NgZone } from "@angular/core";
+
+@Component({ template: "" })
 export class SomeComponent {
   constructor(private zone: NgZone) {}
 }`,
@@ -197,18 +155,27 @@ export class SomeComponent {
     },
     // Static method call
     {
-      code: `if (NgZone.isInAngularZone()) {}`,
+      code: `import { NgZone } from "@angular/core"; if (NgZone.isInAngularZone()) {}`,
       errors: [error],
     },
     // Instantiation
     {
-      code: `const zone = new NgZone({ enableLongStackTrace: false });`,
+      code: `import { NgZone } from "@angular/core"; const zone = new NgZone({ enableLongStackTrace: false });`,
       errors: [error],
     },
     // Provider token
     {
-      code: `const providers = [{ provide: NgZone, useClass: NoopNgZone }];`,
+      code: `import { NgZone } from "@angular/core"; const providers = [{ provide: NgZone, useClass: NoopNgZone }];`,
       errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { NgZone as Alias } from "@angular/core";
+
+@Component({
+  template: "",
+})
+export class SomeComponent {
+  private readonly zone = inject(Alias);
+}`, errors: [error] },
   ],
 });

@@ -134,3 +134,16 @@ export function objectArgumentCases(build: (argument: string) => string, propert
     ].map((code) => ({ code, errors })),
   };
 }
+
+/**
+ * Add the import of the checked function to all cases, as rules only check functions imported from Angular.
+ *
+ * @param importDeclaration Import of the checked function, for example `import { effect } from "@angular/core";`
+ * @param cases Cases to complete
+ */
+export function withImport(importDeclaration: string, cases: Cases): Cases {
+  return {
+    valid: cases.valid.map((code) => `${importDeclaration}\n${code}`),
+    invalid: cases.invalid.map((testCase) => ({ ...testCase, code: `${importDeclaration}\n${testCase.code}` })),
+  };
+}

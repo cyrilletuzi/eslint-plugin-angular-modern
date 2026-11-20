@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { isImportIdentifier } from "../../utils/is-import-identifier";
+import { getImportedReferences } from "../../utils/angular-import";
 
 export const ruleName = "no-cdk-modules";
 const messageId = "noCdkModules";
@@ -19,8 +19,9 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Identifier[name=/^(?:Cdk[A-Za-z0-9]+|A11y|Bidi|Clipboard|Dialog|DragDrop|Layout|Observers|Overlay|Platform|Portal|Scrolling|TextField)Module$/]"(node: TSESTree.Identifier) {
-        if (!isImportIdentifier(node)) {
+      "ImportDeclaration[source.value=/^@angular\\/cdk/] > ImportSpecifier[imported.name=/Module$/]"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at usage sites */
+        for (const node of getImportedReferences(context, importNode)) {
           context.report({
             node,
             messageId,

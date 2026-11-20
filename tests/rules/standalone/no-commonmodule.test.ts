@@ -5,24 +5,16 @@ const error = { messageId: "noCommonmodule" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { CommonModule } from "@angular/common";`,
     `import { Other, CommonModule } from "@angular/common";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { CommonModule } from "@angular/common";`,
     `import { type CommonModule } from "@angular/common";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { CommonModule as Alias } from "@angular/common";`,
     `import { Other as CommonModule } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { CommonModule as Alias } from "@angular/common";
-
-@Component({
-  imports: [Alias],
-  template: "",
-})
-export class SomeComponent {}`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `@Component({
   imports: [MyCommonModule],
   template: "",
@@ -53,10 +45,38 @@ export class SomeComponent {}`,
   template: "",
 })
 export class SomeComponent {}`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "CommonModule";`,
-    `// CommonModule`,
-    `const value = ng["CommonModule"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { CommonModule } from "@angular/common"; const name = "CommonModule";`,
+    `import { CommonModule } from "@angular/common"; // CommonModule`,
+    `import { CommonModule } from "@angular/common"; const value = ng["CommonModule"];`,
+    // Usage without import is not reported
+    `@Component({
+  imports: [CommonModule],
+  template: "",
+})
+export class SomeComponent {}`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/common";
+
+const a = ng.CommonModule;`,
+    `import { CommonModule } from "@angular/common"; const a = foo.bar.CommonModule;`,
+    // Not reported: local declaration with the same name
+    `class CommonModule {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as CommonModule } from "other-lib";
+
+const a = CommonModule;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import CommonModule from "@angular/common";`,
+    `import * as CommonModule from "@angular/common";`,
+    `import { CommonModule } from "@angular/common"; import CommonModule = require("@angular/common");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { CommonModule as Alias } from "@angular/common";`,
+    `export * as CommonModule from "@angular/common";`,
+    // Not reported: re-export without import (not a usage)
+    `export { CommonModule } from "@angular/common";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { CommonModule } from "@angular/common"; const a = { CommonModule: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -64,15 +84,6 @@ export class SomeComponent {}`,
       code: `import { CommonModule } from "@angular/common";
 
 @Component({
-  imports: [CommonModule],
-  template: "",
-})
-export class SomeComponent {}`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `@Component({
   imports: [CommonModule],
   template: "",
 })
@@ -87,96 +98,50 @@ const a = CommonModule;
 const b = [CommonModule];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/common";
-
-const a = ng.CommonModule;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.CommonModule;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `CommonModule.toString();`,
+      code: `import { CommonModule } from "@angular/common"; CommonModule.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: CommonModule;`,
+      code: `import { CommonModule } from "@angular/common"; let a: CommonModule;`,
       errors: [error],
     },
     {
-      code: `type T = typeof CommonModule;`,
+      code: `import { CommonModule } from "@angular/common"; type T = typeof CommonModule;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { CommonModule } from "@angular/common";
+
+function f() {
   return () => ({ imports: [[CommonModule]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class CommonModule {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is CommonModule: the specifier is not reported, but usages are
-    {
-      code: `import { Other as CommonModule } from "other-lib";
-
-const a = CommonModule;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import CommonModule from "@angular/common";`,
-      errors: [error],
-    },
-    {
-      code: `import * as CommonModule from "@angular/common";`,
-      errors: [error],
-    },
-    {
-      code: `import CommonModule = require("@angular/common");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { CommonModule as Alias } from "@angular/common";`,
-      errors: [error],
-    },
-    {
-      code: `export * as CommonModule from "@angular/common";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { CommonModule } from "@angular/common";`,
-      errors: [error, error],
     },
     {
       code: `import { CommonModule } from "@angular/common";
 
 export { CommonModule };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { CommonModule: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { CommonModule };`,
-      errors: [error, error],
+      code: `import { CommonModule } from "@angular/common"; const a = { CommonModule };`,
+      errors: [error],
     },
     {
-      code: `const { CommonModule } = a;`,
-      errors: [error, error],
+      code: `import { CommonModule } from "@angular/common"; const { CommonModule } = a;`,
+      errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { CommonModule as Alias } from "@angular/common";
+
+@Component({
+  imports: [Alias],
+  template: "",
+})
+export class SomeComponent {}`, errors: [error] },
   ],
 });

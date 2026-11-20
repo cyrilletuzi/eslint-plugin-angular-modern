@@ -5,24 +5,16 @@ const error = { messageId: "noServermodule" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { ServerModule } from "@angular/platform-server";`,
     `import { Other, ServerModule } from "@angular/platform-server";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { ServerModule } from "@angular/platform-server";`,
     `import { type ServerModule } from "@angular/platform-server";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { ServerModule as Alias } from "@angular/platform-server";`,
     `import { Other as ServerModule } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { ServerModule as Alias } from "@angular/platform-server";
-
-@NgModule({
-  imports: [AppModule, Alias],
-  bootstrap: [AppComponent],
-})
-export class AppServerModule {}`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `@NgModule({
   imports: [AppModule, MyServerModule],
   bootstrap: [AppComponent],
@@ -53,10 +45,38 @@ export class AppServerModule {}`,
   bootstrap: [AppComponent],
 })
 export class AppServerModule {}`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "ServerModule";`,
-    `// ServerModule`,
-    `const value = ng["ServerModule"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { ServerModule } from "@angular/platform-server"; const name = "ServerModule";`,
+    `import { ServerModule } from "@angular/platform-server"; // ServerModule`,
+    `import { ServerModule } from "@angular/platform-server"; const value = ng["ServerModule"];`,
+    // Usage without import is not reported
+    `@NgModule({
+  imports: [AppModule, ServerModule],
+  bootstrap: [AppComponent],
+})
+export class AppServerModule {}`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/platform-server";
+
+const a = ng.ServerModule;`,
+    `import { ServerModule } from "@angular/platform-server"; const a = foo.bar.ServerModule;`,
+    // Not reported: local declaration with the same name
+    `class ServerModule {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as ServerModule } from "other-lib";
+
+const a = ServerModule;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import ServerModule from "@angular/platform-server";`,
+    `import * as ServerModule from "@angular/platform-server";`,
+    `import { ServerModule } from "@angular/platform-server"; import ServerModule = require("@angular/platform-server");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { ServerModule as Alias } from "@angular/platform-server";`,
+    `export * as ServerModule from "@angular/platform-server";`,
+    // Not reported: re-export without import (not a usage)
+    `export { ServerModule } from "@angular/platform-server";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { ServerModule } from "@angular/platform-server"; const a = { ServerModule: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -64,15 +84,6 @@ export class AppServerModule {}`,
       code: `import { ServerModule } from "@angular/platform-server";
 
 @NgModule({
-  imports: [AppModule, ServerModule],
-  bootstrap: [AppComponent],
-})
-export class AppServerModule {}`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `@NgModule({
   imports: [AppModule, ServerModule],
   bootstrap: [AppComponent],
 })
@@ -87,96 +98,50 @@ const a = ServerModule;
 const b = [ServerModule];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/platform-server";
-
-const a = ng.ServerModule;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.ServerModule;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `ServerModule.toString();`,
+      code: `import { ServerModule } from "@angular/platform-server"; ServerModule.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: ServerModule;`,
+      code: `import { ServerModule } from "@angular/platform-server"; let a: ServerModule;`,
       errors: [error],
     },
     {
-      code: `type T = typeof ServerModule;`,
+      code: `import { ServerModule } from "@angular/platform-server"; type T = typeof ServerModule;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { ServerModule } from "@angular/platform-server";
+
+function f() {
   return () => ({ imports: [[ServerModule]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class ServerModule {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is ServerModule: the specifier is not reported, but usages are
-    {
-      code: `import { Other as ServerModule } from "other-lib";
-
-const a = ServerModule;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import ServerModule from "@angular/platform-server";`,
-      errors: [error],
-    },
-    {
-      code: `import * as ServerModule from "@angular/platform-server";`,
-      errors: [error],
-    },
-    {
-      code: `import ServerModule = require("@angular/platform-server");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { ServerModule as Alias } from "@angular/platform-server";`,
-      errors: [error],
-    },
-    {
-      code: `export * as ServerModule from "@angular/platform-server";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { ServerModule } from "@angular/platform-server";`,
-      errors: [error, error],
     },
     {
       code: `import { ServerModule } from "@angular/platform-server";
 
 export { ServerModule };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { ServerModule: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { ServerModule };`,
-      errors: [error, error],
+      code: `import { ServerModule } from "@angular/platform-server"; const a = { ServerModule };`,
+      errors: [error],
     },
     {
-      code: `const { ServerModule } = a;`,
-      errors: [error, error],
+      code: `import { ServerModule } from "@angular/platform-server"; const { ServerModule } = a;`,
+      errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { ServerModule as Alias } from "@angular/platform-server";
+
+@NgModule({
+  imports: [AppModule, Alias],
+  bootstrap: [AppComponent],
+})
+export class AppServerModule {}`, errors: [error] },
   ],
 });

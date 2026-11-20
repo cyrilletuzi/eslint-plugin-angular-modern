@@ -5,23 +5,16 @@ const error = { messageId: "noRoutermodule" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { RouterModule } from "@angular/router";`,
     `import { Other, RouterModule } from "@angular/router";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { RouterModule } from "@angular/router";`,
     `import { type RouterModule } from "@angular/router";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { RouterModule as Alias } from "@angular/router";`,
     `import { Other as RouterModule } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { RouterModule as Alias } from "@angular/router";
-
-@NgModule({
-  imports: [Alias.forRoot(routes)],
-})
-export class AppRoutingModule {}`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `@NgModule({
   imports: [MyRouterModule.forRoot(routes)],
 })
@@ -58,10 +51,37 @@ export class AppRoutingModule {}`,
   imports: [AppRoutingModule.forRoot(routes)],
 })
 export class AppRoutingModule {}`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "RouterModule";`,
-    `// RouterModule`,
-    `const value = ng["RouterModule"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { RouterModule } from "@angular/router"; const name = "RouterModule";`,
+    `import { RouterModule } from "@angular/router"; // RouterModule`,
+    `import { RouterModule } from "@angular/router"; const value = ng["RouterModule"];`,
+    // Usage without import is not reported
+    `@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+})
+export class AppRoutingModule {}`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/router";
+
+const a = ng.RouterModule;`,
+    `import { RouterModule } from "@angular/router"; const a = foo.bar.RouterModule;`,
+    // Not reported: local declaration with the same name
+    `class RouterModule {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as RouterModule } from "other-lib";
+
+const a = RouterModule;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import RouterModule from "@angular/router";`,
+    `import * as RouterModule from "@angular/router";`,
+    `import { RouterModule } from "@angular/router"; import RouterModule = require("@angular/router");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { RouterModule as Alias } from "@angular/router";`,
+    `export * as RouterModule from "@angular/router";`,
+    // Not reported: re-export without import (not a usage)
+    `export { RouterModule } from "@angular/router";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { RouterModule } from "@angular/router"; const a = { RouterModule: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -69,14 +89,6 @@ export class AppRoutingModule {}`,
       code: `import { RouterModule } from "@angular/router";
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-})
-export class AppRoutingModule {}`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `@NgModule({
   imports: [RouterModule.forRoot(routes)],
 })
 export class AppRoutingModule {}`,
@@ -90,96 +102,49 @@ const a = RouterModule;
 const b = [RouterModule];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/router";
-
-const a = ng.RouterModule;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.RouterModule;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `RouterModule.toString();`,
+      code: `import { RouterModule } from "@angular/router"; RouterModule.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: RouterModule;`,
+      code: `import { RouterModule } from "@angular/router"; let a: RouterModule;`,
       errors: [error],
     },
     {
-      code: `type T = typeof RouterModule;`,
+      code: `import { RouterModule } from "@angular/router"; type T = typeof RouterModule;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { RouterModule } from "@angular/router";
+
+function f() {
   return () => ({ imports: [[RouterModule]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class RouterModule {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is RouterModule: the specifier is not reported, but usages are
-    {
-      code: `import { Other as RouterModule } from "other-lib";
-
-const a = RouterModule;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import RouterModule from "@angular/router";`,
-      errors: [error],
-    },
-    {
-      code: `import * as RouterModule from "@angular/router";`,
-      errors: [error],
-    },
-    {
-      code: `import RouterModule = require("@angular/router");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { RouterModule as Alias } from "@angular/router";`,
-      errors: [error],
-    },
-    {
-      code: `export * as RouterModule from "@angular/router";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { RouterModule } from "@angular/router";`,
-      errors: [error, error],
     },
     {
       code: `import { RouterModule } from "@angular/router";
 
 export { RouterModule };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { RouterModule: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { RouterModule };`,
-      errors: [error, error],
+      code: `import { RouterModule } from "@angular/router"; const a = { RouterModule };`,
+      errors: [error],
     },
     {
-      code: `const { RouterModule } = a;`,
-      errors: [error, error],
+      code: `import { RouterModule } from "@angular/router"; const { RouterModule } = a;`,
+      errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { RouterModule as Alias } from "@angular/router";
+
+@NgModule({
+  imports: [Alias.forRoot(routes)],
+})
+export class AppRoutingModule {}`, errors: [error] },
   ],
 });

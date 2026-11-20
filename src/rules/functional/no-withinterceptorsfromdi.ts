@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedFunctionCalls } from "../../utils/angular-import";
 
 export const ruleName = "no-withinterceptorsfromdi";
 const messageId = "noWithinterceptorsfromdi";
@@ -19,11 +20,14 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "CallExpression[callee.type='Identifier'][callee.name='withInterceptorsFromDi']"(node: TSESTree.CallExpression) {
-        context.report({
-          node,
-          messageId,
-        });
+      "ImportDeclaration[source.value='@angular/common/http'] > ImportSpecifier[imported.name='withInterceptorsFromDi']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at call sites */
+        for (const node of getImportedFunctionCalls(context, importNode)) {
+          context.report({
+            node,
+            messageId,
+          });
+        }
       },
     };
   },

@@ -16,31 +16,29 @@ testRule(rule, {
     /* Look-alike names */
     `class A implements ResolveFn, MyResolve, Resolves {}`,
     /* `extends` instead of `implements` */
-    `class A extends Resolve {}`,
-    `interface A extends Resolve {}`,
+    `import { Resolve } from '@angular/router'; class A extends Resolve {}`,
+    `import { Resolve } from '@angular/router'; interface A extends Resolve {}`,
     /* Type usage (not an `implements` clause) */
-    `let a: Resolve;`,
-    // SUSPECTED BUG: qualified name is a MemberExpression, without `name`, so it is not matched
-    `class A implements router.Resolve {}`,
-    // SUSPECTED BUG: an aliased import is not followed
-    `import { Resolve as Alias } from '@angular/router'; class A implements Alias {}`,
+    `import { Resolve } from '@angular/router'; let a: Resolve;`,
+    // ACCEPTED FALSE NEGATIVE: with a namespace import, the qualified name (`router.X`) is not reported
+    `import { Resolve } from '@angular/router'; class A implements router.Resolve {}`,
   ],
   invalid: [
     /* Classic class-based usage */
-    { code: `@Injectable({ providedIn: 'root' }) export class A implements Resolve {}`, errors: [error] },
+    { code: `import { Resolve } from '@angular/router'; @Injectable({ providedIn: 'root' }) export class A implements Resolve {}`, errors: [error] },
     /* Without Angular decorator */
-    { code: `class A implements Resolve {}`, errors: [error] },
-    /* With type arguments */
-    { code: `class A implements Resolve<Data> {}`, errors: [error] },
-    /* Among other interfaces */
-    { code: `class A extends B implements OnDestroy, Resolve {}`, errors: [error] },
-    /* Class expression */
-    { code: `const A = class implements Resolve {};`, errors: [error] },
-    /* Abstract class */
-    { code: `abstract class A implements Resolve {}`, errors: [error] },
-    /* Import and usage: only the `implements` clause is reported */
     { code: `import { Resolve } from '@angular/router'; class A implements Resolve {}`, errors: [error] },
+    /* With type arguments */
+    { code: `import { Resolve } from '@angular/router'; class A implements Resolve<Data> {}`, errors: [error] },
+    /* Among other interfaces */
+    { code: `import { Resolve } from '@angular/router'; class A extends B implements OnDestroy, Resolve {}`, errors: [error] },
+    /* Class expression */
+    { code: `import { Resolve } from '@angular/router'; const A = class implements Resolve {};`, errors: [error] },
+    /* Abstract class */
+    { code: `import { Resolve } from '@angular/router'; abstract class A implements Resolve {}`, errors: [error] },
     /* Several classes */
-    { code: `class A implements Resolve {} class B implements Resolve {}`, errors: [error, error] },
+    { code: `import { Resolve } from '@angular/router'; class A implements Resolve {} class B implements Resolve {}`, errors: [error, error] },
+    // Aliased import is reported
+    { code: `import { Resolve as Alias } from '@angular/router'; class A implements Alias {}`, errors: [error] },
   ],
 });

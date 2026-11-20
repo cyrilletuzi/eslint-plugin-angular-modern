@@ -10,30 +10,31 @@ testRule(rule, {
     // Function declaration with the same name is not a call
     `function platformBrowser() {}`,
     // Reference without call (callback, assignment)
-    `const fn = platformBrowser;`,
-    `register(platformBrowser);`,
+    `import { platformBrowser } from "@angular/platform-browser"; const fn = platformBrowser;`,
+    `import { platformBrowser } from "@angular/platform-browser"; register(platformBrowser);`,
     // `new` is a NewExpression, not a CallExpression
-    `new platformBrowser();`,
-    // Callee is not an Identifier: method calls on any object
-    `obj.platformBrowser();`,
-    `this.platformBrowser();`,
-    `obj["platformBrowser"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.platformBrowser()` is not reported (callee is a MemberExpression)
+    `import { platformBrowser } from "@angular/platform-browser"; new platformBrowser();`,
+    // Method calls on any object are not reported
+    `import { platformBrowser } from "@angular/platform-browser"; obj.platformBrowser();`,
+    `import { platformBrowser } from "@angular/platform-browser"; this.platformBrowser();`,
+    `import { platformBrowser } from "@angular/platform-browser"; obj["platformBrowser"]();`,
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.platformBrowser()` is not reported (callee is a MemberExpression)
     `import * as ng from "@angular/platform-browser";
 
 ng.platformBrowser();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { platformBrowser as alias } from "@angular/platform-browser";
-
-alias().bootstrapModule(AppModule);`,
     // String / comment
-    `const name = "platformBrowser()";`,
-    `// platformBrowser()`,
-    // Look-alike names (exact name match only)
-    `platformBrowserDynamic();`,
-    `platformBrowserTesting();`,
-    `platformServer();`,
-    `bootstrapApplication();`,
+    `import { platformBrowser } from "@angular/platform-browser"; const name = "platformBrowser()";`,
+    `import { platformBrowser } from "@angular/platform-browser"; // platformBrowser()`,
+    // Look-alike names are not reported
+    `import { platformBrowser } from "@angular/platform-browser"; platformBrowserDynamic();`,
+    `import { platformBrowser } from "@angular/platform-browser"; platformBrowserTesting();`,
+    `import { platformBrowser } from "@angular/platform-browser"; platformServer();`,
+    `import { platformBrowser } from "@angular/platform-browser"; bootstrapApplication();`,
+    // Usage without import is not reported
+    `platformBrowser().bootstrapModule(AppModule);`,
+    // Locally declared function with the same name is not reported
+    `function platformBrowser() {}
+platformBrowser();`,
   ],
   invalid: [
     // Realistic usage with import: only the call is reported
@@ -43,52 +44,49 @@ alias().bootstrapModule(AppModule);`,
 platformBrowser().bootstrapModule(AppModule);`,
       errors: [error],
     },
-    // Usage without import (name-based)
-    {
-      code: `platformBrowser().bootstrapModule(AppModule);`,
-      errors: [error],
-    },
     // Bare call, with arguments
     {
-      code: `platformBrowser();`,
+      code: `import { platformBrowser } from "@angular/platform-browser"; platformBrowser();`,
       errors: [error],
     },
     {
-      code: `platformBrowser(a, b);`,
+      code: `import { platformBrowser } from "@angular/platform-browser"; platformBrowser(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression
     {
-      code: `platformBrowser?.();`,
+      code: `import { platformBrowser } from "@angular/platform-browser"; platformBrowser?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function
     {
-      code: `async function f() {
+      code: `import { platformBrowser } from "@angular/platform-browser";
+
+async function f() {
   await platformBrowser();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[platformBrowser()]] });`,
+      code: `import { platformBrowser } from "@angular/platform-browser"; const f = () => ({ providers: [[platformBrowser()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee
+    // Call on the result: only the inner call is reported
     {
-      code: `platformBrowser()();`,
+      code: `import { platformBrowser } from "@angular/platform-browser"; platformBrowser()();`,
       errors: [error],
     },
     // Each call is reported
     {
-      code: `platformBrowser();
+      code: `import { platformBrowser } from "@angular/platform-browser";
+
+platformBrowser();
 platformBrowser();`,
       errors: [error, error],
     },
-    // Locally declared function with the same name (no import source check)
-    {
-      code: `function platformBrowser() {}
-platformBrowser();`,
-      errors: [error],
-    },
+    // Aliased import is reported
+    { code: `import { platformBrowser as alias } from "@angular/platform-browser";
+
+alias().bootstrapModule(AppModule);`, errors: [error] },
   ],
 });

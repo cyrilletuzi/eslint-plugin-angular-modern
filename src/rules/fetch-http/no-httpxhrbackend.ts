@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedReferences } from "../../utils/angular-import";
 
 export const ruleName = "no-httpxhrbackend";
 const messageId = "noHttpxhrbackend";
@@ -19,11 +20,14 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Identifier[name='HttpXhrBackend']"(node: TSESTree.Identifier) {
-        context.report({
-          node,
-          messageId,
-        });
+      "ImportDeclaration[source.value='@angular/common/http'] > ImportSpecifier[imported.name='HttpXhrBackend']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at usage sites */
+        for (const node of getImportedReferences(context, importNode)) {
+          context.report({
+            node,
+            messageId,
+          });
+        }
       },
     };
   },

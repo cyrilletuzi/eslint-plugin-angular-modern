@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { isImportIdentifier } from "../../utils/is-import-identifier";
+import { getImportedReferences } from "../../utils/angular-import";
 
 export const ruleName = "no-httpinterceptors-token";
 const messageId = "noHttpinterceptorsToken";
@@ -20,8 +20,9 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Identifier[name='HTTP_INTERCEPTORS']"(node: TSESTree.Identifier) {
-        if (!isImportIdentifier(node)) {
+      "ImportDeclaration[source.value='@angular/common/http'] > ImportSpecifier[imported.name='HTTP_INTERCEPTORS']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at usage sites */
+        for (const node of getImportedReferences(context, importNode)) {
           context.report({
             node,
             messageId,

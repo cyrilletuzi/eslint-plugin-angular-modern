@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedFunctionCalls } from "../../utils/angular-import";
 import { isInInjectionContext } from "../../utils/angular-injection-context";
 import { isCalledWithProperty } from "../../utils/ast-call-argument";
 
@@ -21,17 +22,20 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "CallExpression[callee.type='Identifier'][callee.name='form']"(node: TSESTree.CallExpression) {
-        if (
-          /* Takes an `Injector` in second or third argument object: `form(source, { injector })` or `form(source, schema, { injector })` */
-          !(node.arguments.length === 3 && isCalledWithProperty(node, 2, 'injector')) &&
-          !isCalledWithProperty(node, 1, 'injector') &&
-          !isInInjectionContext(node)
-        ) {
-          context.report({
-            node,
-            messageId,
-          });
+      "ImportDeclaration[source.value='@angular/forms/signals'] > ImportSpecifier[imported.name='form']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at call sites */
+        for (const node of getImportedFunctionCalls(context, importNode)) {
+          if (
+            /* Takes an `Injector` in second or third argument object: `form(source, { injector })` or `form(source, schema, { injector })` */
+            !(node.arguments.length === 3 && isCalledWithProperty(node, 2, 'injector')) &&
+            !isCalledWithProperty(node, 1, 'injector') &&
+            !isInInjectionContext(node)
+          ) {
+            context.report({
+              node,
+              messageId,
+            });
+          }
         }
       },
     };

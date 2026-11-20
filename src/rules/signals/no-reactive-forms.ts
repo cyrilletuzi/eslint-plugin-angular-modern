@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { isImportIdentifier } from "../../utils/is-import-identifier";
+import { getImportedReferences } from "../../utils/angular-import";
 
 export const ruleName = "no-reactive-forms";
 const messageId = "noReactiveForms";
@@ -20,8 +20,9 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Identifier[name='ReactiveFormsModule'], Identifier[name='FormBuilder'], Identifier[name='NonNullableFormBuilder'], Identifier[name='UntypedFormBuilder'], Identifier[name='FormControl'], Identifier[name='FormGroup'], Identifier[name='FormArray'], Identifier[name='FormRecord'], Identifier[name='UntypedFormControl'], Identifier[name='UntypedFormGroup'], Identifier[name='UntypedFormArray'], Identifier[name='UntypedFormRecord']"(node: TSESTree.Identifier) {
-        if (!isImportIdentifier(node)) {
+      "ImportDeclaration[source.value='@angular/forms'] > ImportSpecifier[imported.name=/^(ReactiveFormsModule|FormBuilder|NonNullableFormBuilder|UntypedFormBuilder|FormControl|FormGroup|FormArray|FormRecord|UntypedFormControl|UntypedFormGroup|UntypedFormArray|UntypedFormRecord)$/]"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at usage sites */
+        for (const node of getImportedReferences(context, importNode)) {
           context.report({
             node,
             messageId,

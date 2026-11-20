@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedReferences } from "../../utils/angular-import";
 
 export const ruleName = "no-httpinterceptor-class";
 const messageId = "noHttpinterceptorClass";
@@ -19,11 +20,17 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "TSClassImplements[expression.name='HttpInterceptor']"(node: TSESTree.TSClassImplements) {
-        context.report({
-          node,
-          messageId,
-        });
+      "ImportDeclaration[source.value='@angular/common/http'] > ImportSpecifier[imported.name='HttpInterceptor']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at `implements` sites */
+        for (const reference of getImportedReferences(context, importNode)) {
+          const node = reference.parent;
+          if (node.type === "TSClassImplements" && node.expression === reference) {
+            context.report({
+              node,
+              messageId,
+            });
+          }
+        }
       },
     };
   },

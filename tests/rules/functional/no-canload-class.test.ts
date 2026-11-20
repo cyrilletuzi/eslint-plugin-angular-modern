@@ -16,31 +16,29 @@ testRule(rule, {
     /* Look-alike names */
     `class A implements CanMatchFn, MyCanLoad, CanLoads {}`,
     /* `extends` instead of `implements` */
-    `class A extends CanLoad {}`,
-    `interface A extends CanLoad {}`,
+    `import { CanLoad } from '@angular/router'; class A extends CanLoad {}`,
+    `import { CanLoad } from '@angular/router'; interface A extends CanLoad {}`,
     /* Type usage (not an `implements` clause) */
-    `let a: CanLoad;`,
-    // SUSPECTED BUG: qualified name is a MemberExpression, without `name`, so it is not matched
-    `class A implements router.CanLoad {}`,
-    // SUSPECTED BUG: an aliased import is not followed
-    `import { CanLoad as Alias } from '@angular/router'; class A implements Alias {}`,
+    `import { CanLoad } from '@angular/router'; let a: CanLoad;`,
+    // ACCEPTED FALSE NEGATIVE: with a namespace import, the qualified name (`router.X`) is not reported
+    `import { CanLoad } from '@angular/router'; class A implements router.CanLoad {}`,
   ],
   invalid: [
     /* Classic class-based usage */
-    { code: `@Injectable({ providedIn: 'root' }) export class A implements CanLoad {}`, errors: [error] },
+    { code: `import { CanLoad } from '@angular/router'; @Injectable({ providedIn: 'root' }) export class A implements CanLoad {}`, errors: [error] },
     /* Without Angular decorator */
-    { code: `class A implements CanLoad {}`, errors: [error] },
-    /* With type arguments */
-    { code: `class A implements CanLoad<unknown> {}`, errors: [error] },
-    /* Among other interfaces */
-    { code: `class A extends B implements OnDestroy, CanLoad {}`, errors: [error] },
-    /* Class expression */
-    { code: `const A = class implements CanLoad {};`, errors: [error] },
-    /* Abstract class */
-    { code: `abstract class A implements CanLoad {}`, errors: [error] },
-    /* Import and usage: only the `implements` clause is reported */
     { code: `import { CanLoad } from '@angular/router'; class A implements CanLoad {}`, errors: [error] },
+    /* With type arguments */
+    { code: `import { CanLoad } from '@angular/router'; class A implements CanLoad<unknown> {}`, errors: [error] },
+    /* Among other interfaces */
+    { code: `import { CanLoad } from '@angular/router'; class A extends B implements OnDestroy, CanLoad {}`, errors: [error] },
+    /* Class expression */
+    { code: `import { CanLoad } from '@angular/router'; const A = class implements CanLoad {};`, errors: [error] },
+    /* Abstract class */
+    { code: `import { CanLoad } from '@angular/router'; abstract class A implements CanLoad {}`, errors: [error] },
     /* Several classes */
-    { code: `class A implements CanLoad {} class B implements CanLoad {}`, errors: [error, error] },
+    { code: `import { CanLoad } from '@angular/router'; class A implements CanLoad {} class B implements CanLoad {}`, errors: [error, error] },
+    // Aliased import is reported
+    { code: `import { CanLoad as Alias } from '@angular/router'; class A implements Alias {}`, errors: [error] },
   ],
 });

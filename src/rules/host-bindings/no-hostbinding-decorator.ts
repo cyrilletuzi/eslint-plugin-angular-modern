@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedDecorators } from "../../utils/angular-import";
 
 export const ruleName = "no-hostbinding-decorator";
 const messageId = "noHostbindingDecorator";
@@ -19,11 +20,14 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Decorator > CallExpression[callee.type='Identifier'][callee.name='HostBinding']"(node: TSESTree.Decorator) {
-        context.report({
-          node,
-          messageId,
-        });
+      "ImportDeclaration[source.value='@angular/core'] > ImportSpecifier[imported.name='HostBinding']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at decorator sites */
+        for (const { expression: node } of getImportedDecorators(context, importNode)) {
+          context.report({
+            node,
+            messageId,
+          });
+        }
       },
     };
   },

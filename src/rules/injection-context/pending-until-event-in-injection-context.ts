@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedFunctionCalls } from "../../utils/angular-import";
 import { isInInjectionContext } from "../../utils/angular-injection-context";
 
 export const ruleName = "pending-until-event-in-injection-context";
@@ -20,19 +21,22 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "CallExpression[callee.type='Identifier'][callee.name='pendingUntilEvent']"(node: TSESTree.CallExpression) {
-        if (
-          /* Takes an `Injector` as first argument: `pendingUntilEvent(this.injector)` */
-          node.arguments.length < 1 && !isInInjectionContext(node, {
-            includeRouting: true,
-            includeHttp: true,
-            includeAsyncAppInitializationFunctions: true,
-          })
-        ) {
-          context.report({
-            node,
-            messageId,
-          });
+      "ImportDeclaration[source.value='@angular/core/rxjs-interop'] > ImportSpecifier[imported.name='pendingUntilEvent']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at call sites */
+        for (const node of getImportedFunctionCalls(context, importNode)) {
+          if (
+            /* Takes an `Injector` as first argument: `pendingUntilEvent(this.injector)` */
+            node.arguments.length < 1 && !isInInjectionContext(node, {
+              includeRouting: true,
+              includeHttp: true,
+              includeAsyncAppInitializationFunctions: true,
+            })
+          ) {
+            context.report({
+              node,
+              messageId,
+            });
+          }
         }
       },
     };

@@ -5,22 +5,16 @@ const error = { messageId: "noHttpclientmodule" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { HttpClientModule } from "@angular/common/http";`,
     `import { Other, HttpClientModule } from "@angular/common/http";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { HttpClientModule } from "@angular/common/http";`,
     `import { type HttpClientModule } from "@angular/common/http";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { HttpClientModule as Alias } from "@angular/common/http";`,
     `import { Other as HttpClientModule } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { HttpClientModule as Alias } from "@angular/common/http";
-
-bootstrapApplication(AppComponent, {
-  providers: [importProvidersFrom(Alias)],
-});`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `bootstrapApplication(AppComponent, {
   providers: [importProvidersFrom(MyHttpClientModule)],
 });`,
@@ -48,10 +42,36 @@ bootstrapApplication(AppComponent, {
     `bootstrapApplication(AppComponent, {
   providers: [importProvidersFrom(provideHttpClient)],
 });`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "HttpClientModule";`,
-    `// HttpClientModule`,
-    `const value = ng["HttpClientModule"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { HttpClientModule } from "@angular/common/http"; const name = "HttpClientModule";`,
+    `import { HttpClientModule } from "@angular/common/http"; // HttpClientModule`,
+    `import { HttpClientModule } from "@angular/common/http"; const value = ng["HttpClientModule"];`,
+    // Usage without import is not reported
+    `bootstrapApplication(AppComponent, {
+  providers: [importProvidersFrom(HttpClientModule)],
+});`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/common/http";
+
+const a = ng.HttpClientModule;`,
+    `import { HttpClientModule } from "@angular/common/http"; const a = foo.bar.HttpClientModule;`,
+    // Not reported: local declaration with the same name
+    `class HttpClientModule {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as HttpClientModule } from "other-lib";
+
+const a = HttpClientModule;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import HttpClientModule from "@angular/common/http";`,
+    `import * as HttpClientModule from "@angular/common/http";`,
+    `import { HttpClientModule } from "@angular/common/http"; import HttpClientModule = require("@angular/common/http");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { HttpClientModule as Alias } from "@angular/common/http";`,
+    `export * as HttpClientModule from "@angular/common/http";`,
+    // Not reported: re-export without import (not a usage)
+    `export { HttpClientModule } from "@angular/common/http";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { HttpClientModule } from "@angular/common/http"; const a = { HttpClientModule: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -59,13 +79,6 @@ bootstrapApplication(AppComponent, {
       code: `import { HttpClientModule } from "@angular/common/http";
 
 bootstrapApplication(AppComponent, {
-  providers: [importProvidersFrom(HttpClientModule)],
-});`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `bootstrapApplication(AppComponent, {
   providers: [importProvidersFrom(HttpClientModule)],
 });`,
       errors: [error],
@@ -78,96 +91,48 @@ const a = HttpClientModule;
 const b = [HttpClientModule];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/common/http";
-
-const a = ng.HttpClientModule;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.HttpClientModule;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `HttpClientModule.toString();`,
+      code: `import { HttpClientModule } from "@angular/common/http"; HttpClientModule.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: HttpClientModule;`,
+      code: `import { HttpClientModule } from "@angular/common/http"; let a: HttpClientModule;`,
       errors: [error],
     },
     {
-      code: `type T = typeof HttpClientModule;`,
+      code: `import { HttpClientModule } from "@angular/common/http"; type T = typeof HttpClientModule;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { HttpClientModule } from "@angular/common/http";
+
+function f() {
   return () => ({ imports: [[HttpClientModule]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class HttpClientModule {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is HttpClientModule: the specifier is not reported, but usages are
-    {
-      code: `import { Other as HttpClientModule } from "other-lib";
-
-const a = HttpClientModule;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import HttpClientModule from "@angular/common/http";`,
-      errors: [error],
-    },
-    {
-      code: `import * as HttpClientModule from "@angular/common/http";`,
-      errors: [error],
-    },
-    {
-      code: `import HttpClientModule = require("@angular/common/http");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { HttpClientModule as Alias } from "@angular/common/http";`,
-      errors: [error],
-    },
-    {
-      code: `export * as HttpClientModule from "@angular/common/http";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { HttpClientModule } from "@angular/common/http";`,
-      errors: [error, error],
     },
     {
       code: `import { HttpClientModule } from "@angular/common/http";
 
 export { HttpClientModule };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { HttpClientModule: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { HttpClientModule };`,
-      errors: [error, error],
+      code: `import { HttpClientModule } from "@angular/common/http"; const a = { HttpClientModule };`,
+      errors: [error],
     },
     {
-      code: `const { HttpClientModule } = a;`,
-      errors: [error, error],
+      code: `import { HttpClientModule } from "@angular/common/http"; const { HttpClientModule } = a;`,
+      errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { HttpClientModule as Alias } from "@angular/common/http";
+
+bootstrapApplication(AppComponent, {
+  providers: [importProvidersFrom(Alias)],
+});`, errors: [error] },
   ],
 });

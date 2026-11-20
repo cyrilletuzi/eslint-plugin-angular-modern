@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { isImportIdentifier } from "../../utils/is-import-identifier";
+import { getImportedReferences } from "../../utils/angular-import";
 
 export const ruleName = "no-ngmodule";
 const messageId = "noNgmodule";
@@ -20,8 +20,9 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Identifier[name='NgModule']"(node: TSESTree.Identifier) {
-        if (!isImportIdentifier(node)) {
+      "ImportDeclaration[source.value='@angular/core'] > ImportSpecifier[imported.name='NgModule']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at usage sites */
+        for (const node of getImportedReferences(context, importNode)) {
           context.report({
             node,
             messageId,

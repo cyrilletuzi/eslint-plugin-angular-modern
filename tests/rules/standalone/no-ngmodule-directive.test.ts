@@ -6,101 +6,154 @@ const error = { messageId: "noNgmoduleDirective" };
 testRule(rule, {
   valid: [
     // Doc example: no standalone property (standalone by default)
-    `@Directive({})
+    `import { Directive } from "@angular/core";
+
+@Directive({})
 export class SomeClass {}`,
-    `@Directive({
+    `import { Directive } from "@angular/core";
+
+@Directive({
   selector: "[appSome]",
 })
 export class SomeClass {}`,
     // standalone: true
-    `@Directive({
+    `import { Directive } from "@angular/core";
+
+@Directive({
   selector: "[appSome]",
   standalone: true,
 })
 export class SomeClass {}`,
     // getDecoratorProperty: decorator without call / without argument / non-object argument
-    `@Directive
+    `import { Directive } from "@angular/core";
+
+@Directive
 export class SomeClass {}`,
-    `@Directive()
+    `import { Directive } from "@angular/core";
+
+@Directive()
 export class SomeClass {}`,
-    `const config = { standalone: false };
+    `import { Directive } from "@angular/core";
+
+const config = { standalone: false };
 
 @Directive(config)
 export class SomeClass {}`,
     // Only the first argument is read
-    `@Directive({}, { standalone: false })
+    `import { Directive } from "@angular/core";
+
+@Directive({}, { standalone: false })
 export class SomeClass {}`,
     // Spread elements are skipped (not resolved)
-    `const base = { standalone: false };
+    `import { Directive } from "@angular/core";
+
+const base = { standalone: false };
 
 @Directive({ ...base })
 export class SomeClass {}`,
     // Value is not the literal `false`
-    `@Directive({ standalone: "false" })
+    `import { Directive } from "@angular/core";
+
+@Directive({ standalone: "false" })
 export class SomeClass {}`,
-    `@Directive({ standalone: 0 })
+    `import { Directive } from "@angular/core";
+
+@Directive({ standalone: 0 })
 export class SomeClass {}`,
-    `@Directive({ standalone: null })
+    `import { Directive } from "@angular/core";
+
+@Directive({ standalone: null })
 export class SomeClass {}`,
-    `const isStandalone = false;
+    `import { Directive } from "@angular/core";
+
+const isStandalone = false;
 
 @Directive({ standalone: isStandalone })
 export class SomeClass {}`,
-    `const standalone = false;
+    `import { Directive } from "@angular/core";
+
+const standalone = false;
 
 @Directive({ standalone })
 export class SomeClass {}`,
-    `@Directive({ standalone() { return false; } })
+    `import { Directive } from "@angular/core";
+
+@Directive({ standalone() { return false; } })
 export class SomeClass {}`,
     // SUSPECTED BUG: `!true` is a UnaryExpression, not a Literal (false negative)
-    `@Directive({ standalone: !true })
+    `import { Directive } from "@angular/core";
+
+@Directive({ standalone: !true })
 export class SomeClass {}`,
     // Key is not an Identifier named standalone
     // SUSPECTED BUG: quoted key is a Literal, not an Identifier (false negative)
-    `@Directive({ "standalone": false })
+    `import { Directive } from "@angular/core";
+
+@Directive({ "standalone": false })
 export class SomeClass {}`,
-    `@Directive({ ["standalone"]: false })
+    `import { Directive } from "@angular/core";
+
+@Directive({ ["standalone"]: false })
 export class SomeClass {}`,
-    `@Directive({ isStandalone: false })
+    `import { Directive } from "@angular/core";
+
+@Directive({ isStandalone: false })
 export class SomeClass {}`,
-    `@Directive({ Standalone: false })
+    `import { Directive } from "@angular/core";
+
+@Directive({ Standalone: false })
 export class SomeClass {}`,
     // Only the first matching property is checked
-    `@Directive({ standalone: true, standalone: false })
+    `import { Directive } from "@angular/core";
+
+@Directive({ standalone: true, standalone: false })
 export class SomeClass {}`,
     // Other decorators are not checked (exact callee name)
-    `@Component({ standalone: false })
+    `import { Directive } from "@angular/core";
+
+@Component({ standalone: false })
 export class SomeClass {}`,
-    `@Pipe({ standalone: false })
+    `import { Directive } from "@angular/core";
+
+@Pipe({ standalone: false })
 export class SomeClass {}`,
-    `@NgModule({ standalone: false })
+    `import { Directive } from "@angular/core";
+
+@NgModule({ standalone: false })
 export class SomeClass {}`,
-    `@Injectable({ standalone: false })
+    `import { Directive } from "@angular/core";
+
+@Injectable({ standalone: false })
 export class SomeClass {}`,
-    `@Directives({ standalone: false })
+    `import { Directive } from "@angular/core";
+
+@Directives({ standalone: false })
 export class SomeClass {}`,
-    `@MyDirective({ standalone: false })
+    `import { Directive } from "@angular/core";
+
+@MyDirective({ standalone: false })
 export class SomeClass {}`,
-    `@directive({ standalone: false })
+    `import { Directive } from "@angular/core";
+
+@directive({ standalone: false })
 export class SomeClass {}`,
     // Not a decorator
-    `const config = { standalone: false };`,
-    `Directive({ standalone: false });`,
-    // SUSPECTED BUG: namespace-qualified decorator (callee is a MemberExpression) is not reported (false negative)
+    `import { Directive } from "@angular/core"; const config = { standalone: false };`,
+    `import { Directive } from "@angular/core"; Directive({ standalone: false });`,
+    // ACCEPTED FALSE NEGATIVE: namespace-qualified decorator (callee is a MemberExpression) is not reported (false negative)
     `import * as ng from "@angular/core";
 
 @ng.Directive({ standalone: false })
 export class SomeClass {}`,
-    // SUSPECTED BUG: aliases are not followed (false negative)
-    `import { Directive as NgDirective } from "@angular/core";
-
-@NgDirective({ standalone: false })
-export class SomeClass {}`,
+    // Same name imported from another library is not reported
+    `import { Directive } from "other-lib"; @Directive({ standalone: false }) class A {}`,
   ],
   invalid: [
     // Doc example
     {
-      code: `@Directive({
+      code: `import { Directive } from "@angular/core";
+
+@Directive({
   standalone: false,
 })
 export class SomeClass {}`,
@@ -119,18 +172,24 @@ export class SomeClass {}`,
     },
     // After a spread element
     {
-      code: `@Directive({ ...base, standalone: false })
+      code: `import { Directive } from "@angular/core";
+
+@Directive({ ...base, standalone: false })
 export class SomeClass {}`,
       errors: [error],
     },
     // Error is reported on the property itself
     {
-      code: `@Directive({ standalone: false })\nexport class SomeClass {}`,
-      errors: [{ messageId: "noNgmoduleDirective", line: 1, column: 14, endColumn: 31 }],
+      code: `import { Directive } from "@angular/core";
+
+@Directive({ standalone: false })\nexport class SomeClass {}`,
+      errors: [{ messageId: "noNgmoduleDirective", line: 3, column: 14, endColumn: 31 }],
     },
     // One error per decorator
     {
-      code: `@Directive({ standalone: false })
+      code: `import { Directive } from "@angular/core";
+
+@Directive({ standalone: false })
 export class A {}
 
 @Directive({ standalone: false })
@@ -139,7 +198,9 @@ export class B {}`,
     },
     // Any decorator position (selector only checks the decorator, not the target)
     {
-      code: `export class A {
+      code: `import { Directive } from "@angular/core";
+
+export class A {
   @Directive({ standalone: false })
   method() {}
 }`,
@@ -147,11 +208,18 @@ export class B {}`,
     },
     // SUSPECTED BUG: a computed key referencing a variable named `standalone` matches (key.type is Identifier, `computed` is not checked)
     {
-      code: `const standalone = "other";
+      code: `import { Directive } from "@angular/core";
+
+const standalone = "other";
 
 @Directive({ [standalone]: false })
 export class SomeClass {}`,
       errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { Directive as NgDirective } from "@angular/core";
+
+@NgDirective({ standalone: false })
+export class SomeClass {}`, errors: [error] },
   ],
 });
