@@ -80,7 +80,7 @@ export class SomeClass {}`,
 
 @Pipe({ standalone() { return false; } })
 export class SomeClass {}`,
-    // SUSPECTED BUG: `!true` is a UnaryExpression, not a Literal (false negative)
+    // ACCEPTED FALSE NEGATIVE: `!true` is not detected as `false` (unrealistic code, `false` would be written directly)
     `import { Pipe } from "@angular/core";
 
 @Pipe({ standalone: !true })

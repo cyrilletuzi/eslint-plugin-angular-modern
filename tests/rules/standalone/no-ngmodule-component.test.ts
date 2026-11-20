@@ -82,7 +82,7 @@ export class SomeClass {}`,
 
 @Component({ standalone() { return false; } })
 export class SomeClass {}`,
-    // SUSPECTED BUG: `!true` is a UnaryExpression, not a Literal (false negative)
+    // ACCEPTED FALSE NEGATIVE: `!true` is not detected as `false` (unrealistic code, `false` would be written directly)
     `import { Component } from "@angular/core";
 
 @Component({ standalone: !true })
