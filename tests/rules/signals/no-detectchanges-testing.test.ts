@@ -76,7 +76,7 @@ testRule(rule, {
     // Nested plain class declaration inside a component: the nearest `ClassDeclaration` is not Angular
     { code: `@Component() class A { m() { class B { n() { this.cdr.detectChanges(); } } } }`, errors: [{ messageId }] },
     // Decorated class expression: only `ClassDeclaration` is looked up
-    // SUSPECTED BUG: a component defined as a class expression is not recognized
+    // ACCEPTED FALSE POSITIVE: a decorated class expression is not recognized as an Angular class, only class declarations are (not used in Angular code)
     { code: `const A = @Component() class { m() { this.cdr.detectChanges(); } };`, errors: [{ messageId }] },
     // Decorator callee is a `MemberExpression`
     // SUSPECTED BUG: `@core.Component()` (namespace import) is not recognized as a component

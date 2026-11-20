@@ -104,7 +104,7 @@ describe("class initialization (constructor and field initializers)", () => {
       { code: `class A { constructor() { inject(A); } }`, errors },
       { code: `@Other() class A { a = inject(A); }`, errors },
       { code: `@ng.Component() class A { a = inject(A); }`, errors },
-      // SUSPECTED BUG: class expressions are not detected
+      // ACCEPTED FALSE POSITIVE: a decorated class expression is not recognized as an Angular class, only class declarations are (not used in Angular code)
       { code: `const A = @Component() class { a = inject(A); };`, errors },
       // Methods other than the constructor
       { code: `@Component() class A { ngOnInit() { inject(A); } }`, errors },

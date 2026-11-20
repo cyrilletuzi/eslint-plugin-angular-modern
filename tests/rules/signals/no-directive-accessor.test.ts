@@ -43,7 +43,7 @@ testRule(rule, {
     // Nested plain class declaration inside a component method: the nearest `ClassDeclaration` is not Angular
     `import { Component } from "@angular/core"; @Component() class A { m() { class B { get a() { return 1; } } } }`,
     // Decorated class expression: only `ClassDeclaration` is looked up
-    // SUSPECTED BUG: a component defined as a class expression is not checked
+    // ACCEPTED FALSE NEGATIVE: a decorated class expression is not detected, only class declarations are (not used in Angular code)
     `import { Component } from "@angular/core"; const A = @Component() class { get a() { return 1; } };`,
     // Decorator callee is a `MemberExpression`
     // ACCEPTED FALSE NEGATIVE: `@core.Component()` (namespace import) is not recognized as a component
