@@ -15,8 +15,10 @@ testRule(rule, {
     `@Component() class A { ngOnDestroy2(): void {} }`,
     `@Component() class A { myNgOnDestroy(): void {} }`,
     // Only `MethodDefinition` is targeted: a property holding an arrow function is ignored
-    // SUSPECTED BUG: a hook defined as an arrow function property is still called by Angular, but is not reported
+    // An arrow function property is not a lifecycle hook: Angular only registers hooks defined on the class prototype
     `@Component() class A { ngOnDestroy = (): void => {}; }`,
+    // ACCEPTED FALSE NEGATIVE: in a root or environment service, an arrow function property is called by the injector (checked on the instance), but writing a hook this way is unrealistic
+    `import { Service } from "@angular/core"; @Service() class A { ngOnDestroy = (): void => {}; }`,
     // A native private method (`PrivateIdentifier` key) is a different member, not a hook
     `@Component() class A { #ngOnDestroy(): void {} }`,
     // Abstract method (`TSAbstractMethodDefinition`) is not targeted

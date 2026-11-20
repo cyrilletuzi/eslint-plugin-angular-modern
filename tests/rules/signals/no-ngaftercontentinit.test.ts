@@ -15,7 +15,7 @@ testRule(rule, {
     `@Component() class A { ngAfterContentInit2(): void {} }`,
     `@Component() class A { myNgAfterContentInit(): void {} }`,
     // Only `MethodDefinition` is targeted: a property holding an arrow function is ignored
-    // SUSPECTED BUG: a hook defined as an arrow function property is still called by Angular, but is not reported
+    // An arrow function property is not a lifecycle hook: Angular only registers hooks defined on the class prototype
     `@Component() class A { ngAfterContentInit = (): void => {}; }`,
     // A native private method (`PrivateIdentifier` key) is a different member, not a hook
     `@Component() class A { #ngAfterContentInit(): void {} }`,
