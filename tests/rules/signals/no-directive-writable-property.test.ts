@@ -42,7 +42,7 @@ testRule(rule, {
     // ACCEPTED FALSE NEGATIVE: an auto-accessor (`accessor` keyword) is writable, but is not reported (not used in Angular code)
     `import { Component } from "@angular/core"; @Component() class A { accessor a = 1; }`,
     // Constructor parameter property (`TSParameterProperty`)
-    // SUSPECTED BUG: a writable parameter property is not reported
+    // Constructor parameters are dependency injection, already reported by `no-constructor-injection`
     `import { Component } from "@angular/core"; @Component() class A { constructor(public a: string) {} }`,
     // Nested plain class declaration inside a component method: the nearest `ClassDeclaration` is not Angular
     `import { Component } from "@angular/core"; @Component() class A { m() { class B { a = 1; } } }`,

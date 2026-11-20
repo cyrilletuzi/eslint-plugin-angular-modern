@@ -27,7 +27,7 @@ testRule(rule, {
     // A native private member is not a usage
     `import { AsyncPipe } from "@angular/common"; class A { #AsyncPipe = 1; }`,
     // Only the class identifier is checked, not the pipe usage in templates
-    // SUSPECTED BUG: `| async` via `CommonModule` is not reported
+    // `| async` via `CommonModule`: `CommonModule` is already reported by `no-commonmodule`
     `@Component({ template: \`{{ data | async }}\`, imports: [CommonModule] }) class A {}`,
     // Usage without import is not reported
     `@Component({ imports: [AsyncPipe] }) class A {}`,
