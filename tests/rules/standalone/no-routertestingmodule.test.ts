@@ -5,24 +5,16 @@ const error = { messageId: "noRoutertestingmodule" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { RouterTestingModule } from "@angular/router/testing";`,
     `import { Other, RouterTestingModule } from "@angular/router/testing";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { RouterTestingModule } from "@angular/router/testing";`,
     `import { type RouterTestingModule } from "@angular/router/testing";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { RouterTestingModule as Alias } from "@angular/router/testing";`,
     `import { Other as RouterTestingModule } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { RouterTestingModule as Alias } from "@angular/router/testing";
-
-TestBed.configureTestingModule({
-  imports: [
-    Alias,
-  ],
-});`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `TestBed.configureTestingModule({
   imports: [
     MyRouterTestingModule,
@@ -58,10 +50,38 @@ TestBed.configureTestingModule({
     provideRouter,
   ],
 });`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "RouterTestingModule";`,
-    `// RouterTestingModule`,
-    `const value = ng["RouterTestingModule"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { RouterTestingModule } from "@angular/router/testing"; const name = "RouterTestingModule";`,
+    `import { RouterTestingModule } from "@angular/router/testing"; // RouterTestingModule`,
+    `import { RouterTestingModule } from "@angular/router/testing"; const value = ng["RouterTestingModule"];`,
+    // Usage without import is not reported
+    `TestBed.configureTestingModule({
+  imports: [
+    RouterTestingModule,
+  ],
+});`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/router/testing";
+
+const a = ng.RouterTestingModule;`,
+    `import { RouterTestingModule } from "@angular/router/testing"; const a = foo.bar.RouterTestingModule;`,
+    // Not reported: local declaration with the same name
+    `class RouterTestingModule {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as RouterTestingModule } from "other-lib";
+
+const a = RouterTestingModule;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import RouterTestingModule from "@angular/router/testing";`,
+    `import * as RouterTestingModule from "@angular/router/testing";`,
+    `import { RouterTestingModule } from "@angular/router/testing"; import RouterTestingModule = require("@angular/router/testing");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { RouterTestingModule as Alias } from "@angular/router/testing";`,
+    `export * as RouterTestingModule from "@angular/router/testing";`,
+    // Not reported: re-export without import (not a usage)
+    `export { RouterTestingModule } from "@angular/router/testing";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { RouterTestingModule } from "@angular/router/testing"; const a = { RouterTestingModule: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -69,15 +89,6 @@ TestBed.configureTestingModule({
       code: `import { RouterTestingModule } from "@angular/router/testing";
 
 TestBed.configureTestingModule({
-  imports: [
-    RouterTestingModule,
-  ],
-});`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `TestBed.configureTestingModule({
   imports: [
     RouterTestingModule,
   ],
@@ -92,96 +103,50 @@ const a = RouterTestingModule;
 const b = [RouterTestingModule];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/router/testing";
-
-const a = ng.RouterTestingModule;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.RouterTestingModule;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `RouterTestingModule.toString();`,
+      code: `import { RouterTestingModule } from "@angular/router/testing"; RouterTestingModule.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: RouterTestingModule;`,
+      code: `import { RouterTestingModule } from "@angular/router/testing"; let a: RouterTestingModule;`,
       errors: [error],
     },
     {
-      code: `type T = typeof RouterTestingModule;`,
+      code: `import { RouterTestingModule } from "@angular/router/testing"; type T = typeof RouterTestingModule;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { RouterTestingModule } from "@angular/router/testing";
+
+function f() {
   return () => ({ imports: [[RouterTestingModule]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class RouterTestingModule {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is RouterTestingModule: the specifier is not reported, but usages are
-    {
-      code: `import { Other as RouterTestingModule } from "other-lib";
-
-const a = RouterTestingModule;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import RouterTestingModule from "@angular/router/testing";`,
-      errors: [error],
-    },
-    {
-      code: `import * as RouterTestingModule from "@angular/router/testing";`,
-      errors: [error],
-    },
-    {
-      code: `import RouterTestingModule = require("@angular/router/testing");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { RouterTestingModule as Alias } from "@angular/router/testing";`,
-      errors: [error],
-    },
-    {
-      code: `export * as RouterTestingModule from "@angular/router/testing";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { RouterTestingModule } from "@angular/router/testing";`,
-      errors: [error, error],
     },
     {
       code: `import { RouterTestingModule } from "@angular/router/testing";
 
 export { RouterTestingModule };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { RouterTestingModule: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { RouterTestingModule };`,
-      errors: [error, error],
+      code: `import { RouterTestingModule } from "@angular/router/testing"; const a = { RouterTestingModule };`,
+      errors: [error],
     },
     {
-      code: `const { RouterTestingModule } = a;`,
-      errors: [error, error],
+      code: `import { RouterTestingModule } from "@angular/router/testing"; const { RouterTestingModule } = a;`,
+      errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { RouterTestingModule as Alias } from "@angular/router/testing";
+
+TestBed.configureTestingModule({
+  imports: [
+    Alias,
+  ],
+});`, errors: [error] },
   ],
 });

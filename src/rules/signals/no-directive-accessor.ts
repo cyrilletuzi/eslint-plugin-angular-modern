@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { isInAngularClass } from "../../utils/angular-class-decorator";
+import { addAngularClassDecoratorImport, angularClassDecoratorImportSelector, isInImportedAngularClass, type AngularClassDecoratorImports } from "../../utils/angular-class-decorator";
 
 export const ruleName = "no-directive-accessor";
 const messageId = "noDirectiveAccessor";
@@ -19,9 +19,14 @@ export const ruleDefinition: RuleDefinition = {
     schema: [],
   },
   create(context) {
+    const angularDecorators: AngularClassDecoratorImports = new Map();
+
     return {
+      [angularClassDecoratorImportSelector](node: TSESTree.ImportSpecifier) {
+        addAngularClassDecoratorImport(angularDecorators, node);
+      },
       "MethodDefinition[kind='get'][key.type!='PrivateIdentifier'], MethodDefinition[kind='set'][key.type!='PrivateIdentifier']"(node: TSESTree.MethodDefinition) {
-        if (isInAngularClass(node, ["Component", "Directive"])) {
+        if (isInImportedAngularClass(node, angularDecorators, ["Component", "Directive"])) {
           context.report({
             node,
             messageId,

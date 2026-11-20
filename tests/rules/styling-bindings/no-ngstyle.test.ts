@@ -10,33 +10,30 @@ testRule(rule, {
     `import { Other, NgStyle } from '@angular/common';`,
     /* Aliased import: the imported name is skipped */
     `import { NgStyle as Alias } from '@angular/common';`,
-    // SUSPECTED BUG: an aliased import is not followed, the usage of the alias is not reported
-    `import { NgStyle as Alias } from '@angular/common'; @Component({ imports: [Alias], template: '<div [ngStyle]="{ color: c }"></div>' }) class A {}`,
     /* Look-alike names */
     `const a = [MyNgStyle, NgStyles, ngstyle];`,
-    /* String, not an Identifier */
-    `const a = 'NgStyle';`,
+    /* String, not a usage */
+    `import { NgStyle } from '@angular/common'; const a = 'NgStyle';`,
+    /* Not reported: namespace import member */
+    `import * as ng from '@angular/common'; const a = ng.NgStyle;`,
+    /* Not reported: default and namespace imports with the same name */
+    `import NgStyle from '@angular/common';`,
+    `import * as NgStyle from '@angular/common';`,
+    // Not reported: re-export without import (not a usage)
+    `export { NgStyle } from '@angular/common';`,
+    // Not reported: unrelated object key with the same name
+    `import { NgStyle } from '@angular/common'; const o = { NgStyle: true };`,
   ],
   invalid: [
     /* Classic usage */
-    { code: `@Component({ imports: [NgStyle], template: '<div [ngStyle]="{ color: c }"></div>' }) class A {}`, errors: [error] },
-    /* Import and usage: only the usage is reported */
     { code: `import { NgStyle } from '@angular/common'; @Component({ imports: [NgStyle], template: '<div [ngStyle]="{ color: c }"></div>' }) class A {}`, errors: [error] },
     /* Injection */
-    { code: `const a = inject(NgStyle);`, errors: [error] },
+    { code: `import { NgStyle } from '@angular/common'; const a = inject(NgStyle);`, errors: [error] },
     /* Type usage */
-    { code: `let a: NgStyle;`, errors: [error] },
-    /* Namespace import member */
-    { code: `import * as ng from '@angular/common'; const a = ng.NgStyle;`, errors: [error] },
-    /* Default and namespace-like import specifiers are not ImportSpecifier */
-    { code: `import NgStyle from '@angular/common';`, errors: [error] },
-    { code: `import * as NgStyle from '@angular/common';`, errors: [error] },
-    /* Re-export: both local and exported Identifiers are visited */
-    // SUSPECTED BUG: a single re-export is reported twice
-    { code: `export { NgStyle } from '@angular/common';`, errors: [error, error] },
-    // SUSPECTED BUG: any non-import Identifier with this name is reported, even an unrelated object key
-    { code: `const o = { NgStyle: true };`, errors: [error] },
+    { code: `import { NgStyle } from '@angular/common'; let a: NgStyle;`, errors: [error] },
     /* Several usages */
-    { code: `@Component({ imports: [NgStyle], template: '<div [ngStyle]="{ color: c }"></div>' }) class A {} const a = inject(NgStyle);`, errors: [error, error] },
+    { code: `import { NgStyle } from '@angular/common'; @Component({ imports: [NgStyle], template: '<div [ngStyle]="{ color: c }"></div>' }) class A {} const a = inject(NgStyle);`, errors: [error, error] },
+    // Aliased import is reported
+    { code: `import { NgStyle as Alias } from '@angular/common'; @Component({ imports: [Alias], template: '<div [ngStyle]="{ color: c }"></div>' }) class A {}`, errors: [error] },
   ],
 });

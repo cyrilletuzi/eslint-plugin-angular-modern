@@ -1,5 +1,5 @@
 import type { TSESTree } from "@typescript-eslint/utils";
-import { findAngularClassDecorator } from "./angular-class-decorator";
+import { isInImportedAngularClass, type AngularClassDecoratorImports } from "./angular-class-decorator";
 import { findNearestAncestorOf } from "./ast-traversal";
 
 function isInConstructor(node: TSESTree.Node): boolean {
@@ -13,20 +13,14 @@ function isInConstructor(node: TSESTree.Node): boolean {
   return false;
 }
 
-export function isInAngularComponentConstructor(node: TSESTree.Node): boolean {
-  if (isInConstructor(node)) {
-    const classDeclaration = findNearestAncestorOf(
-      node,
-      (node) => node.type === "ClassDeclaration",
-    );
-
-    if (
-      classDeclaration &&
-      findAngularClassDecorator(classDeclaration, ["Component"])
-    ) {
-      return true;
-    }
+/**
+ * Checks if a node is inside the constructor of a class decorated with `@Component()` imported from `@angular/core` (aliases included).
+ */
+export function isInAngularComponentConstructor(node: TSESTree.Node, imports: AngularClassDecoratorImports): boolean {
+  /* No Angular decorator imported in this file: nothing to check */
+  if (imports.size === 0) {
+    return false;
   }
-  return false;
-}
 
+  return isInConstructor(node) && isInImportedAngularClass(node, imports, ["Component"]);
+}

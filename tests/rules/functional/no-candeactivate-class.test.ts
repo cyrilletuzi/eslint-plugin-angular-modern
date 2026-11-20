@@ -16,31 +16,29 @@ testRule(rule, {
     /* Look-alike names */
     `class A implements CanDeactivateFn, MyCanDeactivate, CanDeactivates {}`,
     /* `extends` instead of `implements` */
-    `class A extends CanDeactivate {}`,
-    `interface A extends CanDeactivate {}`,
+    `import { CanDeactivate } from '@angular/router'; class A extends CanDeactivate {}`,
+    `import { CanDeactivate } from '@angular/router'; interface A extends CanDeactivate {}`,
     /* Type usage (not an `implements` clause) */
-    `let a: CanDeactivate;`,
-    // SUSPECTED BUG: qualified name is a MemberExpression, without `name`, so it is not matched
-    `class A implements router.CanDeactivate {}`,
-    // SUSPECTED BUG: an aliased import is not followed
-    `import { CanDeactivate as Alias } from '@angular/router'; class A implements Alias {}`,
+    `import { CanDeactivate } from '@angular/router'; let a: CanDeactivate;`,
+    // ACCEPTED FALSE NEGATIVE: with a namespace import, the qualified name (`router.X`) is not reported
+    `import { CanDeactivate } from '@angular/router'; class A implements router.CanDeactivate {}`,
   ],
   invalid: [
     /* Classic class-based usage */
-    { code: `@Injectable({ providedIn: 'root' }) export class A implements CanDeactivate {}`, errors: [error] },
+    { code: `import { CanDeactivate } from '@angular/router'; @Injectable({ providedIn: 'root' }) export class A implements CanDeactivate {}`, errors: [error] },
     /* Without Angular decorator */
-    { code: `class A implements CanDeactivate {}`, errors: [error] },
-    /* With type arguments */
-    { code: `class A implements CanDeactivate<SomeComponent> {}`, errors: [error] },
-    /* Among other interfaces */
-    { code: `class A extends B implements OnDestroy, CanDeactivate {}`, errors: [error] },
-    /* Class expression */
-    { code: `const A = class implements CanDeactivate {};`, errors: [error] },
-    /* Abstract class */
-    { code: `abstract class A implements CanDeactivate {}`, errors: [error] },
-    /* Import and usage: only the `implements` clause is reported */
     { code: `import { CanDeactivate } from '@angular/router'; class A implements CanDeactivate {}`, errors: [error] },
+    /* With type arguments */
+    { code: `import { CanDeactivate } from '@angular/router'; class A implements CanDeactivate<SomeComponent> {}`, errors: [error] },
+    /* Among other interfaces */
+    { code: `import { CanDeactivate } from '@angular/router'; class A extends B implements OnDestroy, CanDeactivate {}`, errors: [error] },
+    /* Class expression */
+    { code: `import { CanDeactivate } from '@angular/router'; const A = class implements CanDeactivate {};`, errors: [error] },
+    /* Abstract class */
+    { code: `import { CanDeactivate } from '@angular/router'; abstract class A implements CanDeactivate {}`, errors: [error] },
     /* Several classes */
-    { code: `class A implements CanDeactivate {} class B implements CanDeactivate {}`, errors: [error, error] },
+    { code: `import { CanDeactivate } from '@angular/router'; class A implements CanDeactivate {} class B implements CanDeactivate {}`, errors: [error, error] },
+    // Aliased import is reported
+    { code: `import { CanDeactivate as Alias } from '@angular/router'; class A implements Alias {}`, errors: [error] },
   ],
 });

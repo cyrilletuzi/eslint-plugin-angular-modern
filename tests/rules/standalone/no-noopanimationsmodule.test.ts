@@ -5,22 +5,16 @@ const error = { messageId: "noNoopanimationsmodule" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { NoopAnimationsModule } from "@angular/platform-browser/animations";`,
     `import { Other, NoopAnimationsModule } from "@angular/platform-browser/animations";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { NoopAnimationsModule } from "@angular/platform-browser/animations";`,
     `import { type NoopAnimationsModule } from "@angular/platform-browser/animations";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { NoopAnimationsModule as Alias } from "@angular/platform-browser/animations";`,
     `import { Other as NoopAnimationsModule } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { NoopAnimationsModule as Alias } from "@angular/platform-browser/animations";
-
-TestBed.configureTestingModule({
-  imports: [Alias],
-});`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `TestBed.configureTestingModule({
   imports: [MyNoopAnimationsModule],
 });`,
@@ -39,10 +33,36 @@ TestBed.configureTestingModule({
     `TestBed.configureTestingModule({
   imports: [provideNoopAnimations],
 });`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "NoopAnimationsModule";`,
-    `// NoopAnimationsModule`,
-    `const value = ng["NoopAnimationsModule"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; const name = "NoopAnimationsModule";`,
+    `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; // NoopAnimationsModule`,
+    `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; const value = ng["NoopAnimationsModule"];`,
+    // Usage without import is not reported
+    `TestBed.configureTestingModule({
+  imports: [NoopAnimationsModule],
+});`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/platform-browser/animations";
+
+const a = ng.NoopAnimationsModule;`,
+    `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; const a = foo.bar.NoopAnimationsModule;`,
+    // Not reported: local declaration with the same name
+    `class NoopAnimationsModule {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as NoopAnimationsModule } from "other-lib";
+
+const a = NoopAnimationsModule;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import NoopAnimationsModule from "@angular/platform-browser/animations";`,
+    `import * as NoopAnimationsModule from "@angular/platform-browser/animations";`,
+    `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; import NoopAnimationsModule = require("@angular/platform-browser/animations");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { NoopAnimationsModule as Alias } from "@angular/platform-browser/animations";`,
+    `export * as NoopAnimationsModule from "@angular/platform-browser/animations";`,
+    // Not reported: re-export without import (not a usage)
+    `export { NoopAnimationsModule } from "@angular/platform-browser/animations";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; const a = { NoopAnimationsModule: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -50,13 +70,6 @@ TestBed.configureTestingModule({
       code: `import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 TestBed.configureTestingModule({
-  imports: [NoopAnimationsModule],
-});`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `TestBed.configureTestingModule({
   imports: [NoopAnimationsModule],
 });`,
       errors: [error],
@@ -69,96 +82,48 @@ const a = NoopAnimationsModule;
 const b = [NoopAnimationsModule];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/platform-browser/animations";
-
-const a = ng.NoopAnimationsModule;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.NoopAnimationsModule;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `NoopAnimationsModule.toString();`,
+      code: `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; NoopAnimationsModule.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: NoopAnimationsModule;`,
+      code: `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; let a: NoopAnimationsModule;`,
       errors: [error],
     },
     {
-      code: `type T = typeof NoopAnimationsModule;`,
+      code: `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; type T = typeof NoopAnimationsModule;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+
+function f() {
   return () => ({ imports: [[NoopAnimationsModule]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class NoopAnimationsModule {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is NoopAnimationsModule: the specifier is not reported, but usages are
-    {
-      code: `import { Other as NoopAnimationsModule } from "other-lib";
-
-const a = NoopAnimationsModule;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import NoopAnimationsModule from "@angular/platform-browser/animations";`,
-      errors: [error],
-    },
-    {
-      code: `import * as NoopAnimationsModule from "@angular/platform-browser/animations";`,
-      errors: [error],
-    },
-    {
-      code: `import NoopAnimationsModule = require("@angular/platform-browser/animations");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { NoopAnimationsModule as Alias } from "@angular/platform-browser/animations";`,
-      errors: [error],
-    },
-    {
-      code: `export * as NoopAnimationsModule from "@angular/platform-browser/animations";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { NoopAnimationsModule } from "@angular/platform-browser/animations";`,
-      errors: [error, error],
     },
     {
       code: `import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 export { NoopAnimationsModule };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { NoopAnimationsModule: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { NoopAnimationsModule };`,
-      errors: [error, error],
+      code: `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; const a = { NoopAnimationsModule };`,
+      errors: [error],
     },
     {
-      code: `const { NoopAnimationsModule } = a;`,
-      errors: [error, error],
+      code: `import { NoopAnimationsModule } from "@angular/platform-browser/animations"; const { NoopAnimationsModule } = a;`,
+      errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { NoopAnimationsModule as Alias } from "@angular/platform-browser/animations";
+
+TestBed.configureTestingModule({
+  imports: [Alias],
+});`, errors: [error] },
   ],
 });

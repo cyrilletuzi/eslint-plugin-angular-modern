@@ -5,24 +5,16 @@ const error = { messageId: "noBrowsermodule" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { BrowserModule } from "@angular/platform-browser";`,
     `import { Other, BrowserModule } from "@angular/platform-browser";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { BrowserModule } from "@angular/platform-browser";`,
     `import { type BrowserModule } from "@angular/platform-browser";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { BrowserModule as Alias } from "@angular/platform-browser";`,
     `import { Other as BrowserModule } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { BrowserModule as Alias } from "@angular/platform-browser";
-
-@NgModule({
-  imports: [Alias],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `@NgModule({
   imports: [MyBrowserModule],
   bootstrap: [AppComponent],
@@ -58,10 +50,38 @@ export class AppModule {}`,
   bootstrap: [AppComponent],
 })
 export class AppModule {}`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "BrowserModule";`,
-    `// BrowserModule`,
-    `const value = ng["BrowserModule"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { BrowserModule } from "@angular/platform-browser"; const name = "BrowserModule";`,
+    `import { BrowserModule } from "@angular/platform-browser"; // BrowserModule`,
+    `import { BrowserModule } from "@angular/platform-browser"; const value = ng["BrowserModule"];`,
+    // Usage without import is not reported
+    `@NgModule({
+  imports: [BrowserModule],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/platform-browser";
+
+const a = ng.BrowserModule;`,
+    `import { BrowserModule } from "@angular/platform-browser"; const a = foo.bar.BrowserModule;`,
+    // Not reported: local declaration with the same name
+    `class BrowserModule {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as BrowserModule } from "other-lib";
+
+const a = BrowserModule;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import BrowserModule from "@angular/platform-browser";`,
+    `import * as BrowserModule from "@angular/platform-browser";`,
+    `import { BrowserModule } from "@angular/platform-browser"; import BrowserModule = require("@angular/platform-browser");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { BrowserModule as Alias } from "@angular/platform-browser";`,
+    `export * as BrowserModule from "@angular/platform-browser";`,
+    // Not reported: re-export without import (not a usage)
+    `export { BrowserModule } from "@angular/platform-browser";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { BrowserModule } from "@angular/platform-browser"; const a = { BrowserModule: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -69,15 +89,6 @@ export class AppModule {}`,
       code: `import { BrowserModule } from "@angular/platform-browser";
 
 @NgModule({
-  imports: [BrowserModule],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `@NgModule({
   imports: [BrowserModule],
   bootstrap: [AppComponent],
 })
@@ -92,96 +103,50 @@ const a = BrowserModule;
 const b = [BrowserModule];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/platform-browser";
-
-const a = ng.BrowserModule;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.BrowserModule;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `BrowserModule.toString();`,
+      code: `import { BrowserModule } from "@angular/platform-browser"; BrowserModule.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: BrowserModule;`,
+      code: `import { BrowserModule } from "@angular/platform-browser"; let a: BrowserModule;`,
       errors: [error],
     },
     {
-      code: `type T = typeof BrowserModule;`,
+      code: `import { BrowserModule } from "@angular/platform-browser"; type T = typeof BrowserModule;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { BrowserModule } from "@angular/platform-browser";
+
+function f() {
   return () => ({ imports: [[BrowserModule]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class BrowserModule {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is BrowserModule: the specifier is not reported, but usages are
-    {
-      code: `import { Other as BrowserModule } from "other-lib";
-
-const a = BrowserModule;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import BrowserModule from "@angular/platform-browser";`,
-      errors: [error],
-    },
-    {
-      code: `import * as BrowserModule from "@angular/platform-browser";`,
-      errors: [error],
-    },
-    {
-      code: `import BrowserModule = require("@angular/platform-browser");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { BrowserModule as Alias } from "@angular/platform-browser";`,
-      errors: [error],
-    },
-    {
-      code: `export * as BrowserModule from "@angular/platform-browser";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { BrowserModule } from "@angular/platform-browser";`,
-      errors: [error, error],
     },
     {
       code: `import { BrowserModule } from "@angular/platform-browser";
 
 export { BrowserModule };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { BrowserModule: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { BrowserModule };`,
-      errors: [error, error],
+      code: `import { BrowserModule } from "@angular/platform-browser"; const a = { BrowserModule };`,
+      errors: [error],
     },
     {
-      code: `const { BrowserModule } = a;`,
-      errors: [error, error],
+      code: `import { BrowserModule } from "@angular/platform-browser"; const { BrowserModule } = a;`,
+      errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { BrowserModule as Alias } from "@angular/platform-browser";
+
+@NgModule({
+  imports: [Alias],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}`, errors: [error] },
   ],
 });

@@ -5,23 +5,16 @@ const error = { messageId: "noHttpclientxsrfmodule" };
 
 testRule(rule, {
   valid: [
-    // Named import specifier alone is not reported (isImportIdentifier: parent is ImportSpecifier)
+    // The import itself is not reported, only usages are
     `import { HttpClientXsrfModule } from "@angular/common/http";`,
     `import { Other, HttpClientXsrfModule } from "@angular/common/http";`,
-    // Type-only imports are still ImportSpecifier
+    // Type-only imports alone are not reported either
     `import type { HttpClientXsrfModule } from "@angular/common/http";`,
     `import { type HttpClientXsrfModule } from "@angular/common/http";`,
-    // Both identifiers of an aliased specifier are inside the ImportSpecifier
+    // Aliased imports alone are not reported either
     `import { HttpClientXsrfModule as Alias } from "@angular/common/http";`,
     `import { Other as HttpClientXsrfModule } from "other-lib";`,
-    // SUSPECTED BUG: aliases are not followed, so usages of an aliased import are not reported (false negative)
-    `import { HttpClientXsrfModule as Alias } from "@angular/common/http";
-
-@NgModule({
-  imports: [Alias.withOptions({ cookieName: "XSRF-TOKEN" })],
-})
-export class AppModule {}`,
-    // Look-alike names (exact name match only)
+    // Look-alike names are not reported
     `@NgModule({
   imports: [MyHttpClientXsrfModule.withOptions({ cookieName: "XSRF-TOKEN" })],
 })
@@ -46,10 +39,37 @@ export class AppModule {}`,
   imports: [withXsrfConfiguration.withOptions({ cookieName: "XSRF-TOKEN" })],
 })
 export class AppModule {}`,
-    // Not an Identifier: strings, comments, computed access with a string
-    `const name = "HttpClientXsrfModule";`,
-    `// HttpClientXsrfModule`,
-    `const value = ng["HttpClientXsrfModule"];`,
+    // Not a usage: strings, comments, computed access with a string
+    `import { HttpClientXsrfModule } from "@angular/common/http"; const name = "HttpClientXsrfModule";`,
+    `import { HttpClientXsrfModule } from "@angular/common/http"; // HttpClientXsrfModule`,
+    `import { HttpClientXsrfModule } from "@angular/common/http"; const value = ng["HttpClientXsrfModule"];`,
+    // Usage without import is not reported
+    `@NgModule({
+  imports: [HttpClientXsrfModule.withOptions({ cookieName: "XSRF-TOKEN" })],
+})
+export class AppModule {}`,
+    // Not reported: member expression property (namespace import or any other object)
+    `import * as ng from "@angular/common/http";
+
+const a = ng.HttpClientXsrfModule;`,
+    `import { HttpClientXsrfModule } from "@angular/common/http"; const a = foo.bar.HttpClientXsrfModule;`,
+    // Not reported: local declaration with the same name
+    `class HttpClientXsrfModule {}`,
+    // Not reported: same local name imported from another library
+    `import { Other as HttpClientXsrfModule } from "other-lib";
+
+const a = HttpClientXsrfModule;`,
+    // Not reported: default, namespace and import-equals declarations with the same name
+    `import HttpClientXsrfModule from "@angular/common/http";`,
+    `import * as HttpClientXsrfModule from "@angular/common/http";`,
+    `import { HttpClientXsrfModule } from "@angular/common/http"; import HttpClientXsrfModule = require("@angular/common/http");`,
+    // Not reported: re-exports without import (not a usage)
+    `export { HttpClientXsrfModule as Alias } from "@angular/common/http";`,
+    `export * as HttpClientXsrfModule from "@angular/common/http";`,
+    // Not reported: re-export without import (not a usage)
+    `export { HttpClientXsrfModule } from "@angular/common/http";`,
+    // Not reported: non-reference identifiers like object keys
+    `import { HttpClientXsrfModule } from "@angular/common/http"; const a = { HttpClientXsrfModule: true };`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -57,14 +77,6 @@ export class AppModule {}`,
       code: `import { HttpClientXsrfModule } from "@angular/common/http";
 
 @NgModule({
-  imports: [HttpClientXsrfModule.withOptions({ cookieName: "XSRF-TOKEN" })],
-})
-export class AppModule {}`,
-      errors: [error],
-    },
-    // Usage without import (name-based, no import source check)
-    {
-      code: `@NgModule({
   imports: [HttpClientXsrfModule.withOptions({ cookieName: "XSRF-TOKEN" })],
 })
 export class AppModule {}`,
@@ -78,96 +90,49 @@ const a = HttpClientXsrfModule;
 const b = [HttpClientXsrfModule];`,
       errors: [error, error],
     },
-    // Member expression property (e.g. namespace import)
-    {
-      code: `import * as ng from "@angular/common/http";
-
-const a = ng.HttpClientXsrfModule;`,
-      errors: [error],
-    },
-    {
-      code: `const a = foo.bar.HttpClientXsrfModule;`,
-      errors: [error],
-    },
     // Member expression object (static access)
     {
-      code: `HttpClientXsrfModule.toString();`,
+      code: `import { HttpClientXsrfModule } from "@angular/common/http"; HttpClientXsrfModule.toString();`,
       errors: [error],
     },
     // Type positions
     {
-      code: `let a: HttpClientXsrfModule;`,
+      code: `import { HttpClientXsrfModule } from "@angular/common/http"; let a: HttpClientXsrfModule;`,
       errors: [error],
     },
     {
-      code: `type T = typeof HttpClientXsrfModule;`,
+      code: `import { HttpClientXsrfModule } from "@angular/common/http"; type T = typeof HttpClientXsrfModule;`,
       errors: [error],
     },
     // Nested positions
     {
-      code: `function f() {
+      code: `import { HttpClientXsrfModule } from "@angular/common/http";
+
+function f() {
   return () => ({ imports: [[HttpClientXsrfModule]] });
 }`,
       errors: [error],
-    },
-    // Local declaration with the same name
-    {
-      code: `class HttpClientXsrfModule {}`,
-      errors: [error],
-    },
-    // An aliased import whose local name is HttpClientXsrfModule: the specifier is not reported, but usages are
-    {
-      code: `import { Other as HttpClientXsrfModule } from "other-lib";
-
-const a = HttpClientXsrfModule;`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: default, namespace and import-equals declarations are not ImportSpecifier, so the import itself is reported (inconsistent with named imports)
-    {
-      code: `import HttpClientXsrfModule from "@angular/common/http";`,
-      errors: [error],
-    },
-    {
-      code: `import * as HttpClientXsrfModule from "@angular/common/http";`,
-      errors: [error],
-    },
-    {
-      code: `import HttpClientXsrfModule = require("@angular/common/http");`,
-      errors: [error],
-    },
-    // Re-exports are reported (ExportSpecifier is not ImportSpecifier)
-    {
-      code: `export { HttpClientXsrfModule as Alias } from "@angular/common/http";`,
-      errors: [error],
-    },
-    {
-      code: `export * as HttpClientXsrfModule from "@angular/common/http";`,
-      errors: [error],
-    },
-    // SUSPECTED BUG: in a shorthand export specifier, `local` and `exported` are the same node, which is visited twice, so the same location is reported twice
-    {
-      code: `export { HttpClientXsrfModule } from "@angular/common/http";`,
-      errors: [error, error],
     },
     {
       code: `import { HttpClientXsrfModule } from "@angular/common/http";
 
 export { HttpClientXsrfModule };`,
-      errors: [error, error],
-    },
-    // SUSPECTED BUG: non-reference identifiers like object keys are reported (false positive)
-    {
-      code: `const a = { HttpClientXsrfModule: true };`,
       errors: [error],
     },
-    // SUSPECTED BUG: shorthand property / destructuring: `key` and `value` are the same node, reported twice
     {
-      code: `const a = { HttpClientXsrfModule };`,
-      errors: [error, error],
+      code: `import { HttpClientXsrfModule } from "@angular/common/http"; const a = { HttpClientXsrfModule };`,
+      errors: [error],
     },
     {
-      code: `const { HttpClientXsrfModule } = a;`,
-      errors: [error, error],
+      code: `import { HttpClientXsrfModule } from "@angular/common/http"; const { HttpClientXsrfModule } = a;`,
+      errors: [error],
     },
+    // Aliased import is reported
+    { code: `import { HttpClientXsrfModule as Alias } from "@angular/common/http";
+
+@NgModule({
+  imports: [Alias.withOptions({ cookieName: "XSRF-TOKEN" })],
+})
+export class AppModule {}`, errors: [error] },
   ],
 });

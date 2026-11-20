@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
-import { isImportIdentifier } from "../../utils/is-import-identifier";
+import { getImportedReferences } from "../../utils/angular-import";
 
 export const ruleName = "no-browseranimationsmodule";
 const messageId = "noBrowseranimationsmodule";
@@ -20,8 +20,9 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Identifier[name='BrowserAnimationsModule']"(node: TSESTree.Identifier) {
-        if (!isImportIdentifier(node)) {
+      "ImportDeclaration[source.value='@angular/platform-browser/animations'] > ImportSpecifier[imported.name='BrowserAnimationsModule']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at usage sites */
+        for (const node of getImportedReferences(context, importNode)) {
           context.report({
             node,
             messageId,

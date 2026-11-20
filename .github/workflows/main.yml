@@ -27,3 +27,37 @@ jobs:
         run: npm run build
       - name: Tests
         run: npm test
+
+  performance:
+    name: Performance check
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Checkout base branch
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          ref: ${{ github.base_ref }}
+          path: base
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '26'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            base/package-lock.json
+      - name: Build pull request
+        run: |
+          npm ci --no-audit --no-fund --prefer-offline --ignore-scripts --allow-git=none --allow-remote=none --allow-file=none --allow-directory=none
+          npm run build
+      - name: Build base branch
+        working-directory: base
+        run: |
+          npm ci --no-audit --no-fund --prefer-offline --ignore-scripts --allow-git=none --allow-remote=none --allow-file=none --allow-directory=none
+          npm run build
+      - name: Compare performance on valid code
+        run: node scripts/benchmark.mjs base/dist dist >> "$GITHUB_STEP_SUMMARY"

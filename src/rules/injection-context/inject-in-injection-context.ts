@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedFunctionCalls } from "../../utils/angular-import";
 import { isInInjectionContext } from "../../utils/angular-injection-context";
 
 export const ruleName = "inject-in-injection-context";
@@ -20,21 +21,24 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "CallExpression[callee.type='Identifier'][callee.name='inject']"(node: TSESTree.CallExpression) {
-        if (
-          !isInInjectionContext(node, {
-            /* `inject()` is accepted in all injection contexts */
-            includeRouting: true,
-            includeHttp: true,
-            includeFactories: true,
-            includeAsyncAppInitializationFunctions: true,
-            includeSyncAppInitializationFunctions: true,
-          })
-        ) {
-          context.report({
-            node,
-            messageId,
-          });
+      "ImportDeclaration[source.value='@angular/core'] > ImportSpecifier[imported.name='inject']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at call sites */
+        for (const node of getImportedFunctionCalls(context, importNode)) {
+          if (
+            !isInInjectionContext(node, {
+              /* `inject()` is accepted in all injection contexts */
+              includeRouting: true,
+              includeHttp: true,
+              includeFactories: true,
+              includeAsyncAppInitializationFunctions: true,
+              includeSyncAppInitializationFunctions: true,
+            })
+          ) {
+            context.report({
+              node,
+              messageId,
+            });
+          }
         }
       },
     };

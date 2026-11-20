@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { addAngularClassDecoratorImport, angularClassDecoratorImportSelector, type AngularClassDecoratorImports } from "../../utils/angular-class-decorator";
 import { isInAngularComponentConstructor } from "../../utils/in-constructor";
 
 export const ruleName = "no-subscribe-in-component-constructor";
@@ -18,9 +19,14 @@ export const ruleDefinition: RuleDefinition = {
     schema: [],
   },
   create(context) {
+    const angularDecorators: AngularClassDecoratorImports = new Map();
+
     return {
+      [angularClassDecoratorImportSelector](node: TSESTree.ImportSpecifier) {
+        addAngularClassDecoratorImport(angularDecorators, node);
+      },
       "CallExpression > MemberExpression[property.type='Identifier'][property.name='subscribe'][computed=false]"(node: TSESTree.CallExpression) {
-        if (isInAngularComponentConstructor(node)) {
+        if (isInAngularComponentConstructor(node, angularDecorators)) {
           context.report({
             node,
             messageId,

@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedDecorators } from "../../utils/angular-import";
 import { getDecoratorProperty } from "../../utils/ast-decorator-property";
 
 export const ruleName = "no-component-animations";
@@ -20,14 +21,17 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Decorator[expression.callee.name='Component']"(node: TSESTree.Decorator) {
-        const animations = getDecoratorProperty(node, "animations");
+      "ImportDeclaration[source.value='@angular/core'] > ImportSpecifier[imported.name='Component']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at decorator sites */
+        for (const node of getImportedDecorators(context, importNode)) {
+          const animations = getDecoratorProperty(node, "animations");
 
-        if (animations) {
-          context.report({
-            node: animations,
-            messageId,
-          });
+          if (animations) {
+            context.report({
+              node: animations,
+              messageId,
+            });
+          }
         }
       },
     };

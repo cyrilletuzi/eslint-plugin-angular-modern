@@ -6,41 +6,43 @@ const error = { messageId: "noWithinterceptorsfromdi" } as const;
 testRule(rule, {
   valid: [
     /* Modern alternative */
-    `bootstrapApplication(App, { providers: [provideHttpClient(withInterceptors([authInterceptor]))] });`,
+    `import { withInterceptorsFromDi } from '@angular/common/http'; bootstrapApplication(App, { providers: [provideHttpClient(withInterceptors([authInterceptor]))] });`,
     /* Import only (not a call) */
     `import { withInterceptorsFromDi } from '@angular/common/http';`,
     /* Reference without call */
-    `const f = withInterceptorsFromDi;`,
-    `const features = [withInterceptorsFromDi];`,
-    /* Member expression call (callee is not an Identifier) */
-    `http.withInterceptorsFromDi();`,
-    `this.withInterceptorsFromDi();`,
+    `import { withInterceptorsFromDi } from '@angular/common/http'; const f = withInterceptorsFromDi;`,
+    `import { withInterceptorsFromDi } from '@angular/common/http'; const features = [withInterceptorsFromDi];`,
+    /* Method calls on any object are not reported */
+    `import { withInterceptorsFromDi } from '@angular/common/http'; http.withInterceptorsFromDi();`,
+    `import { withInterceptorsFromDi } from '@angular/common/http'; this.withInterceptorsFromDi();`,
     /* Look-alike names */
-    `withInterceptorsFromDis(); mywithInterceptorsFromDi(); withinterceptorsfromdi();`,
+    `import { withInterceptorsFromDi } from '@angular/common/http'; withInterceptorsFromDis(); mywithInterceptorsFromDi(); withinterceptorsfromdi();`,
     /* String, not a call */
-    `const a = 'withInterceptorsFromDi()';`,
+    `import { withInterceptorsFromDi } from '@angular/common/http'; const a = 'withInterceptorsFromDi()';`,
     /* Function declaration with the same name */
     `function withInterceptorsFromDi() {}`,
-    // SUSPECTED BUG: an aliased import is not followed, the call of the alias is not reported
-    `import { withInterceptorsFromDi as alias } from '@angular/common/http'; provideHttpClient(alias());`,
+    /* Same name imported from another library is not reported */
+    `import { withInterceptorsFromDi } from 'other-lib'; provideHttpClient(withInterceptorsFromDi());`,
   ],
   invalid: [
     /* Classic usage in `provideHttpClient()` */
-    { code: `bootstrapApplication(App, { providers: [provideHttpClient(withInterceptorsFromDi())] });`, errors: [error] },
+    { code: `import { withInterceptorsFromDi } from '@angular/common/http'; bootstrapApplication(App, { providers: [provideHttpClient(withInterceptorsFromDi())] });`, errors: [error] },
     /* Among other features */
-    { code: `provideHttpClient(withFetch(), withInterceptorsFromDi(), withXsrfConfiguration({}));`, errors: [error] },
+    { code: `import { withInterceptorsFromDi } from '@angular/common/http'; provideHttpClient(withFetch(), withInterceptorsFromDi(), withXsrfConfiguration({}));`, errors: [error] },
     /* Standalone call */
-    { code: `withInterceptorsFromDi();`, errors: [error] },
+    { code: `import { withInterceptorsFromDi } from '@angular/common/http'; withInterceptorsFromDi();`, errors: [error] },
     /* With arguments */
-    { code: `provideHttpClient(withInterceptorsFromDi(a, b));`, errors: [error] },
+    { code: `import { withInterceptorsFromDi } from '@angular/common/http'; provideHttpClient(withInterceptorsFromDi(a, b));`, errors: [error] },
     /* Optional call */
-    { code: `withInterceptorsFromDi?.();`, errors: [error] },
+    { code: `import { withInterceptorsFromDi } from '@angular/common/http'; withInterceptorsFromDi?.();`, errors: [error] },
     /* Import and usage: only the call is reported */
     {
       code: `import { withInterceptorsFromDi } from '@angular/common/http'; provideHttpClient(withInterceptorsFromDi());`,
       errors: [error],
     },
     /* Several calls */
-    { code: `withInterceptorsFromDi(); withInterceptorsFromDi();`, errors: [error, error] },
+    { code: `import { withInterceptorsFromDi } from '@angular/common/http'; withInterceptorsFromDi(); withInterceptorsFromDi();`, errors: [error, error] },
+    // Aliased import is reported
+    { code: `import { withInterceptorsFromDi as alias } from '@angular/common/http'; provideHttpClient(alias());`, errors: [error] },
   ],
 });

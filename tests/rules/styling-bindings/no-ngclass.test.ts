@@ -10,33 +10,30 @@ testRule(rule, {
     `import { Other, NgClass } from '@angular/common';`,
     /* Aliased import: the imported name is skipped */
     `import { NgClass as Alias } from '@angular/common';`,
-    // SUSPECTED BUG: an aliased import is not followed, the usage of the alias is not reported
-    `import { NgClass as Alias } from '@angular/common'; @Component({ imports: [Alias], template: '<div [ngClass]="{ a: true }"></div>' }) class A {}`,
     /* Look-alike names */
     `const a = [MyNgClass, NgClasss, ngclass];`,
-    /* String, not an Identifier */
-    `const a = 'NgClass';`,
+    /* String, not a usage */
+    `import { NgClass } from '@angular/common'; const a = 'NgClass';`,
+    /* Not reported: namespace import member */
+    `import * as ng from '@angular/common'; const a = ng.NgClass;`,
+    /* Not reported: default and namespace imports with the same name */
+    `import NgClass from '@angular/common';`,
+    `import * as NgClass from '@angular/common';`,
+    // Not reported: re-export without import (not a usage)
+    `export { NgClass } from '@angular/common';`,
+    // Not reported: unrelated object key with the same name
+    `import { NgClass } from '@angular/common'; const o = { NgClass: true };`,
   ],
   invalid: [
     /* Classic usage */
-    { code: `@Component({ imports: [NgClass], template: '<div [ngClass]="{ a: true }"></div>' }) class A {}`, errors: [error] },
-    /* Import and usage: only the usage is reported */
     { code: `import { NgClass } from '@angular/common'; @Component({ imports: [NgClass], template: '<div [ngClass]="{ a: true }"></div>' }) class A {}`, errors: [error] },
     /* Injection */
-    { code: `const a = inject(NgClass);`, errors: [error] },
+    { code: `import { NgClass } from '@angular/common'; const a = inject(NgClass);`, errors: [error] },
     /* Type usage */
-    { code: `let a: NgClass;`, errors: [error] },
-    /* Namespace import member */
-    { code: `import * as ng from '@angular/common'; const a = ng.NgClass;`, errors: [error] },
-    /* Default and namespace-like import specifiers are not ImportSpecifier */
-    { code: `import NgClass from '@angular/common';`, errors: [error] },
-    { code: `import * as NgClass from '@angular/common';`, errors: [error] },
-    /* Re-export: both local and exported Identifiers are visited */
-    // SUSPECTED BUG: a single re-export is reported twice
-    { code: `export { NgClass } from '@angular/common';`, errors: [error, error] },
-    // SUSPECTED BUG: any non-import Identifier with this name is reported, even an unrelated object key
-    { code: `const o = { NgClass: true };`, errors: [error] },
+    { code: `import { NgClass } from '@angular/common'; let a: NgClass;`, errors: [error] },
     /* Several usages */
-    { code: `@Component({ imports: [NgClass], template: '<div [ngClass]="{ a: true }"></div>' }) class A {} const a = inject(NgClass);`, errors: [error, error] },
+    { code: `import { NgClass } from '@angular/common'; @Component({ imports: [NgClass], template: '<div [ngClass]="{ a: true }"></div>' }) class A {} const a = inject(NgClass);`, errors: [error, error] },
+    // Aliased import is reported
+    { code: `import { NgClass as Alias } from '@angular/common'; @Component({ imports: [Alias], template: '<div [ngClass]="{ a: true }"></div>' }) class A {}`, errors: [error] },
   ],
 });

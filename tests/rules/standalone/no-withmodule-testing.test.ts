@@ -10,30 +10,31 @@ testRule(rule, {
     // Function declaration with the same name is not a call
     `function withModule() {}`,
     // Reference without call (callback, assignment)
-    `const fn = withModule;`,
-    `register(withModule);`,
+    `import { withModule } from "@angular/core/testing"; const fn = withModule;`,
+    `import { withModule } from "@angular/core/testing"; register(withModule);`,
     // `new` is a NewExpression, not a CallExpression
-    `new withModule();`,
-    // Callee is not an Identifier: method calls on any object
-    `obj.withModule();`,
-    `this.withModule();`,
-    `obj["withModule"]();`,
-    // SUSPECTED BUG: namespace import usage `ng.withModule()` is not reported (callee is a MemberExpression)
+    `import { withModule } from "@angular/core/testing"; new withModule();`,
+    // Method calls on any object are not reported
+    `import { withModule } from "@angular/core/testing"; obj.withModule();`,
+    `import { withModule } from "@angular/core/testing"; this.withModule();`,
+    `import { withModule } from "@angular/core/testing"; obj["withModule"]();`,
+    // ACCEPTED FALSE NEGATIVE: namespace import usage `ng.withModule()` is not reported (callee is a MemberExpression)
     `import * as ng from "@angular/core/testing";
 
 ng.withModule();`,
-    // SUSPECTED BUG: aliases are not followed, so a call to an aliased import is not reported (false negative)
-    `import { withModule as alias } from "@angular/core/testing";
-
-it("should...", alias({ imports: [SomeModule] }, () => {}));`,
     // String / comment
-    `const name = "withModule()";`,
-    `// withModule()`,
-    // Look-alike names (exact name match only)
-    `withModules();`,
-    `withComponent();`,
-    `withInterceptors();`,
-    `inject();`,
+    `import { withModule } from "@angular/core/testing"; const name = "withModule()";`,
+    `import { withModule } from "@angular/core/testing"; // withModule()`,
+    // Look-alike names are not reported
+    `import { withModule } from "@angular/core/testing"; withModules();`,
+    `import { withModule } from "@angular/core/testing"; withComponent();`,
+    `import { withModule } from "@angular/core/testing"; withInterceptors();`,
+    `import { withModule } from "@angular/core/testing"; inject();`,
+    // Usage without import is not reported
+    `it("should...", withModule({ imports: [SomeModule] }, () => {}));`,
+    // Locally declared function with the same name is not reported
+    `function withModule() {}
+withModule();`,
   ],
   invalid: [
     // Realistic usage with import: only the call is reported
@@ -43,52 +44,49 @@ it("should...", alias({ imports: [SomeModule] }, () => {}));`,
 it("should...", withModule({ imports: [SomeModule] }, () => {}));`,
       errors: [error],
     },
-    // Usage without import (name-based)
-    {
-      code: `it("should...", withModule({ imports: [SomeModule] }, () => {}));`,
-      errors: [error],
-    },
     // Bare call, with arguments
     {
-      code: `withModule();`,
+      code: `import { withModule } from "@angular/core/testing"; withModule();`,
       errors: [error],
     },
     {
-      code: `withModule(a, b);`,
+      code: `import { withModule } from "@angular/core/testing"; withModule(a, b);`,
       errors: [error],
     },
     // Optional call is still a CallExpression
     {
-      code: `withModule?.();`,
+      code: `import { withModule } from "@angular/core/testing"; withModule?.();`,
       errors: [error],
     },
     // Awaited / returned / nested in another call or arrow function
     {
-      code: `async function f() {
+      code: `import { withModule } from "@angular/core/testing";
+
+async function f() {
   await withModule();
 }`,
       errors: [error],
     },
     {
-      code: `const f = () => ({ providers: [[withModule()]] });`,
+      code: `import { withModule } from "@angular/core/testing"; const f = () => ({ providers: [[withModule()]] });`,
       errors: [error],
     },
-    // Call on the result: only the inner call has an Identifier callee
+    // Call on the result: only the inner call is reported
     {
-      code: `withModule()();`,
+      code: `import { withModule } from "@angular/core/testing"; withModule()();`,
       errors: [error],
     },
     // Each call is reported
     {
-      code: `withModule();
+      code: `import { withModule } from "@angular/core/testing";
+
+withModule();
 withModule();`,
       errors: [error, error],
     },
-    // Locally declared function with the same name (no import source check)
-    {
-      code: `function withModule() {}
-withModule();`,
-      errors: [error],
-    },
+    // Aliased import is reported
+    { code: `import { withModule as alias } from "@angular/core/testing";
+
+it("should...", alias({ imports: [SomeModule] }, () => {}));`, errors: [error] },
   ],
 });

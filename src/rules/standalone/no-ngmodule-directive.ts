@@ -1,5 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getImportedDecorators } from "../../utils/angular-import";
 import { getDecoratorProperty } from "../../utils/ast-decorator-property";
 
 export const ruleName = "no-ngmodule-directive";
@@ -20,17 +21,20 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Decorator[expression.callee.name='Directive']"(node: TSESTree.Decorator) {
-        const standalone = getDecoratorProperty(node, "standalone");
+      "ImportDeclaration[source.value='@angular/core'] > ImportSpecifier[imported.name='Directive']"(importNode: TSESTree.ImportSpecifier) {
+        /* Check the import source, but report at decorator sites */
+        for (const node of getImportedDecorators(context, importNode)) {
+          const standalone = getDecoratorProperty(node, "standalone");
 
-        if (
-          standalone?.value.type === "Literal" &&
-          standalone.value.value === false
-        ) {
-          context.report({
-            node: standalone,
-            messageId,
-          });
+          if (
+            standalone?.value.type === "Literal" &&
+            standalone.value.value === false
+          ) {
+            context.report({
+              node: standalone,
+              messageId,
+            });
+          }
         }
       },
     };

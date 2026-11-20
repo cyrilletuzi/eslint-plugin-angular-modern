@@ -9,12 +9,15 @@
 import * as rule from "../../../src/rules/injection-context/inject-in-injection-context.js";
 import { describe } from "vitest";
 import { testRule } from "../../rule-tester.js";
-import { injectionContextsCases } from "./injection-contexts.js";
+import { injectionContextsCases, withImport } from "./injection-contexts.js";
+
+/* Rules only check functions imported from Angular */
+const importDeclaration = `import { inject } from "@angular/core";`;
 
 const errors = [{ messageId: "injectInInjectionContext" }];
 
 describe("outside of any injection context", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [
       // Other functions are ignored
       `notInject(A);`,
@@ -33,11 +36,11 @@ describe("outside of any injection context", () => {
       // One error per call
       { code: `inject(A); inject(B);`, errors: [...errors, ...errors] },
     ],
-  });
+  }));
 });
 
 describe("class initialization (constructor and field initializers)", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [
       // All Angular class decorators, called or not
       `@Component() class A { a = inject(A); }`,
@@ -121,21 +124,21 @@ describe("class initialization (constructor and field initializers)", () => {
       // Non-Angular class nested inside an Angular class: the nearest class is the one checked
       { code: `@Component() class A { constructor() { class B { b = inject(B); } } }`, errors },
     ],
-  });
+  }));
 });
 
 describe("inheritance", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [],
     invalid: [
       // SUSPECTED BUG: undecorated base classes are in an injection context when instantiated by a decorated child class
       { code: `abstract class Base { a = inject(A); } @Component() class Child extends Base {}`, errors },
     ],
-  });
+  }));
 });
 
 describe("function types with injection context (guards, resolvers, interceptors...)", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [
       // All routing function types
       `const f: CanActivateFn = () => inject(A);`,
@@ -197,11 +200,11 @@ describe("function types with injection context (guards, resolvers, interceptors
       { code: `const f: CanActivateFn = () => { const a = inject(A).value; return a; };`, errors },
       { code: `const f: CanActivateFn = () => { const a = [inject(A)]; return a; };`, errors },
     ],
-  });
+  }));
 });
 
 describe("legacy class guards, resolvers and interceptors", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [
       `@Injectable() class G implements CanActivate { canActivate() { return inject(A).check(); } }`,
       `@Injectable() class G implements CanActivateChild { canActivateChild() { return inject(A).check(); } }`,
@@ -234,11 +237,11 @@ describe("legacy class guards, resolvers and interceptors", () => {
       // After `await`
       { code: `@Injectable() class G implements CanActivate { async canActivate() { await something(); return inject(A); } }`, errors },
     ],
-  });
+  }));
 });
 
 describe("inline route functions", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [
       `const routes: Routes = [{ path: '', canActivate: [() => inject(A).check()] }];`,
       `const routes: Routes = [{ path: '', canActivateChild: [() => inject(A).check()] }];`,
@@ -276,11 +279,11 @@ describe("inline route functions", () => {
       // KNOWN BUG: inside a local variable
       { code: `const routes: Routes = [{ path: '', canActivate: [() => { const a = inject(A); return a.check(); }] }];`, errors },
     ],
-  });
+  }));
 });
 
 describe("factories", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [
       // Provider factory
       `const p = { provide: T, useFactory: () => inject(A) };`,
@@ -325,11 +328,11 @@ describe("factories", () => {
       { code: `const p = { provide: T, useFactory: () => ({ api: inject(A) }) };`, errors },
       { code: `const T = new Other('t', { factory: () => ({ api: inject(A) }) });`, errors },
     ],
-  });
+  }));
 });
 
 describe("functions with injection context", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [
       // `runInInjectionContext()`
       `runInInjectionContext(injector, () => inject(A));`,
@@ -384,11 +387,11 @@ describe("functions with injection context", () => {
       // KNOWN LIMITATION: `runInInjectionContext()` done before in the call stack
       { code: `function f() { return inject(A); } runInInjectionContext(injector, () => f());`, errors },
     ],
-  });
+  }));
 });
 
 describe("assertInInjectionContext()", () => {
-  testRule(rule, {
+  testRule(rule, withImport(importDeclaration, {
     valid: [
       `function f() { assertInInjectionContext(f); return inject(A); }`,
       `function f() { assertInInjectionContext(f); const a = inject(A); return a; }`,
@@ -427,15 +430,26 @@ describe("assertInInjectionContext()", () => {
       { code: `function f() { assertInInjectionContext(f); try { return inject(A); } catch {} }`, errors },
       { code: `function f() { assertInInjectionContext(f); for (const x of xs) { inject(A); } }`, errors },
     ],
-  });
+  }));
 });
 
 describe("all special injection contexts are enabled", () => {
-  testRule(rule, injectionContextsCases(`inject(A)`, {
+  testRule(rule, withImport(importDeclaration, injectionContextsCases(`inject(A)`, {
     routing: true,
     http: true,
     factories: true,
     asyncAppInitialization: true,
     syncAppInitialization: true,
-  }, errors));
+  }, errors)));
+});
+
+describe("same name imported from another library", () => {
+  testRule(rule, {
+    valid: [
+      `import { inject } from "vitest";
+
+const value = inject("key");`,
+    ],
+    invalid: [],
+  });
 });
