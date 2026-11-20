@@ -66,8 +66,6 @@ describe("class initialization (constructor and field initializers)", () => {
       `@Component() class A { #a = inject(A); }`,
       `@Component() class A { a: A = inject(A); }`,
       `@Component() class A { ['a'] = inject(A); }`,
-      // SUSPECTED BUG: static field initializers are run when the class is defined, not in an injection context
-      `@Component() class A { static a = inject(A); }`,
       // Nested in an expression of the field initializer
       `@Component() class A { a = inject(A).something; }`,
       `@Component() class A { a = inject(A).something(); }`,
@@ -99,6 +97,9 @@ describe("class initialization (constructor and field initializers)", () => {
       `@Component() class A { accessor a = inject(A); }`,
     ],
     invalid: [
+      // Static fields are initialized when the class is defined, not in an injection context
+      { code: `@Component() class A { static a = inject(A); }`, errors },
+      { code: `@Component() class A { static accessor a = inject(A); }`, errors },
       // Not an Angular class
       { code: `class A { a = inject(A); }`, errors },
       { code: `class A { constructor() { inject(A); } }`, errors },

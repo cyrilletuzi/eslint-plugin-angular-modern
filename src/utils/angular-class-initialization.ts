@@ -9,7 +9,8 @@ function isInProperty(node: TSESTree.Node): boolean {
     (node) => node.type === "PropertyDefinition" || node.type === "AccessorProperty",
     { notInCallback: true },
   );
-  if (propertyDefinition) {
+  /* Static fields are initialized when the class is defined, not when it is instantiated */
+  if (propertyDefinition && !propertyDefinition.static) {
     return true;
   }
   return false;
