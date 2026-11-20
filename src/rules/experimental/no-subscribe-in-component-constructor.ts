@@ -25,7 +25,7 @@ export const ruleDefinition: RuleDefinition = {
       [angularClassDecoratorImportSelector](node: TSESTree.ImportSpecifier) {
         addAngularClassDecoratorImport(angularDecorators, node);
       },
-      "CallExpression > MemberExpression[property.type='Identifier'][property.name='subscribe'][computed=false]"(node: TSESTree.CallExpression) {
+      "CallExpression > MemberExpression.callee[property.type='Identifier'][property.name='subscribe'][computed=false]"(node: TSESTree.CallExpression) {
         if (isInAngularComponentConstructor(node, angularDecorators)) {
           context.report({
             node,

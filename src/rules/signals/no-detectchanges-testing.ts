@@ -20,7 +20,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "CallExpression > MemberExpression[property.type='Identifier'][property.name='detectChanges'][computed=false]"(node: TSESTree.CallExpression) {
+      "CallExpression > MemberExpression.callee[property.type='Identifier'][property.name='detectChanges'][computed=false]"(node: TSESTree.CallExpression) {
         if (
           // Report only in tests, otherwise it will report on `ChangeDetectorRef.detectChanges()`
           !isInAngularClass(node, ["Component", "Directive"])

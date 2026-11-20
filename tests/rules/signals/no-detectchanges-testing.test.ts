@@ -19,6 +19,8 @@ testRule(rule, {
     // Member access without call (parent is not a `CallExpression`)
     `const detect = fixture.detectChanges;`,
     `new Foo(fixture.detectChanges);`,
+    /* A `.detectChanges` reference passed as an argument is not a call */
+    `spyOn(fixture.detectChanges);`,
     // Computed access (`computed=true`)
     // SUSPECTED BUG: `fixture["detectChanges"]()` is not reported
     `fixture["detectChanges"]();`,
@@ -80,7 +82,5 @@ testRule(rule, {
     // SUSPECTED BUG: `@core.Component()` (namespace import) is not recognized as a component
     { code: `@core.Component() class A { m() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
     // The selector matches any `MemberExpression` child of a `CallExpression`, including arguments
-    // SUSPECTED BUG: passing `fixture.detectChanges` as an argument (not calling it) is reported
-    { code: `spyOn(fixture.detectChanges);`, errors: [{ messageId }] },
   ],
 });

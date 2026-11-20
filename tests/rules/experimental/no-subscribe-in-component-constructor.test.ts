@@ -47,6 +47,8 @@ testRule(rule, {
     `import { Component } from '@stencil/core'; @Component({ tag: 'my-a' }) export class A { constructor() { obs.subscribe(); } }`,
     /* Angular decorator used without import is not checked */
     `@Component({}) export class A { constructor() { obs.subscribe(); } }`,
+    /* A `.subscribe` reference passed as an argument is not a call */
+    `import { Component } from "@angular/core"; @Component() class A { constructor() { foo(this.obs.subscribe); } }`,
   ],
   invalid: [
     /* Basic case */
@@ -76,8 +78,6 @@ testRule(rule, {
       code: `import { Component } from "@angular/core"; @Component() class A { constructor() { a.subscribe(() => { b.subscribe(); }); } }`,
       errors: [error, error],
     },
-    // SUSPECTED BUG: `CallExpression > MemberExpression` also matches a `.subscribe` reference passed as an argument (not a call)
-    { code: `import { Component } from "@angular/core"; @Component() class A { constructor() { foo(this.obs.subscribe); } }`, errors: [error] },
     /* Any `.subscribe()` method is matched, even on non-observables */
     { code: `import { Component } from "@angular/core"; @Component() class A { constructor() { this.store.subscribe(() => {}); } }`, errors: [error] },
     /* Component class nested inside another context */
