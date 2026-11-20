@@ -9,10 +9,10 @@ export const ruleDefinition: RuleDefinition = {
   meta: {
     type: "problem",
     messages: {
-      [messageId]: `\`BrowserTestingModule\` is useless in a standalone application.`,
+      [messageId]: `\`BrowserTestingModule\` and \`BrowserDynamicTestingModule\` are useless in a standalone application.`,
     },
     docs: {
-      description: `Checks that \`BrowserTestingModule\` is not used.`,
+      description: `Checks that \`BrowserTestingModule\` and \`BrowserDynamicTestingModule\` are not used.`,
       url: 'https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/standalone/NO_BROWSERTESTINGMODULE.md',
       recommended: true,
     },
@@ -20,7 +20,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "ImportDeclaration[source.value='@angular/platform-browser/testing'] > ImportSpecifier[imported.name='BrowserTestingModule']"(importNode: TSESTree.ImportSpecifier) {
+      "ImportDeclaration[source.value='@angular/platform-browser/testing'] > ImportSpecifier[imported.name='BrowserTestingModule'], ImportDeclaration[source.value='@angular/platform-browser-dynamic/testing'] > ImportSpecifier[imported.name='BrowserDynamicTestingModule']"(importNode: TSESTree.ImportSpecifier) {
         /* Check the import source, but report at usage sites */
         for (const node of getImportedReferences(context, importNode)) {
           context.report({

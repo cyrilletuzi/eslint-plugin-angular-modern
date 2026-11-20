@@ -25,10 +25,6 @@ testRule(rule, {
     `import { BrowserTestingModule } from "@angular/platform-browser/testing"; const name = "BrowserTestingModule";`,
     `import { BrowserTestingModule } from "@angular/platform-browser/testing"; // BrowserTestingModule`,
     `import { BrowserTestingModule } from "@angular/platform-browser/testing"; const value = ng["BrowserTestingModule"];`,
-    // SUSPECTED BUG: `BrowserDynamicTestingModule` (the classic module from `@angular/platform-browser-dynamic/testing`) is not covered by this rule (exact name match)
-    `import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
-
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());`,
     // Usage without import is not reported
     `getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting());`,
     // Not reported: member expression property (namespace import or any other object)
@@ -53,6 +49,10 @@ const a = BrowserTestingModule;`,
     `export { BrowserTestingModule } from "@angular/platform-browser/testing";`,
     // Not reported: non-reference identifiers like object keys
     `import { BrowserTestingModule } from "@angular/platform-browser/testing"; const a = { BrowserTestingModule: true };`,
+    // `BrowserDynamicTestingModule` with the same name from another module
+    `import { BrowserDynamicTestingModule } from "other-lib";
+
+const a = BrowserDynamicTestingModule;`,
   ],
   invalid: [
     // Usage with import: only the usage is reported, not the import specifier
@@ -111,5 +111,12 @@ export { BrowserTestingModule };`,
     { code: `import { BrowserTestingModule as Alias } from "@angular/platform-browser/testing";
 
 getTestBed().initTestEnvironment(Alias, platformBrowserTesting());`, errors: [error] },
+    // `BrowserDynamicTestingModule`, the classic module from `@angular/platform-browser-dynamic/testing`
+    {
+      code: `import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from "@angular/platform-browser-dynamic/testing";
+
+getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());`,
+      errors: [error],
+    },
   ],
 });

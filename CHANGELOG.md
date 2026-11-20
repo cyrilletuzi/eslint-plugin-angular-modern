@@ -7,6 +7,15 @@ Rules now check that the Angular APIs really come from Angular imports:
 - aliased imports are now reported too (for example `import { Input as NgInput } from '@angular/core'`)
 - `no-material-modules` now also reports Material modules without the `Mat` prefix, like `NativeDateModule` and the date adapters modules
 
+Rules now also report:
+- `BrowserDynamicTestingModule` in `no-browsertestingmodule`
+- `zone.js` sub-entry points like `zone.js/testing` in `no-zonejs-import`
+- `reportProgress` and `reportUploadProgress` options in `new HttpRequest()`
+
+Fewer false positives:
+- quoted keys are now handled, for example `{ 'providedIn': 'platform' }`, and backticks too, for example ``providedIn: `platform` ``
+- `.subscribe` and `.detectChanges` passed as references (not called) are no longer reported
+
 Linting is also faster, especially on large files.
 
 ## 1.11.0 (2026-11-18)
