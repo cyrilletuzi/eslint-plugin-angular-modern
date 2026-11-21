@@ -70,33 +70,47 @@ export const ruleDefinition: RuleDefinition = {
     }],
   },
   create(context) {
-    return {
-      "CallExpression[callee.type='Identifier']"(node: TSESTree.CallExpression) {
-        const ruleOptions = context.options[0] as RuleOptions | undefined;
-        const functionsConfigs = ruleOptions?.functions ?? [];
-        const callee = node.callee as TSESTree.Identifier;
+    const ruleOptions = context.options[0] as RuleOptions | undefined;
 
-        for (const functionConfig of functionsConfigs) {
-          if (callee.name === functionConfig.name) {
-            if ((
-              functionConfig.argumentPosition === undefined ||
-              functionConfig.argumentPropertyName !== undefined && !isCalledWithProperty(node, functionConfig.argumentPosition, functionConfig.argumentPropertyName) ||
-              node.arguments.length < functionConfig.argumentPosition + 1
-            ) &&
-              !isInInjectionContext(node, {
-                includeRouting: functionConfig.allowedSpecialInjectionContexts?.includes("routing") ?? false,
-                includeHttp: functionConfig.allowedSpecialInjectionContexts?.includes("http") ?? false,
-                includeFactories: functionConfig.allowedSpecialInjectionContexts?.includes("factory") ?? false,
-                includeAsyncAppInitializationFunctions: functionConfig.allowedSpecialInjectionContexts?.includes("asyncApplicationInitialization") ?? false,
-                includeSyncAppInitializationFunctions: functionConfig.allowedSpecialInjectionContexts?.includes("syncApplicationInitialization") ?? false,
-              })) {
-              context.report({
-                node,
-                message: `\`${functionConfig.name}()\` must be called in an injection context, or ${functionConfig.argumentPropertyName !== undefined ? `\`${functionConfig.argumentPropertyName}\`` : `an explicit injection context`} must be provided in an argument.`,
-              });
-            }
-            /* No need to check other functions names if one has already matched */
-            break;
+    /* By name, the first config wins if a name is configured twice */
+    const functionsConfigs = new Map<string, FunctionConfig>();
+    for (const functionConfig of ruleOptions?.functions ?? []) {
+      if (!functionsConfigs.has(functionConfig.name)) {
+        functionsConfigs.set(functionConfig.name, functionConfig);
+      }
+    }
+
+    /* Rule enabled without functions (misconfiguration): nothing to check, and an empty selector would throw */
+    if (functionsConfigs.size === 0) {
+      return {};
+    }
+
+    /* One selector per configured name, so only calls of these functions reach the listener (quotes and backslashes escaped for esquery) */
+    const selector = [...functionsConfigs.keys()]
+      .map((name) => `CallExpression[callee.type='Identifier'][callee.name='${name.replaceAll(/['\\]/g, "\\$&")}']`)
+      .join(", ");
+
+    return {
+      [selector](node: TSESTree.CallExpression) {
+        const functionConfig = functionsConfigs.get((node.callee as TSESTree.Identifier).name);
+
+        if (functionConfig) {
+          if ((
+            functionConfig.argumentPosition === undefined ||
+            functionConfig.argumentPropertyName !== undefined && !isCalledWithProperty(node, functionConfig.argumentPosition, functionConfig.argumentPropertyName) ||
+            node.arguments.length < functionConfig.argumentPosition + 1
+          ) &&
+            !isInInjectionContext(node, {
+              includeRouting: functionConfig.allowedSpecialInjectionContexts?.includes("routing") ?? false,
+              includeHttp: functionConfig.allowedSpecialInjectionContexts?.includes("http") ?? false,
+              includeFactories: functionConfig.allowedSpecialInjectionContexts?.includes("factory") ?? false,
+              includeAsyncAppInitializationFunctions: functionConfig.allowedSpecialInjectionContexts?.includes("asyncApplicationInitialization") ?? false,
+              includeSyncAppInitializationFunctions: functionConfig.allowedSpecialInjectionContexts?.includes("syncApplicationInitialization") ?? false,
+            })) {
+            context.report({
+              node,
+              message: `\`${functionConfig.name}()\` must be called in an injection context, or ${functionConfig.argumentPropertyName !== undefined ? `\`${functionConfig.argumentPropertyName}\`` : `an explicit injection context`} must be provided in an argument.`,
+            });
           }
         }
       },
