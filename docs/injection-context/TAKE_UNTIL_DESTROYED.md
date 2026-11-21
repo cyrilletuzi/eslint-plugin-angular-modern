@@ -178,6 +178,9 @@ function customOperator(destroyRef: DestroyRef) {
 }
 ```
 
-[View the test file for all valid and invalid cases](../../tests/rules/injection-context/take-until-destroyed-in-injection-context.test.ts)
+View the test files for all valid and invalid cases:
+- [this rule's specific cases](../../tests/rules/injection-context/take-until-destroyed-in-injection-context.test.ts)
+- [shared cases checking which special injection contexts are accepted by each rule](../../tests/rules/injection-context/injection-contexts.ts)
+- [all injection context detection cases](../../tests/rules/injection-context/inject-in-injection-context.test.ts), shared by all injection context rules
 
 [Back to README](../../README.md)
