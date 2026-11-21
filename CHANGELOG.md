@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.12.0 (2026-11-21)
 
 Rules now check that the Angular APIs really come from Angular imports:
 - no more false positives on APIs with the same names from other libraries (for example NestJS `@Injectable()` and constructor injection, Vitest `inject()`), or on unrelated local code with the same names
