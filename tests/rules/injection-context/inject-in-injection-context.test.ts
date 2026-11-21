@@ -428,7 +428,7 @@ describe("functions with injection context", () => {
       { code: `withViewTransitions({ onViewTransitionCreated: () => { const f = () => inject(A); } });`, errors },
       // Outside of the `runInContext()` callback
       { code: `inject(EnvironmentInjector).runInContext(() => {});`, errors },
-      // KNOWN LIMITATION: `runInInjectionContext()` done before in the call stack
+      // ACCEPTED FALSE POSITIVE: `runInInjectionContext()` done before in the call stack, `assertInInjectionContext()` should be used in the function
       { code: `function f() { return inject(A); } runInInjectionContext(injector, () => f());`, errors },
     ],
   }));
