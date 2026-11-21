@@ -2,7 +2,7 @@ import type { RuleDefinition } from "@eslint/core";
 import type { TSESTree } from "@typescript-eslint/utils";
 import { getImportedFunctionCalls } from "../../utils/angular-import";
 import { isInInjectionContext } from "../../utils/angular-injection-context";
-import { isCalledWithProperty } from "../../utils/ast-call-argument";
+import { getObjectArgument, isCalledWithProperty } from "../../utils/ast-call-argument";
 import { getKeyName } from "../../utils/ast-property-key";
 
 export const ruleName = "to-signal-in-injection-context";
@@ -11,15 +11,15 @@ const messageId = "toSignalInInjectionContext";
 /**
  * `manualCleanup: false` is the default value, so it still requires an injection context.
  */
-function isManualCleanupDisabled(node: TSESTree.CallExpression): boolean {
-  const options = node.arguments[1];
+function isManualCleanupDisabled(context: Parameters<RuleDefinition["create"]>[0], node: TSESTree.CallExpression): boolean {
+  const options = getObjectArgument(context, node, 1);
 
-  return options?.type === "ObjectExpression" && options.properties.some((property) =>
+  return options?.properties.some((property) =>
     property.type === "Property" &&
     getKeyName(property) === "manualCleanup" &&
     property.value.type === "Literal" &&
     property.value.value === false
-  );
+  ) ?? false;
 }
 
 export const ruleDefinition: RuleDefinition = {
@@ -42,10 +42,10 @@ export const ruleDefinition: RuleDefinition = {
         for (const node of getImportedFunctionCalls(context, importNode)) {
           if (
             /* Takes an `Injector` or `manualCleanup` in second argument object: `toSignal(obs, { injector })` or `toSignal(obs, { manualCleanup })` */
-            !isCalledWithProperty(node, 1, 'injector') &&
+            !isCalledWithProperty(context, node, 1, 'injector') &&
             !(
-              isCalledWithProperty(node, 1, 'manualCleanup') &&
-              !isManualCleanupDisabled(node)
+              isCalledWithProperty(context, node, 1, 'manualCleanup') &&
+              !isManualCleanupDisabled(context, node)
             ) &&
             !isInInjectionContext(node)
           ) {

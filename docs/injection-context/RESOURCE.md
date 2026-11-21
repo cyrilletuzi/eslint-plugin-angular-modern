@@ -144,7 +144,7 @@ export class ProductPage implements OnInit {
 ```
 
 > [!NOTE]
-> Prefer a literal object as in this example. If the second argument is a variable, the lint rule will not check if `injector` is actually present, see the [known limitation documentation](./known-limitations/INJECTOR_IN_VARIABLE.md).
+> Prefer a literal object as in this example. If the argument is a variable which is not a local `const` initialized with a literal object (an import, a parameter...), the lint rule will not check if `injector` is actually present, see the [known limitation documentation](./known-limitations/INJECTOR_IN_VARIABLE.md).
 
 - in explicit injection context
 ```typescript

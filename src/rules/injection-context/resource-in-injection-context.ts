@@ -27,7 +27,7 @@ export const ruleDefinition: RuleDefinition = {
         for (const node of getImportedFunctionCalls(context, importNode)) {
           if (
             /* Takes an `Injector` in argument: `resource({ loader, injector })` */
-            !isCalledWithProperty(node, 0, 'injector') &&
+            !isCalledWithProperty(context, node, 0, 'injector') &&
             !isInInjectionContext(node)
           ) {
             context.report({

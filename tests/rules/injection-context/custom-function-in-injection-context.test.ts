@@ -118,7 +118,9 @@ describe("explicit injection context in an object argument property", () => {
     valid: [
       { code: `customInject(a, { injector });`, options },
       { code: `customInject(a, { other: true, injector: this.injector });`, options },
-      // KNOWN LIMITATION: options in a variable are supposed to contain the property
+      // Options in a local `const` initialized with an object literal are resolved
+      { code: `const o = { injector };\ncustomInject(a, o);`, options },
+      // KNOWN LIMITATION (FALSE NEGATIVE): options in a variable which cannot be resolved are supposed to contain the property
       { code: `customInject(a, options);`, options },
     ],
     invalid: [
@@ -127,6 +129,7 @@ describe("explicit injection context in an object argument property", () => {
       { code: `customInject(a, {});`, options, errors },
       { code: `customInject(a, { other: true });`, options, errors },
       { code: `customInject(a, this.options);`, options, errors },
+      { code: `const o = { other: true };\ncustomInject(a, o);`, options, errors },
       { code: `customInject({ injector });`, options, errors },
     ],
   });

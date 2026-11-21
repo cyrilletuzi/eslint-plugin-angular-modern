@@ -26,12 +26,15 @@ describe("`manualCleanup` in the second argument", () => {
       // Quoted `manualCleanup` key
       `toSignal(obs, { 'manualCleanup': true });`,
       `toSignal(obs, { ['manualCleanup']: true });`,
+      // Options in a local `const` are resolved
+      `const options = { manualCleanup: true };\ntoSignal(obs, options);`,
     ],
     invalid: [
       { code: `toSignal(obs, { initialValue: 0 });`, errors },
       // `false` is the default value, so an injection context is still required
       { code: `toSignal(obs, { manualCleanup: false });`, errors },
       { code: `toSignal(obs, { 'manualCleanup': false });`, errors },
+      { code: `const options = { manualCleanup: false };\ntoSignal(obs, options);`, errors },
       // Computed key with a variable is not the `manualCleanup` property
       { code: `toSignal(obs, { [manualCleanup]: true });`, errors },
     ],
