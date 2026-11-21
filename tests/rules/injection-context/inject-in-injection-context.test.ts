@@ -403,6 +403,8 @@ describe("functions with injection context", () => {
       `withViewTransitions({ onViewTransitionCreated: () => { inject(A).init(); } });`,
       `provideWebMcpTools(() => { const a = inject(A); a.register(); });`,
       `provideWebMcpTools(() => { inject(A).register(); });`,
+      // Workaround for the `runInInjectionContext()` done before in the call stack limitation: assert the injection context in the called function
+      `function f() { assertInInjectionContext(f); return inject(A); } runInInjectionContext(injector, () => f());`,
     ],
     invalid: [
       // Other functions
