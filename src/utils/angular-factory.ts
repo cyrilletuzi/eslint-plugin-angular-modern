@@ -1,119 +1,52 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 import { getKeyName } from "./ast-property-key";
-import { findAngularClassDecorator } from "./angular-class-decorator";
-import { findNearestAncestorOf } from "./ast-traversal";
+import type { FunctionNode } from "./ast-traversal";
 
-function isPropertyInInjectionTokenFactory(
-  property: TSESTree.PropertyComputedName | TSESTree.PropertyNonComputedName,
-): boolean {
-  // Check the property is inside a `new InjectionToken()`
-  const newExpression = findNearestAncestorOf(
-    property,
-    (node) => node.type === "NewExpression",
-  );
+/**
+ * Checks if an object is the options of a decorator: `@Injectable({})`.
+ */
+function isDecoratorOptions(objectExpression: TSESTree.ObjectExpression, decoratorName: string): boolean {
+  const callExpression = objectExpression.parent;
 
-  if (
-    newExpression?.callee.type === "Identifier" &&
-    newExpression.callee.name === "InjectionToken"
-  ) {
-    return true;
-  }
-
-  return false;
+  return callExpression.type === "CallExpression" &&
+    callExpression.parent.type === "Decorator" &&
+    callExpression.callee.type === "Identifier" &&
+    callExpression.callee.name === decoratorName;
 }
 
-function isPropertyInProviderFactory(
-  property: TSESTree.PropertyComputedName | TSESTree.PropertyNonComputedName,
-): boolean {
-  // Check the property is called `useFactory`
-  if (getKeyName(property.key) !== "useFactory") {
+/**
+ * Checks if a function is a factory:
+ * - `{ provide: Some, useFactory: () => {} }`
+ * - `new InjectionToken('some', { factory: () => {} })`
+ * - `@Injectable({ useFactory: () => {} })`
+ * - `@Service({ factory: () => {} })`
+ */
+export function isFactoryFunction(functionNode: FunctionNode): boolean {
+  const property = functionNode.parent;
+
+  if (property.type !== "Property" || property.value !== functionNode || property.parent.type !== "ObjectExpression") {
     return false;
   }
 
-  // Check the object contains another property called `provide`
-  const objectExpression = findNearestAncestorOf(
-    property,
-    (node) => node.type === "ObjectExpression",
-  );
+  const objectExpression = property.parent;
+  const keyName = getKeyName(property.key);
 
-  const provideProperty = objectExpression?.properties.find(
-    (objectProperty) =>
-      objectProperty.type === "Property" &&
-      getKeyName(objectProperty.key) === "provide",
-  );
-
-  if (provideProperty !== undefined) {
-    return true;
+  if (keyName === "useFactory") {
+    return objectExpression.properties.some(
+      (objectProperty) =>
+        objectProperty.type === "Property" &&
+        getKeyName(objectProperty.key) === "provide",
+    ) || isDecoratorOptions(objectExpression, "Injectable");
   }
 
-  return false;
-}
+  if (keyName === "factory") {
+    const newExpression = objectExpression.parent;
 
-function isPropertyInServiceFactory(
-  property: TSESTree.PropertyComputedName | TSESTree.PropertyNonComputedName,
-): boolean {
-  // Check the property is called `useFactory`
-  if (getKeyName(property.key) !== "factory") {
-    return false;
-  }
-
-  // Check the property is inside an `Service()`
-  const classDeclaration = findNearestAncestorOf(
-    property,
-    (node) => node.type === "ClassDeclaration",
-  );
-
-  if (!classDeclaration) {
-    return false;
-  }
-
-  if (findAngularClassDecorator(classDeclaration) === "Service") {
-    return true;
-  }
-
-  return false;
-}
-
-function isPropertyInInjectableFactory(
-  property: TSESTree.PropertyComputedName | TSESTree.PropertyNonComputedName,
-): boolean {
-  // Check the property is called `useFactory`
-  if (getKeyName(property.key) !== "useFactory") {
-    return false;
-  }
-
-  // Check the property is inside an `Injectable()`
-  const classDeclaration = findNearestAncestorOf(
-    property,
-    (node) => node.type === "ClassDeclaration",
-  );
-
-  if (!classDeclaration) {
-    return false;
-  }
-
-  if (findAngularClassDecorator(classDeclaration) === "Injectable") {
-    return true;
-  }
-
-  return false;
-}
-
-export function isInFactoryFunction(node: TSESTree.Node): boolean {
-  const property = findNearestAncestorOf(
-    node,
-    (node) => node.type === "Property",
-    { notInCallback: true },
-  );
-
-  if (
-    property &&
-    (isPropertyInProviderFactory(property) ||
-      isPropertyInInjectionTokenFactory(property) ||
-      isPropertyInServiceFactory(property) ||
-      isPropertyInInjectableFactory(property))
-  ) {
-    return true;
+    return (
+      newExpression.type === "NewExpression" &&
+      newExpression.callee.type === "Identifier" &&
+      newExpression.callee.name === "InjectionToken"
+    ) || isDecoratorOptions(objectExpression, "Service");
   }
 
   return false;

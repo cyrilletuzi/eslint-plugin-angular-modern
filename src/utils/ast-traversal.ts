@@ -1,38 +1,27 @@
 import type { TSESTree } from "@typescript-eslint/utils";
 
+export type FunctionNode = TSESTree.ArrowFunctionExpression | TSESTree.FunctionExpression | TSESTree.FunctionDeclaration;
+
+export function isFunction(node: TSESTree.Node): node is FunctionNode {
+  return node.type === "ArrowFunctionExpression" || node.type === "FunctionExpression" || node.type === "FunctionDeclaration";
+}
+
 /**
- * Get the nearest ancestor node of a certain type.
- * 
+ * Get the nearest ancestor node matching a predicate.
+ *
  * @example
  * ```typescript
- * const classDeclaration = getNearestNodeFrom(
+ * const classDeclaration = findNearestAncestorOf(
  *   node,
  *   (node) => node.type === "ClassDeclaration",
- * );
- * ```
- * 
- * With `notInCallback` option enabled, the traversal will stop if it encounters a `CallExpression`.
- * This is needed for some rules because the injection context is lost when inside a callback.
- * 
- * @example
- * ```typescript
- * const classDeclaration = getNearestNodeFrom(
- *   node,
- *   (node) => node.type === "ClassDeclaration",
- *   { notInCallback: true },
  * );
  * ```
  */
 export function findNearestAncestorOf<T extends TSESTree.Node>(
   { parent }: TSESTree.Node,
   predicate: (parent: TSESTree.Node) => parent is T,
-  { notInCallback = false } = {},
 ): T | undefined {
   while (parent && parent.type !== "Program") {
-    if (notInCallback && (parent.type === "ArrowFunctionExpression" || parent.type === "FunctionExpression") && parent.parent.type === "CallExpression") {
-      return undefined;
-    }
-
     if (predicate(parent)) {
       return parent;
     }

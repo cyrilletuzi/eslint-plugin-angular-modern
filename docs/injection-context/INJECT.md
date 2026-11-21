@@ -62,8 +62,20 @@ export class ProductPage {
 }
 ```
 
+- in nested functions, which may be run later
+```typescript
+@Component({
+  template: `<button (click)="goHome()">Home</button>`
+})
+export class ProductPage {
+  readonly goHome = () => {
+    inject(Router).navigate(['/']);
+  };
+}
+```
+
 > [!NOTE]
-> The rule reports both on asynchronous and synchronous callbacks, see the [known limitation documentation](./known-limitations/CALLBACKS.md).
+> The rule reports in any callback or nested function, even if it is run synchronously, see the [known limitation documentation](./known-limitations/CALLBACKS.md).
 
 - after awaiting (which is equivalent to be in a `.then()` callback)
 ```typescript

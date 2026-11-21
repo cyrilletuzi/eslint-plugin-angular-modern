@@ -1,62 +1,41 @@
-import type { TSESTree } from "@typescript-eslint/utils";
-import { findNearestAncestorOf } from "./ast-traversal";
-import { isAfterAwait } from "./await-detection";
+import type { FunctionNode } from "./ast-traversal";
+import { getVariableType } from "./variable-type";
 
-export function isInFunctionTypeWithInjectionContext(node: TSESTree.Node, {
+const routingFunctionTypes: ReadonlySet<string> = new Set([
+  // see https://angular.dev/api/router/CanActivateFn
+  "CanActivateFn",
+  "CanActivateChildFn",
+  "CanDeactivateFn",
+  "CanMatchFn",
+  "ResolveFn",
+  // see https://github.com/angular/angular/pull/64938
+  "RunGuardsAndResolvers",
+  // see https://github.com/angular/angular/pull/62133
+  "LoadChildren",
+  "LoadChildrenCallback",
+]);
+
+// see https://angular.dev/api/common/http/HttpInterceptorFn
+const httpFunctionType = "HttpInterceptorFn";
+
+/**
+ * Checks if a function is typed with a function type with injection context:
+ * `const someGuard: CanActivateFn = () => {}`
+ */
+export function isFunctionTypeWithInjectionContext(functionNode: FunctionNode, {
   includeRouting = false,
   includeHttp = false,
-  includeSyncAppInitializationFunctions = false,
 } = {}): boolean {
-  const functionTypesWithInjectionContext: ReadonlySet<string> = new Set([
-    ...(includeRouting ? [
-      // see https://angular.dev/api/router/ViewTransitionsFeatureOptions#onViewTransitionCreated
-      "CanActivateFn",
-      "CanActivateChildFn",
-      "CanDeactivateFn",
-      "CanMatchFn",
-      "ResolveFn",
-      // see https://github.com/angular/angular/pull/64938
-      "RunGuardsAndResolvers",
-      // see https://github.com/angular/angular/pull/62133
-      "LoadChildren",
-      "LoadChildrenCallback",
-    ] : []),
-    ...(includeHttp ? [
-      // see https://angular.dev/api/router/ViewTransitionsFeatureOptions#onViewTransitionCreated
-      "HttpInterceptorFn",
-    ] : []),
-    ...(includeSyncAppInitializationFunctions ? [
-      // see https://angular.dev/api/router/ViewTransitionsFeatureOptions#onViewTransitionCreated
-      "ViewTransitionsFeatureOptions",
-    ] : []),
-  ]);
+  const { parent } = functionNode;
 
-  if (functionTypesWithInjectionContext.size === 0) {
+  if (parent.type !== "VariableDeclarator" || parent.init !== functionNode) {
     return false;
   }
 
-  if (!node.parent) {
-    return false;
-  }
-  // Check the variable type is an accepted type like `CanActivateFn`
-  // `inject()` can be stored in a variable itself, so start at the parent for the lookup,
-  // otherwise it would catch the first variable
-  const variableDeclarator = findNearestAncestorOf(
-    node.parent,
-    (node) => node.type === "VariableDeclarator",
-    { notInCallback: true },
+  const variableType = getVariableType(parent);
+
+  return variableType !== undefined && (
+    (includeRouting && routingFunctionTypes.has(variableType)) ||
+    (includeHttp && variableType === httpFunctionType)
   );
-
-  const typeAnnotation = variableDeclarator?.id.typeAnnotation?.typeAnnotation;
-
-  if (
-    typeAnnotation?.type === "TSTypeReference" &&
-    typeAnnotation.typeName.type === "Identifier" &&
-    functionTypesWithInjectionContext.has(typeAnnotation.typeName.name) &&
-    !isAfterAwait(node)
-  ) {
-    return true;
-  }
-
-  return false;
 }
