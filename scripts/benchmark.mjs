@@ -85,20 +85,33 @@ export class ProductApi${i} {
 }
 `);
   files.push(`import { inject } from '@angular/core';
-import { type CanActivateFn, type HttpInterceptorFn, Router, type Routes } from '@angular/router';
+import { type CanActivateFn, type HttpInterceptorFn, type ResolveFn, Router, type Routes } from '@angular/router';
 import { AuthStore${i} } from './auth-store';
+import { ProductApi${i}, type Product } from './product-api';
 
 export const authGuard${i}: CanActivateFn = () => inject(AuthStore${i}).isLoggedIn() || inject(Router).parseUrl('/login');
 
 export const authInterceptor${i}: HttpInterceptorFn = (request, next) => {
-  const authStore = inject(AuthStore${i});
-  const token = authStore.token();
+  const token = inject(AuthStore${i}).token();
   return next(token ? request.clone({ setHeaders: { Authorization: \`Bearer \${token}\` } }) : request);
+};
+
+export const productResolver${i}: ResolveFn<Product | undefined> = async (route) => {
+  const api = inject(ProductApi${i});
+  const router = inject(Router);
+  const id = Number(route.paramMap.get('id'));
+  if (Number.isNaN(id)) {
+    await router.navigate(['/']);
+    return undefined;
+  }
+  const product = await api.load(id);
+  return product.available ? product : undefined;
 };
 
 export const routes${i}: Routes = [
   { path: '', loadComponent: () => import('./home').then((m) => m.Home) },
-  { path: 'products/:id', canActivate: [authGuard${i}], loadComponent: () => import('./product').then((m) => m.ProductPage) },
+  { path: 'products/:id', canActivate: [authGuard${i}], resolve: { product: productResolver${i} }, loadComponent: () => import('./product').then((m) => m.ProductPage) },
+  { path: 'admin', canMatch: [async () => { const authStore = inject(AuthStore${i}); await authStore.refresh(); return authStore.isAdmin(); }], loadChildren: () => import('./admin') },
 ];
 `);
   files.push(`import { TestBed } from '@angular/core/testing';
