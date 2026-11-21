@@ -1,5 +1,5 @@
 import { findAngularClassDecorator } from "./angular-class-decorator";
-import { getKeyName } from "./ast-property-key";
+import { getKeyName, hasUnknownKey } from "./ast-property-key";
 import type { FunctionNode } from "./ast-traversal";
 
 /* Method name => interface name */
@@ -30,22 +30,30 @@ export function isMethodWithInjectionContext(functionNode: FunctionNode, {
   }
 
   const methodName = getKeyName(methodDefinition);
+  let interfaceNames: readonly string[];
 
-  if (methodName === undefined) {
+  if (methodName !== undefined) {
+    const interfaceName = (includeRouting ? routingMethods.get(methodName) : undefined) ??
+      (includeHttp ? httpMethods.get(methodName) : undefined);
+    interfaceNames = interfaceName !== undefined ? [interfaceName] : [];
+  } else if (hasUnknownKey(methodDefinition)) {
+    /* The method prevents a report, so a key with an unknown value, like `[key]`, may be any method of the interfaces */
+    interfaceNames = [
+      ...(includeRouting ? routingMethods.values() : []),
+      ...(includeHttp ? httpMethods.values() : []),
+    ];
+  } else {
     return false;
   }
 
-  const interfaceName = (includeRouting ? routingMethods.get(methodName) : undefined) ??
-    (includeHttp ? httpMethods.get(methodName) : undefined);
-
   const classDeclaration = methodDefinition.parent.parent;
 
-  return interfaceName !== undefined &&
+  return interfaceNames.length > 0 &&
     classDeclaration.type === "ClassDeclaration" &&
     classDeclaration.implements.some(
       ({ expression }) =>
         expression.type === "Identifier" &&
-        expression.name === interfaceName,
+        interfaceNames.includes(expression.name),
     ) &&
     findAngularClassDecorator(classDeclaration) !== undefined;
 }

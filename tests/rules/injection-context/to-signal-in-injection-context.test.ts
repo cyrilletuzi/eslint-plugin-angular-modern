@@ -26,6 +26,10 @@ describe("`manualCleanup` in the second argument", () => {
       // Quoted `manualCleanup` key
       `toSignal(obs, { 'manualCleanup': true });`,
       `toSignal(obs, { ['manualCleanup']: true });`,
+      // Computed key with a variable: its value is unknown, so it may be `manualCleanup`
+      `toSignal(obs, { [manualCleanup]: true });`,
+      // ACCEPTED FALSE NEGATIVE: `false` with a computed key with a variable is not reported, to avoid false positives (not used in Angular code)
+      `toSignal(obs, { [manualCleanup]: false });`,
       // Options in a local `const` are resolved
       `const options = { manualCleanup: true };\ntoSignal(obs, options);`,
     ],
@@ -34,9 +38,8 @@ describe("`manualCleanup` in the second argument", () => {
       // `false` is the default value, so an injection context is still required
       { code: `toSignal(obs, { manualCleanup: false });`, errors },
       { code: `toSignal(obs, { 'manualCleanup': false });`, errors },
+      { code: `toSignal(obs, { ['manualCleanup']: false });`, errors },
       { code: `const options = { manualCleanup: false };\ntoSignal(obs, options);`, errors },
-      // Computed key with a variable is not the `manualCleanup` property
-      { code: `toSignal(obs, { [manualCleanup]: true });`, errors },
     ],
   }));
 });

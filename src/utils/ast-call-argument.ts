@@ -1,6 +1,6 @@
 import type { RuleDefinition } from "@eslint/core";
 import type { TSESLint, TSESTree } from "@typescript-eslint/utils";
-import { getKeyName } from "./ast-property-key";
+import { mayHaveKeyName } from "./ast-property-key";
 
 type RuleContext = Parameters<RuleDefinition["create"]>[0];
 
@@ -54,8 +54,9 @@ export function isCalledWithProperty(context: RuleContext, node: TSESTree.CallEx
     return true;
   }
 
+  /* The property prevents a report, so a key with an unknown value, like `[key]`, may be the property */
   return object?.properties.some((property) =>
     property.type === "Property" &&
-    getKeyName(property) === propertyName
+    mayHaveKeyName(property, propertyName)
   ) ?? false;
 }

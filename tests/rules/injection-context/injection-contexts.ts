@@ -123,6 +123,11 @@ export function objectArgumentCases(build: (argument: string) => string, propert
       build(`{ '${propertyName}': value }`),
       // Computed key with a string
       build(`{ ['${propertyName}']: value }`),
+      // Computed key with a variable: its value is unknown, so it may be the property
+      `const ${propertyName} = '${propertyName}';\n${build(`{ [${propertyName}]: value }`)}`,
+      // ACCEPTED FALSE NEGATIVE: a computed key with a variable which is not the property is not reported, to avoid false positives (not used in Angular code)
+      build(`{ [key]: value }`),
+      `const options = { [key]: value };\n${build(`options`)}`,
       // Options in a local `const` initialized with an object literal are resolved
       `const options = { ${propertyName} };\n${build(`options`)}`,
       `const options = { other: true, ${propertyName}: value };\n${build(`options`)}`,
@@ -140,8 +145,6 @@ export function objectArgumentCases(build: (argument: string) => string, propert
       build(`{ ...options }`),
       build(`this.options`),
       build(`getOptions()`),
-      // Computed key with a variable is not the property
-      build(`{ [${propertyName}]: value }`),
       // Options in a local `const` initialized with an object literal without the property
       `const options = {};\n${build(`options`)}`,
       `const options = { other: true };\n${build(`options`)}`,

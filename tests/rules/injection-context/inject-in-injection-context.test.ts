@@ -236,14 +236,21 @@ describe("legacy class guards, resolvers and interceptors", () => {
       `@Injectable() class G implements CanActivate { canActivate() { const a = inject(A); if (a) { return inject(B); } return toUser(inject(C)); } }`,
       // Before `await`
       `@Injectable() class G implements CanActivate { async canActivate() { const a = inject(A); await a.check(); } }`,
+      // Computed method name with a variable: its value is unknown, so it may be the guard method
+      // ACCEPTED FALSE NEGATIVE: it is not reported even if it is another method, to avoid false positives (not used in Angular code)
+      `@Injectable() class G implements CanActivate { [canActivate]() { return inject(A).check(); } }`,
+      // Computed method name with a string
+      `@Injectable() class G implements CanActivate { ['canActivate']() { return inject(A).check(); } }`,
     ],
     invalid: [
       // Method does not match the interface
       { code: `@Injectable() class G implements CanMatch { canActivate() { return inject(A).check(); } }`, errors },
       // No interface
       { code: `@Injectable() class G { canActivate() { return inject(A).check(); } }`, errors },
-      // Computed method name with a variable is not the guard method
-      { code: `@Injectable() class G implements CanActivate { [canActivate]() { return inject(A).check(); } }`, errors },
+      // Computed method name with a variable in a class without a guard interface
+      { code: `@Injectable() class G { [canActivate]() { return inject(A).check(); } }`, errors },
+      // Computed method name with another string
+      { code: `@Injectable() class G implements CanActivate { ['other']() { return inject(A).check(); } }`, errors },
       // Not an Angular class
       { code: `class G implements CanActivate { canActivate() { return inject(A).check(); } }`, errors },
       // Other method
@@ -329,13 +336,21 @@ describe("factories", () => {
       // Quoted and computed string `useFactory` keys
       `const p = { provide: T, 'useFactory': () => inject(A) };`,
       `const p = { provide: T, ['useFactory']: () => inject(A) };`,
+      `const p = { ['provide']: T, useFactory: () => inject(A) };`,
+      `const T = new InjectionToken('t', { ['factory']: () => inject(A) });`,
+      // Computed keys with a variable: their value is unknown, so they may be `provide`, `useFactory` or `factory`
+      // ACCEPTED FALSE NEGATIVE: they are not reported even if they are other properties, to avoid false positives (not used in Angular code)
+      `const p = { [provide]: T, useFactory: () => inject(A) };`,
+      `const p = { provide: T, [useFactory]: () => inject(A) };`,
+      `const T = new InjectionToken('t', { [factory]: () => inject(A) });`,
     ],
     invalid: [
       // `useFactory` without `provide`
       { code: `const p = { useFactory: () => inject(A) };`, errors },
-      // Computed keys with a variable are not the `provide` or `useFactory` properties
-      { code: `const p = { [provide]: T, useFactory: () => inject(A) };`, errors },
-      { code: `const p = { provide: T, [useFactory]: () => inject(A) };`, errors },
+      // Computed key with a variable, but nothing else making it a factory: the function's own key does not count as `provide`
+      { code: `const p = { [key]: () => inject(A) };`, errors },
+      { code: `const p = { other: T, [key]: () => inject(A) };`, errors },
+      { code: `const p = { provide: T, ['other']: () => inject(A) };`, errors },
       // Other property names
       { code: `const p = { provide: T, factory: () => inject(A) };`, errors },
       { code: `const T = new InjectionToken('t', { other: () => inject(A) });`, errors },

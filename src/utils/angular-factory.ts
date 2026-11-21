@@ -1,5 +1,5 @@
 import type { TSESTree } from "@typescript-eslint/utils";
-import { getKeyName } from "./ast-property-key";
+import { getKeyName, hasUnknownKey, mayHaveKeyName } from "./ast-property-key";
 import type { FunctionNode } from "./ast-traversal";
 
 /**
@@ -30,16 +30,21 @@ export function isFactoryFunction(functionNode: FunctionNode): boolean {
 
   const objectExpression = property.parent;
   const keyName = getKeyName(property);
+  /* A factory prevents a report, so a key with an unknown value, like `[key]`, may be `useFactory` or `factory` */
+  const isUnknownKey = hasUnknownKey(property);
 
-  if (keyName === "useFactory") {
-    return objectExpression.properties.some(
+  if (keyName === "useFactory" || isUnknownKey) {
+    if (objectExpression.properties.some(
       (objectProperty) =>
         objectProperty.type === "Property" &&
-        getKeyName(objectProperty) === "provide",
-    ) || isDecoratorOptions(objectExpression, "Injectable");
+        objectProperty !== property &&
+        mayHaveKeyName(objectProperty, "provide"),
+    ) || isDecoratorOptions(objectExpression, "Injectable")) {
+      return true;
+    }
   }
 
-  if (keyName === "factory") {
+  if (keyName === "factory" || isUnknownKey) {
     const newExpression = objectExpression.parent;
 
     return (
