@@ -1,41 +1,26 @@
 import type { TSESTree } from "@typescript-eslint/utils";
-import { findNearestAncestorOf } from "./ast-traversal";
+import type { FunctionNode } from "./ast-traversal";
 
-export function isInjectionContextAsserted(node: TSESTree.Node): boolean {
-  // Check there is an `assertInInjectionContext` call in the same block
-  const blockStatement = findNearestAncestorOf(
-    node,
-    (node) => node.type === "BlockStatement",
-    { notInCallback: true },
+function isAssertCall(statement: TSESTree.Statement): boolean {
+  return statement.type === "ExpressionStatement" &&
+    statement.expression.type === "CallExpression" &&
+    statement.expression.callee.type === "Identifier" &&
+    statement.expression.callee.name === "assertInInjectionContext";
+}
+
+/**
+ * Checks if a function asserts it is called in an injection context:
+ * - `function injectSome() { assertInInjectionContext(injectSome); }`
+ * - `function injectSome(injector) { if (!injector) { assertInInjectionContext(injectSome); } }`
+ *
+ * The assertion declares that the function must be called in an injection context, wherever it is placed in the function.
+ */
+export function isInjectionContextAsserted(functionNode: FunctionNode): boolean {
+  return functionNode.body.type === "BlockStatement" && functionNode.body.body.some(
+    (statement) =>
+      isAssertCall(statement) ||
+      (statement.type === "IfStatement" &&
+        statement.consequent.type === "BlockStatement" &&
+        statement.consequent.body.some(isAssertCall)),
   );
-
-  const assertCall = blockStatement?.body.find(
-    (body) =>
-      body.type === "ExpressionStatement" &&
-      body.expression.type === "CallExpression" &&
-      body.expression.callee.type === "Identifier" &&
-      body.expression.callee.name === "assertInInjectionContext",
-  );
-
-  if (assertCall !== undefined) {
-    return true;
-  }
-
-  const conditionalAssertCall = blockStatement?.body.find(
-    (body) =>
-      body.type === "IfStatement" &&
-      body.consequent.type === "BlockStatement" &&
-      body.consequent.body.find((consequentBody) =>
-        consequentBody.type === "ExpressionStatement" &&
-        consequentBody.expression.type === "CallExpression" &&
-        consequentBody.expression.callee.type === "Identifier" &&
-        consequentBody.expression.callee.name === "assertInInjectionContext",
-      )
-  );
-
-  if (conditionalAssertCall !== undefined) {
-    return true;
-  }
-
-  return false;
 }

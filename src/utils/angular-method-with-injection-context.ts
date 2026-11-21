@@ -1,82 +1,51 @@
-import type { TSESTree } from "@typescript-eslint/utils";
-import { getKeyName } from "./ast-property-key";
 import { findAngularClassDecorator } from "./angular-class-decorator";
-import { findNearestAncestorOf } from "./ast-traversal";
-import { isAfterAwait } from "./await-detection";
+import { getKeyName } from "./ast-property-key";
+import type { FunctionNode } from "./ast-traversal";
 
-export function isInMethodWithInjectionContext(node: TSESTree.Node, {
+/* Method name => interface name */
+const routingMethods: ReadonlyMap<string, string> = new Map([
+  ["canActivate", "CanActivate"],
+  ["canActivateChild", "CanActivateChild"],
+  ["canDeactivate", "CanDeactivate"],
+  ["canMatch", "CanMatch"],
+  ["resolve", "Resolve"],
+]);
+
+const httpMethods: ReadonlyMap<string, string> = new Map([
+  ["intercept", "HttpInterceptor"],
+]);
+
+/**
+ * Checks if a function is a method of a legacy class guard, resolver or interceptor:
+ * `@Injectable() class SomeGuard implements CanActivate { canActivate() {} }`
+ */
+export function isMethodWithInjectionContext(functionNode: FunctionNode, {
   includeRouting = false,
   includeHttp = false,
 } = {}): boolean {
-  const routingMethodsAndInterfaces: readonly (readonly [string, string])[] = [
-    ["canActivate", "CanActivate"],
-    ["canActivateChild", "CanActivateChild"],
-    ["canDeactivate", "CanDeactivate"],
-    ["canMatch", "CanMatch"],
-    ["resolve", "Resolve"],
-  ];
-  const httpMethodsAndInterfaces: readonly (readonly [string, string])[] = [
-    ["intercept", "HttpInterceptor"],
-  ];
-  const methodsAndInterfacesWithInjectionContextMap: ReadonlyMap<string, string> =
-    new Map<string, string>([
-      ...(includeRouting ? routingMethodsAndInterfaces : []),
-      ...(includeHttp ? httpMethodsAndInterfaces : []),
-    ]);
+  const methodDefinition = functionNode.parent;
 
-  if (methodsAndInterfacesWithInjectionContextMap.size === 0) {
+  if (methodDefinition.type !== "MethodDefinition" || (!includeRouting && !includeHttp)) {
     return false;
   }
 
-  const methodsWithInjectionContext: ReadonlySet<string> = new Set(
-    methodsAndInterfacesWithInjectionContextMap.keys(),
-  );
+  const methodName = getKeyName(methodDefinition.key);
 
-  // Check if the method name is one of the accepted ones like `canActivate`
-  const methodDefinition = findNearestAncestorOf(
-    node,
-    (node) => node.type === "MethodDefinition",
-    { notInCallback: true },
-  );
-
-  const methodName = methodDefinition ? getKeyName(methodDefinition.key) : undefined;
-
-  if (
-    methodName === undefined ||
-    !methodsWithInjectionContext.has(methodName)
-  ) {
+  if (methodName === undefined) {
     return false;
   }
 
-  // Check if we are in an injectable Angular class
-  const classDeclaration = findNearestAncestorOf(
-    node,
-    (node) => node.type === "ClassDeclaration",
-  );
+  const interfaceName = (includeRouting ? routingMethods.get(methodName) : undefined) ??
+    (includeHttp ? httpMethods.get(methodName) : undefined);
 
-  if (
-    !classDeclaration ||
-    !findAngularClassDecorator(classDeclaration)
-  ) {
-    return false;
-  }
+  const classDeclaration = methodDefinition.parent.parent;
 
-  // Check if the class implements the according accepted interface
-  const implementName = methodsAndInterfacesWithInjectionContextMap.get(
-    methodName,
-  );
-
-  if (
-    implementName !== undefined &&
-    classDeclaration.implements.find(
+  return interfaceName !== undefined &&
+    classDeclaration.type === "ClassDeclaration" &&
+    classDeclaration.implements.some(
       ({ expression }) =>
         expression.type === "Identifier" &&
-        expression.name === implementName,
-    ) !== undefined &&
-    !isAfterAwait(node)
-  ) {
-    return true;
-  }
-
-  return false;
+        expression.name === interfaceName,
+    ) &&
+    findAngularClassDecorator(classDeclaration) !== undefined;
 }

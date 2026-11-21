@@ -33,13 +33,12 @@ describe("as an RxJS operator", () => {
     valid: [
       `@Component() class C { a = obs.pipe(takeUntilDestroyed()); }`,
       `@Component() class C { constructor() { obs.pipe(takeUntilDestroyed()).subscribe(); } }`,
+      `runInInjectionContext(injector, () => { obs.pipe(takeUntilDestroyed()).subscribe(); });`,
+      `const f: CanActivateFn = () => { const d = obs.pipe(takeUntilDestroyed()); return true; };`,
     ],
     invalid: [
       // Callbacks
       { code: `@Component() class C { a = obs.pipe(switchMap(() => other.pipe(takeUntilDestroyed()))); }`, errors },
-      // KNOWN BUG: nested in another call
-      { code: `runInInjectionContext(injector, () => { obs.pipe(takeUntilDestroyed()).subscribe(); });`, errors },
-      { code: `const f: CanActivateFn = () => { const d = obs.pipe(takeUntilDestroyed()); return true; };`, errors },
     ],
   }));
 });

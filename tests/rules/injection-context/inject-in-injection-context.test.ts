@@ -85,14 +85,6 @@ describe("class initialization (constructor and field initializers)", () => {
       `@Component() class A { constructor() { try { inject(A); } catch {} } }`,
       `@Component() class A { constructor() { for (const x of xs) { inject(A); } } }`,
       `@Component() class A { constructor() { toUser(inject(A)); } }`,
-      // KNOWN BUG: nested functions which can be run later, outside of the injection context
-      `@Component() class A { a = () => inject(A); }`,
-      `@Component() class A { a = () => { inject(A).navigate(['/']); }; }`,
-      `@Component() class A { a = function () { return inject(A); }; }`,
-      `@Component() class A { a = { m() { return inject(A); } }; }`,
-      `@Component() class A { constructor() { const f = () => inject(A); } }`,
-      `@Component() class A { constructor() { function f() { return inject(A); } } }`,
-      `@Component() class A { constructor() { this.f = () => inject(A); } }`,
       // Auto-accessor (`accessor` keyword) initializers run at construction too
       `@Component() class A { accessor a = inject(A); }`,
     ],
@@ -122,6 +114,18 @@ describe("class initialization (constructor and field initializers)", () => {
       { code: `@Component() class A { constructor() { obs.subscribe(() => { inject(A); }); } }`, errors },
       { code: `@Component() class A { constructor() { setTimeout(() => { const a = inject(A); }); } }`, errors },
       { code: `@Component() class A { constructor() { xs.forEach(function () { inject(A); }); } }`, errors },
+      // Nested functions, which may be run later, outside of the injection context
+      { code: `@Component() class A { a = () => inject(A); }`, errors },
+      { code: `@Component() class A { a = () => { inject(A).navigate(['/']); }; }`, errors },
+      { code: `@Component() class A { a = function () { return inject(A); }; }`, errors },
+      { code: `@Component() class A { a = { m() { return inject(A); } }; }`, errors },
+      { code: `@Component() class A { constructor() { const f = () => inject(A); } }`, errors },
+      { code: `@Component() class A { constructor() { function f() { return inject(A); } } }`, errors },
+      { code: `@Component() class A { constructor() { this.f = () => inject(A); } }`, errors },
+      // KNOWN LIMITATION: nested functions run synchronously
+      { code: `@Component() class A { constructor() { (() => inject(A))(); } }`, errors },
+      // Static blocks are run when the class is defined
+      { code: `@Component() class A { static { inject(A); } }`, errors },
       // Non-Angular class nested inside an Angular class: the nearest class is the one checked
       { code: `@Component() class A { constructor() { class B { b = inject(B); } } }`, errors },
     ],
@@ -172,16 +176,18 @@ describe("function types with injection context (guards, resolvers, interceptors
       `const f: CanActivateFn = () => [inject(A)];`,
       // Synchronous code before `await`
       `const f: CanActivateFn = async () => { const a = inject(A); await a.check(); };`,
-      // KNOWN BUG: `await` is only detected when it is an expression statement in the same block
-      `const f: CanActivateFn = async () => { const x = await something(); return inject(A); };`,
-      `const f: CanActivateFn = async () => { await something(); if (cond) { return inject(A); } };`,
-      `const f: CanActivateFn = async () => { if (await something()) {} return inject(A); };`,
-      `const f: CanActivateFn = async () => { for await (const x of xs) {} return inject(A); };`,
-      `const f: CanActivateFn = async () => { return (await something()) && inject(A); };`,
-      // KNOWN BUG: nested functions which can be run later, outside of the injection context
-      `const f: CanActivateFn = () => () => inject(A);`,
-      // KNOWN BUG: callbacks directly returning the call
-      `const f: CanActivateFn = () => obs.pipe(map(() => inject(A)));`,
+      `const f: CanActivateFn = async () => { await something(inject(A)); };`,
+      `const f: CanActivateFn = async () => { const a = await something(inject(A)); return a; };`,
+      // `await` in a nested function does not pause the function
+      `const f: CanActivateFn = async () => { const g = async () => { await something(); }; return inject(A); };`,
+      `const f: CanActivateFn = async () => { xs.map(async (x) => await x); return inject(A); };`,
+      // Nested in another expression
+      `const f: CanActivateFn = () => { const user = toUser(inject(A)); return !!user; };`,
+      `const f: CanActivateFn = () => { const a = inject(A).value; return a; };`,
+      `const f: CanActivateFn = () => { const a = [inject(A)]; return a; };`,
+      `const f: CanActivateFn = () => { const a = { b: inject(A) }; return a; };`,
+      // ACCEPTED FALSE NEGATIVE: `await` after the call in a loop, which pauses before the next iterations (not used in Angular guards)
+      `const f: CanActivateFn = async () => { for (const x of xs) { inject(A); await x; } };`,
     ],
     invalid: [
       // No type or other type
@@ -192,6 +198,7 @@ describe("function types with injection context (guards, resolvers, interceptors
       { code: `const f = (() => inject(A)) as CanActivateFn;`, errors },
       { code: `function f(): ReturnType<CanActivateFn> { return inject(A); }`, errors },
       // Callbacks
+      { code: `const f: CanActivateFn = () => obs.pipe(map(() => inject(A)));`, errors },
       { code: `const f: CanActivateFn = () => obs.pipe(map((x) => { return inject(A); }));`, errors },
       { code: `const f: CanActivateFn = () => { obs.subscribe(() => { inject(A); }); return true; };`, errors },
       // After `await` in the same block
@@ -199,14 +206,17 @@ describe("function types with injection context (guards, resolvers, interceptors
       { code: `const f: CanActivateFn = async () => { await something(); const a = inject(A); };`, errors },
       { code: `const f: CanActivateFn = async () => { await something(); inject(A); };`, errors },
       { code: `const f: CanActivateFn = async () => { await something(); inject(A); await other(); };`, errors },
-      // KNOWN BUG: call inside the awaited expression
-      { code: `const f: CanActivateFn = async () => { await something(inject(A)); };`, errors },
-      // Nested function in a variable without type
+      // After any `await` before
+      { code: `const f: CanActivateFn = async () => { const x = await something(); return inject(A); };`, errors },
+      { code: `const f: CanActivateFn = async () => { await something(); if (cond) { return inject(A); } };`, errors },
+      { code: `const f: CanActivateFn = async () => { if (await something()) {} return inject(A); };`, errors },
+      { code: `const f: CanActivateFn = async () => { for await (const x of xs) {} return inject(A); };`, errors },
+      { code: `const f: CanActivateFn = async () => { for await (const x of xs) { inject(A); } };`, errors },
+      { code: `const f: CanActivateFn = async () => { return (await something()) && inject(A); };`, errors },
+      { code: `const f: CanActivateFn = async () => { await something(await other(), inject(A)); };`, errors },
+      // Nested functions, which may be run later, outside of the injection context
+      { code: `const f: CanActivateFn = () => () => inject(A);`, errors },
       { code: `const f: CanActivateFn = () => { const g = () => inject(A); return g; };`, errors },
-      // KNOWN BUG: nested in another expression of a variable without type
-      { code: `const f: CanActivateFn = () => { const user = toUser(inject(A)); return !!user; };`, errors },
-      { code: `const f: CanActivateFn = () => { const a = inject(A).value; return a; };`, errors },
-      { code: `const f: CanActivateFn = () => { const a = [inject(A)]; return a; };`, errors },
     ],
   }));
 });
@@ -228,8 +238,6 @@ describe("legacy class guards, resolvers and interceptors", () => {
       `@Injectable() class G implements CanActivate { canActivate() { const a = inject(A); if (a) { return inject(B); } return toUser(inject(C)); } }`,
       // Before `await`
       `@Injectable() class G implements CanActivate { async canActivate() { const a = inject(A); await a.check(); } }`,
-      // KNOWN BUG: nested functions which can be run later, outside of the injection context
-      `@Injectable() class G implements CanActivate { canActivate() { return () => inject(A); } }`,
     ],
     invalid: [
       // Method does not match the interface
@@ -244,6 +252,8 @@ describe("legacy class guards, resolvers and interceptors", () => {
       { code: `@Injectable() class G implements CanActivate { canActivate() { return obs.pipe(map(() => inject(A))); } }`, errors },
       // After `await`
       { code: `@Injectable() class G implements CanActivate { async canActivate() { await something(); return inject(A); } }`, errors },
+      // Nested functions, which may be run later, outside of the injection context
+      { code: `@Injectable() class G implements CanActivate { canActivate() { return () => inject(A); } }`, errors },
     ],
   }));
 });
@@ -267,11 +277,12 @@ describe("inline route functions", () => {
       `const routes: Routes = [{ path: '', canActivate: [function () { return inject(A).check(); }] }];`,
       `const routes: Routes = [{ path: '', canActivate: [() => { return inject(A).check(); }] }];`,
       `const routes: Routes = [{ path: '', canActivate: [() => { if (cond) { return inject(A).check(); } }] }];`,
+      // Local variables and nested expressions
+      `const routes: Routes = [{ path: '', canActivate: [() => { const a = inject(A); return a.check(); }] }];`,
+      `const routes: Routes = [{ path: '', redirectTo: () => { const a = inject(A); return a.url; } }];`,
+      `const routes: Routes = [{ path: '', resolve: { data: () => toData(inject(A)) } }];`,
       // Before `await`
       `const routes: Routes = [{ path: '', canActivate: [async () => { inject(A); await something(); }] }];`,
-      // KNOWN BUG: not in a function, so it is run when the routes are defined, outside of the injection context
-      `const routes: Routes = [{ path: '', providers: [{ provide: B, useValue: inject(A) }] }];`,
-      `const routes: Routes = [{ path: '', data: { a: inject(A) } }];`,
     ],
     invalid: [
       // No type or other type
@@ -280,12 +291,16 @@ describe("inline route functions", () => {
       { code: `const routes: Route[] = [{ path: '', canActivate: [() => inject(A).check()] }];`, errors },
       { code: `const routes = [{ path: '', canActivate: [() => inject(A).check()] }] satisfies Routes;`, errors },
       { code: `provideRouter([{ path: '', canActivate: [() => inject(A).check()] }]);`, errors },
+      // Not in a function, so it is run when the routes are defined, outside of the injection context
+      { code: `const routes: Routes = [{ path: '', providers: [{ provide: B, useValue: inject(A) }] }];`, errors },
+      { code: `const routes: Routes = [{ path: '', data: { a: inject(A) } }];`, errors },
       // Callbacks
       { code: `const routes: Routes = [{ path: '', canActivate: [() => obs.pipe(map(() => inject(A)))] }];`, errors },
+      { code: `const routes: Routes = [{ path: '', canActivate: [wrap(() => inject(A))] }];`, errors },
+      // Nested functions, which may be run later, outside of the injection context
+      { code: `const routes: Routes = [{ path: '', canActivate: [() => { const g = () => inject(A); return g; }] }];`, errors },
       // After `await`
       { code: `const routes: Routes = [{ path: '', canActivate: [async () => { await something(); return inject(A); }] }];`, errors },
-      // KNOWN BUG: inside a local variable
-      { code: `const routes: Routes = [{ path: '', canActivate: [() => { const a = inject(A); return a.check(); }] }];`, errors },
     ],
   }));
 });
@@ -299,6 +314,7 @@ describe("factories", () => {
       `const p = { provide: T, useFactory: function () { return inject(A); } };`,
       `const p = { provide: T, useFactory: () => { const a = inject(A); return a; } };`,
       `const p = { provide: T, useFactory: () => toUser(inject(A)) };`,
+      `const p = { provide: T, useFactory: () => ({ api: inject(A) }) };`,
       `@Component({ providers: [{ provide: T, useFactory: () => inject(A) }] }) class C {}`,
       `bootstrapApplication(App, { providers: [{ provide: T, useFactory: () => inject(A) }] });`,
       `const ps = xs.map((x) => ({ provide: x, useFactory: () => inject(A) }));`,
@@ -306,15 +322,10 @@ describe("factories", () => {
       `const T = new InjectionToken('t', { factory: () => inject(A) });`,
       `const T = new InjectionToken<A>('t', { providedIn: 'root', factory: () => inject(A) });`,
       `const T = new InjectionToken('t', { factory: () => { const a = inject(A); return a; } });`,
-      // KNOWN BUG: the property name is not checked in `InjectionToken` options
-      `const T = new InjectionToken('t', { other: () => inject(A) });`,
       // `@Injectable()` factory
       `@Injectable({ providedIn: 'root', useFactory: () => inject(A) }) class S {}`,
       // `@Service()` factory
       `@Service({ factory: () => inject(A) }) class S {}`,
-      // KNOWN BUG: nested functions which can be run later, outside of the injection context
-      `const p = { provide: T, useFactory: () => () => inject(A) };`,
-      `const T = new InjectionToken('t', { factory: () => () => inject(A) });`,
       // Quoted and computed string `useFactory` keys
       `const p = { provide: T, 'useFactory': () => inject(A) };`,
       `const p = { provide: T, ['useFactory']: () => inject(A) };`,
@@ -324,8 +335,10 @@ describe("factories", () => {
       { code: `const p = { useFactory: () => inject(A) };`, errors },
       // Other property names
       { code: `const p = { provide: T, factory: () => inject(A) };`, errors },
+      { code: `const T = new InjectionToken('t', { other: () => inject(A) });`, errors },
       // Not an `InjectionToken`
       { code: `const T = new Other('t', { factory: () => inject(A) });`, errors },
+      { code: `const T = new Other('t', { factory: () => ({ api: inject(A) }) });`, errors },
       { code: `const T = new ng.InjectionToken('t', { factory: () => inject(A) });`, errors },
       // Decorator mismatch
       { code: `@Injectable({ factory: () => inject(A) }) class S {}`, errors },
@@ -333,9 +346,12 @@ describe("factories", () => {
       { code: `@Other({ useFactory: () => inject(A) }) class S {}`, errors },
       // Callbacks
       { code: `const p = { provide: T, useFactory: () => obs.pipe(map(() => inject(A))) };`, errors },
-      // KNOWN BUG: nested in an object
-      { code: `const p = { provide: T, useFactory: () => ({ api: inject(A) }) };`, errors },
-      { code: `const T = new Other('t', { factory: () => ({ api: inject(A) }) });`, errors },
+      // Nested functions, which may be run later, outside of the injection context
+      { code: `const p = { provide: T, useFactory: () => () => inject(A) };`, errors },
+      { code: `const p = { provide: T, useFactory: () => ({ get: () => inject(A) }) };`, errors },
+      { code: `const T = new InjectionToken('t', { factory: () => () => inject(A) });`, errors },
+      // After `await`
+      { code: `const p = { provide: T, useFactory: async () => { await something(); return inject(A); } };`, errors },
     ],
   }));
 });
@@ -352,28 +368,36 @@ describe("functions with injection context", () => {
       `runInInjectionContext(injector, async () => { inject(A); await something(); });`,
       `TestBed.runInInjectionContext(() => inject(A));`,
       `TestBed.runInInjectionContext(() => { const a = inject(A); });`,
+      // Nested in another expression
+      `runInInjectionContext(injector, () => toUser(inject(A)));`,
+      `runInInjectionContext(injector, () => { const user = toUser(inject(A)); });`,
+      `runInInjectionContext(injector, () => inject(A).init());`,
+      `runInInjectionContext(injector, () => obs.pipe(takeUntilDestroyed(inject(A))));`,
+      `TestBed.runInInjectionContext(() => toUser(inject(A)));`,
       // `TestBed` instance from `getTestBed()`
       `testBed.runInInjectionContext(() => inject(A));`,
       `getTestBed().runInInjectionContext(() => inject(A));`,
       // `EnvironmentInjector.runInContext()`
       `injector.runInContext(() => inject(A));`,
       `this.injector.runInContext(() => { const a = inject(A); });`,
-      `inject(EnvironmentInjector).runInContext(() => inject(A));`,
+      `@Component() class C { constructor() { inject(EnvironmentInjector).runInContext(() => inject(A)); } }`,
       // ACCEPTED FALSE NEGATIVE: methods are name-based, whatever the object (the check only skips reports)
       `Other.runInInjectionContext(() => inject(A));`,
       // Async application initialization
       `provideAppInitializer(() => inject(A));`,
       `provideAppInitializer(() => { const a = inject(A); return a.init(); });`,
+      `provideAppInitializer(() => toUser(inject(A)));`,
+      `provideAppInitializer(() => inject(A).init());`,
       // Sync application initialization
       `providePlatformInitializer(() => { const a = inject(A); a.init(); });`,
       `provideEnvironmentInitializer(() => { const a = inject(A); a.init(); });`,
-      // REGRESSION in `fix/falsepositives`: reported there, because the function is not a direct argument of the call, but inside an options object
+      `providePlatformInitializer(() => { inject(A).init(); });`,
+      `provideEnvironmentInitializer(() => { inject(A).init(); });`,
+      // Function in an options object
       `withViewTransitions({ onViewTransitionCreated: () => { const a = inject(A); a.init(); } });`,
+      `withViewTransitions({ onViewTransitionCreated: () => { inject(A).init(); } });`,
       `provideWebMcpTools(() => { const a = inject(A); a.register(); });`,
-      // KNOWN BUG: `await` is only detected when it is an expression statement in the same block
-      `runInInjectionContext(injector, async () => { const x = await something(); inject(A); });`,
-      // KNOWN BUG: nested functions which can be run later, outside of the injection context
-      `runInInjectionContext(injector, () => { const f = () => inject(A); });`,
+      `provideWebMcpTools(() => { inject(A).register(); });`,
     ],
     invalid: [
       // Other functions
@@ -389,20 +413,14 @@ describe("functions with injection context", () => {
       { code: `provideAppInitializer(() => { obs.subscribe(() => inject(A)); });`, errors },
       // After `await`
       { code: `runInInjectionContext(injector, async () => { await something(); inject(A); });`, errors },
+      { code: `runInInjectionContext(injector, async () => { const x = await something(); inject(A); });`, errors },
       { code: `TestBed.runInInjectionContext(async () => { await something(); inject(A); });`, errors },
       { code: `provideAppInitializer(async () => { await something(); inject(A); });`, errors },
-      // KNOWN BUG: nested in another call
-      { code: `runInInjectionContext(injector, () => toUser(inject(A)));`, errors },
-      { code: `runInInjectionContext(injector, () => { const user = toUser(inject(A)); });`, errors },
-      { code: `TestBed.runInInjectionContext(() => toUser(inject(A)));`, errors },
-      { code: `provideAppInitializer(() => toUser(inject(A)));`, errors },
-      { code: `provideAppInitializer(() => inject(A).init());`, errors },
-      { code: `providePlatformInitializer(() => { inject(A).init(); });`, errors },
-      { code: `provideEnvironmentInitializer(() => { inject(A).init(); });`, errors },
-      { code: `withViewTransitions({ onViewTransitionCreated: () => { inject(A).init(); } });`, errors },
-      { code: `provideWebMcpTools(() => { inject(A).register(); });`, errors },
-      { code: `runInInjectionContext(injector, () => inject(A).init());`, errors },
-      { code: `runInInjectionContext(injector, () => obs.pipe(takeUntilDestroyed(inject(A))));`, errors },
+      // Nested functions, which may be run later, outside of the injection context
+      { code: `runInInjectionContext(injector, () => { const f = () => inject(A); });`, errors },
+      { code: `withViewTransitions({ onViewTransitionCreated: () => { const f = () => inject(A); } });`, errors },
+      // Outside of the `runInContext()` callback
+      { code: `inject(EnvironmentInjector).runInContext(() => {});`, errors },
       // KNOWN LIMITATION: `runInInjectionContext()` done before in the call stack
       { code: `function f() { return inject(A); } runInInjectionContext(injector, () => f());`, errors },
     ],
@@ -423,10 +441,12 @@ describe("assertInInjectionContext()", () => {
       `function f(injector) { if (!injector) { other(); assertInInjectionContext(f); } return inject(A); }`,
       // The assertion declares that the function must be called in an injection context, wherever it is placed: misuse fails either way
       `function f() { const a = inject(A); assertInInjectionContext(f); return a; }`,
-      // KNOWN BUG: assertion only covers the synchronous part of the function
-      `async function f() { assertInInjectionContext(f); await something(); return inject(A); }`,
-      // KNOWN BUG: nested functions which can be run later, outside of the injection context
-      `function f() { assertInInjectionContext(f); return () => inject(A); }`,
+      // Call nested in another block
+      `function f() { assertInInjectionContext(f); if (cond) { return inject(A); } }`,
+      `function f() { assertInInjectionContext(f); try { return inject(A); } catch {} }`,
+      `function f() { assertInInjectionContext(f); for (const x of xs) { inject(A); } }`,
+      // Before `await`
+      `async function f() { assertInInjectionContext(f); const a = inject(A); await something(); return a; }`,
     ],
     invalid: [
       // No assertion, or another assertion
@@ -444,10 +464,10 @@ describe("assertInInjectionContext()", () => {
       { code: `function f(injector) { if (injector) {} else { assertInInjectionContext(f); } return inject(A); }`, errors },
       // Callbacks
       { code: `function f() { assertInInjectionContext(f); obs.subscribe(() => inject(A)); }`, errors },
-      // KNOWN BUG: call nested in another block
-      { code: `function f() { assertInInjectionContext(f); if (cond) { return inject(A); } }`, errors },
-      { code: `function f() { assertInInjectionContext(f); try { return inject(A); } catch {} }`, errors },
-      { code: `function f() { assertInInjectionContext(f); for (const x of xs) { inject(A); } }`, errors },
+      // Nested functions, which may be run later, outside of the injection context
+      { code: `function f() { assertInInjectionContext(f); return () => inject(A); }`, errors },
+      // The assertion only covers the synchronous part of the function
+      { code: `async function f() { assertInInjectionContext(f); await something(); return inject(A); }`, errors },
     ],
   }));
 });

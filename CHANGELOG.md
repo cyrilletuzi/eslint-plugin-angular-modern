@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.13.0 (not yet released)
+
+Injection context rules:
+- fewer false positives when the call is nested in another expression or block, for example `obs.pipe(takeUntilDestroyed())` in `runInInjectionContext()`, or `const auth = inject(Auth);` in a guard or a route function
+- now report calls in any nested function, not only in callbacks, for example `readonly goHome = () => inject(Router).navigate(['/']);` (see the [known limitation](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/injection-context/known-limitations/CALLBACKS.md))
+- now report calls after any `await`, not only after an `await` statement in the same block
+
 ## 1.12.0 (2026-11-21)
 
 Rules now check that the Angular APIs really come from Angular imports:
