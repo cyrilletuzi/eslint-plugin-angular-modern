@@ -19,7 +19,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "MemberExpression[property.type='Identifier'][property.name='ngZone'][computed=false]"(node: TSESTree.MemberExpression) {
+      "MemberExpression[property.name='ngZone'][property.type='Identifier'][computed=false][object.type!='ThisExpression']"(node: TSESTree.MemberExpression) {
         context.report({
           node,
           messageId,

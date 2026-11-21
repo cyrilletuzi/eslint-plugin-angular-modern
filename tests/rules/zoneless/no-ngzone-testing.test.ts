@@ -29,6 +29,17 @@ testRule(rule, {
 }`,
     // Object key
     `const a = { ngZone: null };`,
+    // `this.ngZone` is a class member (e.g. an injected NgZone), never a fixture
+    `@Component({ template: "" })
+export class SomeComponent {
+  private readonly ngZone = inject(NgZone);
+
+  constructor() {
+    this.ngZone.runOutsideAngular(() => {});
+  }
+}`,
+    `this.ngZone.run(() => {});`,
+    `this?.ngZone;`,
     // Strings and comments
     `const name = "fixture.ngZone";`,
     `// fixture.ngZone`,
@@ -74,16 +85,9 @@ testRule(rule, {
 const b = otherFixture.ngZone;`,
       errors: [error, error],
     },
-    // SUSPECTED BUG: any object is matched, not only a ComponentFixture (e.g. an injected NgZone in a component, outside tests)
+    // ACCEPTED FALSE POSITIVE: any object other than `this` is matched, not only a ComponentFixture
     {
-      code: `@Component({ template: "" })
-export class SomeComponent {
-  private readonly ngZone = inject(NgZone);
-
-  constructor() {
-    this.ngZone.runOutsideAngular(() => {});
-  }
-}`,
+      code: `someService.ngZone.run(() => {});`,
       errors: [error],
     },
   ],
