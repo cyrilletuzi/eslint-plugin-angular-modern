@@ -131,7 +131,7 @@ export class SomeClass {}`,
     // Not a decorator
     `import { Directive } from "@angular/core"; const config = { standalone: false };`,
     `import { Directive } from "@angular/core"; Directive({ standalone: false });`,
-    // ACCEPTED FALSE NEGATIVE: namespace-qualified decorator (callee is a MemberExpression) is not reported (false negative)
+    // ACCEPTED FALSE NEGATIVE: namespace-qualified decorator (callee is a MemberExpression) is not reported
     `import * as ng from "@angular/core";
 
 @ng.Directive({ standalone: false })
@@ -198,26 +198,34 @@ export class A {
       errors: [error],
     },
     // Aliased import is reported
-    { code: `import { Directive as NgDirective } from "@angular/core";
+    {
+      code: `import { Directive as NgDirective } from "@angular/core";
 
 @NgDirective({ standalone: false })
-export class SomeClass {}`, errors: [error] },
+export class SomeClass {}`, errors: [error]
+    },
     // Quoted `standalone` key
-    { code: `import { Directive } from "@angular/core";
+    {
+      code: `import { Directive } from "@angular/core";
 
 @Directive({ "standalone": false })
-export class SomeClass {}`, errors: [error] },
+export class SomeClass {}`, errors: [error]
+    },
     // Computed key with a string
-    { code: `import { Directive } from "@angular/core";
+    {
+      code: `import { Directive } from "@angular/core";
 
 @Directive({ ["standalone"]: false })
-export class SomeClass {}`, errors: [error] },
+export class SomeClass {}`, errors: [error]
+    },
     // ACCEPTED FALSE POSITIVE: a computed key with a variable named `standalone` is matched as the `standalone` property (a dynamic key in a static Angular configuration is a bad practice)
-    { code: `import { Directive } from "@angular/core";
+    {
+      code: `import { Directive } from "@angular/core";
 
 const standalone = "other";
 
 @Directive({ [standalone]: false })
-export class SomeClass {}`, errors: [error] },
+export class SomeClass {}`, errors: [error]
+    },
   ],
 });

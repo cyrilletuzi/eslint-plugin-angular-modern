@@ -133,7 +133,7 @@ export class SomeClass {}`,
     // Not a decorator
     `import { Component } from "@angular/core"; const config = { standalone: false };`,
     `import { Component } from "@angular/core"; Component({ standalone: false });`,
-    // ACCEPTED FALSE NEGATIVE: namespace-qualified decorator (callee is a MemberExpression) is not reported (false negative)
+    // ACCEPTED FALSE NEGATIVE: namespace-qualified decorator (callee is a MemberExpression) is not reported
     `import * as ng from "@angular/core";
 
 @ng.Component({ standalone: false })
@@ -201,26 +201,34 @@ export class A {
       errors: [error],
     },
     // Aliased import is reported
-    { code: `import { Component as NgComponent } from "@angular/core";
+    {
+      code: `import { Component as NgComponent } from "@angular/core";
 
 @NgComponent({ standalone: false })
-export class SomeClass {}`, errors: [error] },
+export class SomeClass {}`, errors: [error]
+    },
     // Quoted `standalone` key
-    { code: `import { Component } from "@angular/core";
+    {
+      code: `import { Component } from "@angular/core";
 
 @Component({ "standalone": false })
-export class SomeClass {}`, errors: [error] },
+export class SomeClass {}`, errors: [error]
+    },
     // Computed key with a string
-    { code: `import { Component } from "@angular/core";
+    {
+      code: `import { Component } from "@angular/core";
 
 @Component({ ["standalone"]: false })
-export class SomeClass {}`, errors: [error] },
+export class SomeClass {}`, errors: [error]
+    },
     // ACCEPTED FALSE POSITIVE: a computed key with a variable named `standalone` is matched as the `standalone` property (a dynamic key in a static Angular configuration is a bad practice)
-    { code: `import { Component } from "@angular/core";
+    {
+      code: `import { Component } from "@angular/core";
 
 const standalone = "other";
 
 @Component({ [standalone]: false })
-export class SomeClass {}`, errors: [error] },
+export class SomeClass {}`, errors: [error]
+    },
   ],
 });
