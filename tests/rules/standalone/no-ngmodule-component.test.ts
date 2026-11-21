@@ -140,6 +140,13 @@ export class SomeClass {}`,
 export class SomeClass {}`,
     // Same name imported from another library is not reported
     `import { Component } from "other-lib"; @Component({ standalone: false }) class A {}`,
+    // Computed key with a variable is not the `standalone` property
+    `import { Component } from "@angular/core";
+
+const standalone = "other";
+
+@Component({ [standalone]: false })
+export class SomeClass {}`,
   ],
   invalid: [
     // Doc example
@@ -219,15 +226,6 @@ export class SomeClass {}`, errors: [error]
       code: `import { Component } from "@angular/core";
 
 @Component({ ["standalone"]: false })
-export class SomeClass {}`, errors: [error]
-    },
-    // ACCEPTED FALSE POSITIVE: a computed key with a variable named `standalone` is matched as the `standalone` property (a dynamic key in a static Angular configuration is a bad practice)
-    {
-      code: `import { Component } from "@angular/core";
-
-const standalone = "other";
-
-@Component({ [standalone]: false })
 export class SomeClass {}`, errors: [error]
     },
   ],

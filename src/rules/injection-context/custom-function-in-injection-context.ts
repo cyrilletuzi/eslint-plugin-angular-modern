@@ -97,7 +97,7 @@ export const ruleDefinition: RuleDefinition = {
         if (functionConfig) {
           if ((
             functionConfig.argumentPosition === undefined ||
-            functionConfig.argumentPropertyName !== undefined && !isCalledWithProperty(node, functionConfig.argumentPosition, functionConfig.argumentPropertyName) ||
+            functionConfig.argumentPropertyName !== undefined && !isCalledWithProperty(context, node, functionConfig.argumentPosition, functionConfig.argumentPropertyName) ||
             node.arguments.length < functionConfig.argumentPosition + 1
           ) &&
             !isInInjectionContext(node, {

@@ -27,7 +27,7 @@ export const ruleDefinition: RuleDefinition = {
         for (const node of getImportedFunctionCalls(context, importNode)) {
           if (
             /* Takes an `Injector` in second argument: `httpResource(() => '/some/api/path', { injector })` */
-            !isCalledWithProperty(node, 1, 'injector') &&
+            !isCalledWithProperty(context, node, 1, 'injector') &&
             !isInInjectionContext(node)
           ) {
             context.report({

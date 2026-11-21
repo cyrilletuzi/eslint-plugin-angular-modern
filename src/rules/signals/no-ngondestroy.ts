@@ -19,7 +19,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "MethodDefinition[key.type='Identifier'][key.name='ngOnDestroy'], MethodDefinition[key.type='Literal'][key.value='ngOnDestroy']"(node: TSESTree.MethodDefinition) {
+      "MethodDefinition[key.type='Identifier'][key.name='ngOnDestroy'][computed=false], MethodDefinition[key.type='Literal'][key.value='ngOnDestroy']"(node: TSESTree.MethodDefinition) {
         context.report({
           node,
           messageId,

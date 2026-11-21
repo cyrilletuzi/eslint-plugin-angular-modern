@@ -1,4 +1,4 @@
-# Synchronous callbacks
+# Route options depending on Angular version
 
 This known limitation is a false negative.
 

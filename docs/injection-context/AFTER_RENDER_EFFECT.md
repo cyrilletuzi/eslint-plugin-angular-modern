@@ -124,7 +124,7 @@ export class ProductPage implements OnInit {
 ```
 
 > [!NOTE]
-> Prefer a literal object as in this example. If the second argument is a variable, the lint rule will not check if `injector` is actually present, see the [known limitation documentation](./known-limitations/INJECTOR_IN_VARIABLE.md).
+> Prefer a literal object as in this example. If the argument is a variable which is not a local `const` initialized with a literal object (an import, a parameter...), the lint rule will not check if `injector` is actually present, see the [known limitation documentation](./known-limitations/INJECTOR_IN_VARIABLE.md).
 
 - in explicit injection context
 ```typescript
@@ -153,6 +153,9 @@ function customOperator(injector: Injector) {
 }
 ```
 
-[View the test file for all valid and invalid cases](../../tests/rules/injection-context/after-render-effect-in-injection-context.test.ts)
+View the test files for all valid and invalid cases:
+- [this rule's specific cases](../../tests/rules/injection-context/after-render-effect-in-injection-context.test.ts)
+- [shared cases checking which special injection contexts are accepted by each rule](../../tests/rules/injection-context/injection-contexts.ts)
+- [all injection context detection cases](../../tests/rules/injection-context/inject-in-injection-context.test.ts), shared by all injection context rules
 
 [Back to README](../../README.md)

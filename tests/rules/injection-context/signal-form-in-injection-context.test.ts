@@ -23,11 +23,16 @@ describe("explicit `injector` in the third argument: `form(model, schema, option
 describe("schema in the second argument", () => {
   testRule(rule, withImport(importDeclaration, {
     valid: [
-      // TODO: KNOWN LIMITATION, with 2 arguments, a variable can be a schema or options, and is assumed to be options with an `injector`
+      // ACCEPTED FALSE NEGATIVE: with 2 arguments, a schema in a variable cannot be told apart from options, and is assumed to be options with an `injector` (schemas are written inline in Angular code)
       `form(model, schema);`,
     ],
     invalid: [
+      // Inline schema function, the common case: it is not options, so there is no `injector`
       { code: `form(model, (path) => {});`, errors },
+      { code: `form(model, (path) => { required(path.name); email(path.email); });`, errors },
+      { code: `form(model, (path) => { customValidators(path); });`, errors },
+      { code: `form(model, function (path) { required(path.name); });`, errors },
+      { code: `form(model, (path: SchemaPathTree<User>) => { required(path.name); });`, errors },
       { code: `form(model, schema(), {});`, errors },
       // With 3 arguments, a schema in a variable is not mistaken for options
       { code: `form(model, schema, {});`, errors },

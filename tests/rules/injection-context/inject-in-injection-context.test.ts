@@ -3,11 +3,9 @@
  * of the shared injection context detection logic (`src/utils/angular-injection-context.ts` and its dependencies).
  *
  * Other injection context rules only test their own specificities (explicit injector argument, enabled special contexts).
- *
- * See `tests/README.md` for the meaning of the `KNOWN BUG`, `SUSPECTED BUG`, `KNOWN LIMITATION` and `REGRESSION` markers.
  */
-import * as rule from "../../../src/rules/injection-context/inject-in-injection-context.js";
 import { describe } from "vitest";
+import * as rule from "../../../src/rules/injection-context/inject-in-injection-context.js";
 import { testRule } from "../../rule-tester.js";
 import { injectionContextsCases, withImport } from "./injection-contexts.js";
 
@@ -122,7 +120,7 @@ describe("class initialization (constructor and field initializers)", () => {
       { code: `@Component() class A { constructor() { const f = () => inject(A); } }`, errors },
       { code: `@Component() class A { constructor() { function f() { return inject(A); } } }`, errors },
       { code: `@Component() class A { constructor() { this.f = () => inject(A); } }`, errors },
-      // KNOWN LIMITATION: nested functions run synchronously
+      // KNOWN LIMITATION (FALSE POSITIVE): nested functions run synchronously
       { code: `@Component() class A { constructor() { (() => inject(A))(); } }`, errors },
       // Static blocks are run when the class is defined
       { code: `@Component() class A { static { inject(A); } }`, errors },
@@ -238,12 +236,21 @@ describe("legacy class guards, resolvers and interceptors", () => {
       `@Injectable() class G implements CanActivate { canActivate() { const a = inject(A); if (a) { return inject(B); } return toUser(inject(C)); } }`,
       // Before `await`
       `@Injectable() class G implements CanActivate { async canActivate() { const a = inject(A); await a.check(); } }`,
+      // Computed method name with a variable: its value is unknown, so it may be the guard method
+      // ACCEPTED FALSE NEGATIVE: it is not reported even if it is another method, to avoid false positives (not used in Angular code)
+      `@Injectable() class G implements CanActivate { [canActivate]() { return inject(A).check(); } }`,
+      // Computed method name with a string
+      `@Injectable() class G implements CanActivate { ['canActivate']() { return inject(A).check(); } }`,
     ],
     invalid: [
       // Method does not match the interface
       { code: `@Injectable() class G implements CanMatch { canActivate() { return inject(A).check(); } }`, errors },
       // No interface
       { code: `@Injectable() class G { canActivate() { return inject(A).check(); } }`, errors },
+      // Computed method name with a variable in a class without a guard interface
+      { code: `@Injectable() class G { [canActivate]() { return inject(A).check(); } }`, errors },
+      // Computed method name with another string
+      { code: `@Injectable() class G implements CanActivate { ['other']() { return inject(A).check(); } }`, errors },
       // Not an Angular class
       { code: `class G implements CanActivate { canActivate() { return inject(A).check(); } }`, errors },
       // Other method
@@ -329,10 +336,21 @@ describe("factories", () => {
       // Quoted and computed string `useFactory` keys
       `const p = { provide: T, 'useFactory': () => inject(A) };`,
       `const p = { provide: T, ['useFactory']: () => inject(A) };`,
+      `const p = { ['provide']: T, useFactory: () => inject(A) };`,
+      `const T = new InjectionToken('t', { ['factory']: () => inject(A) });`,
+      // Computed keys with a variable: their value is unknown, so they may be `provide`, `useFactory` or `factory`
+      // ACCEPTED FALSE NEGATIVE: they are not reported even if they are other properties, to avoid false positives (not used in Angular code)
+      `const p = { [provide]: T, useFactory: () => inject(A) };`,
+      `const p = { provide: T, [useFactory]: () => inject(A) };`,
+      `const T = new InjectionToken('t', { [factory]: () => inject(A) });`,
     ],
     invalid: [
       // `useFactory` without `provide`
       { code: `const p = { useFactory: () => inject(A) };`, errors },
+      // Computed key with a variable, but nothing else making it a factory: the function's own key does not count as `provide`
+      { code: `const p = { [key]: () => inject(A) };`, errors },
+      { code: `const p = { other: T, [key]: () => inject(A) };`, errors },
+      { code: `const p = { provide: T, ['other']: () => inject(A) };`, errors },
       // Other property names
       { code: `const p = { provide: T, factory: () => inject(A) };`, errors },
       { code: `const T = new InjectionToken('t', { other: () => inject(A) });`, errors },
@@ -398,6 +416,8 @@ describe("functions with injection context", () => {
       `withViewTransitions({ onViewTransitionCreated: () => { inject(A).init(); } });`,
       `provideWebMcpTools(() => { const a = inject(A); a.register(); });`,
       `provideWebMcpTools(() => { inject(A).register(); });`,
+      // Workaround for the `runInInjectionContext()` done before in the call stack limitation: assert the injection context in the called function
+      `function f() { assertInInjectionContext(f); return inject(A); } runInInjectionContext(injector, () => f());`,
     ],
     invalid: [
       // Other functions
@@ -421,7 +441,7 @@ describe("functions with injection context", () => {
       { code: `withViewTransitions({ onViewTransitionCreated: () => { const f = () => inject(A); } });`, errors },
       // Outside of the `runInContext()` callback
       { code: `inject(EnvironmentInjector).runInContext(() => {});`, errors },
-      // KNOWN LIMITATION: `runInInjectionContext()` done before in the call stack
+      // ACCEPTED FALSE POSITIVE: `runInInjectionContext()` done before in the call stack, `assertInInjectionContext()` should be used in the function
       { code: `function f() { return inject(A); } runInInjectionContext(injector, () => f());`, errors },
     ],
   }));

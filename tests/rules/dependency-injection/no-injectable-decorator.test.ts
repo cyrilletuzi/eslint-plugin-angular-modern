@@ -16,6 +16,11 @@ testRule(rule, {
     /* Quoted key */
     `import { Injectable } from '@angular/core'; @Injectable({ 'providedIn': 'platform' }) class A {}`,
     `import { Injectable } from '@angular/core'; @Injectable({ "providedIn": 'platform' }) class A {}`,
+    /* Computed key with a variable: its value is unknown, so it may be `providedIn` and the `'platform'` exception applies */
+    /* ACCEPTED FALSE NEGATIVE: it is not reported even if it is another property, to avoid false positives (not used in Angular code) */
+    `import { Injectable } from '@angular/core'; @Injectable({ [providedIn]: 'platform' }) class A {}`,
+    /* Computed key with a string */
+    `import { Injectable } from '@angular/core'; @Injectable({ ['providedIn']: 'platform' }) class A {}`,
     /* Exception with other properties */
     `import { Injectable } from '@angular/core'; @Injectable({ useFactory: () => '', providedIn: 'platform' }) class A {}`,
     /* Decorator without call (selector requires `expression.callee`) */
@@ -57,6 +62,10 @@ testRule(rule, {
     { code: `import { Injectable } from '@angular/core'; @Injectable({ ...config }) class A {}`, errors: [error] },
     /* Quoted key with another value than 'platform' */
     { code: `import { Injectable } from '@angular/core'; @Injectable({ 'providedIn': 'root' }) class A {}`, errors: [error] },
+    /* Computed key with a variable, but another value than `'platform'` */
+    { code: `import { Injectable } from '@angular/core'; @Injectable({ [providedIn]: 'root' }) class A {}`, errors: [error] },
+    /* `'platform'` in another property */
+    { code: `import { Injectable } from '@angular/core'; @Injectable({ ['other']: 'platform' }) class A {}`, errors: [error] },
     /* Generic call */
     { code: `import { Injectable } from '@angular/core'; @Injectable<unknown>() class A {}`, errors: [error] },
     /* Exported class, decorator among others */

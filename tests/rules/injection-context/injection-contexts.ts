@@ -121,10 +121,23 @@ export function objectArgumentCases(build: (argument: string) => string, propert
       build(`{ ...others, ${propertyName} }`),
       // Quoted key
       build(`{ '${propertyName}': value }`),
-      // Computed key with the same identifier name (edge case)
-      build(`{ [${propertyName}]: value }`),
-      // KNOWN LIMITATION: options in a variable are supposed to contain the property
+      // Computed key with a string
+      build(`{ ['${propertyName}']: value }`),
+      // Computed key with a variable: its value is unknown, so it may be the property
+      `const ${propertyName} = '${propertyName}';\n${build(`{ [${propertyName}]: value }`)}`,
+      // ACCEPTED FALSE NEGATIVE: a computed key with a variable which is not the property is not reported, to avoid false positives (not used in Angular code)
+      build(`{ [key]: value }`),
+      `const options = { [key]: value };\n${build(`options`)}`,
+      // Options in a local `const` initialized with an object literal are resolved
+      `const options = { ${propertyName} };\n${build(`options`)}`,
+      `const options = { other: true, ${propertyName}: value };\n${build(`options`)}`,
+      // KNOWN LIMITATION (FALSE NEGATIVE): options in a variable which cannot be resolved (import, parameter...) are supposed to contain the property
       build(`options`),
+      `import { options } from "./options";\n${build(`options`)}`,
+      `function f(options) { ${build(`options`)} }`,
+      `let options = {};\n${build(`options`)}`,
+      `const options = getOptions();\n${build(`options`)}`,
+      `const { options } = config;\n${build(`options`)}`,
     ],
     invalid: [
       build(`{}`),
@@ -132,6 +145,11 @@ export function objectArgumentCases(build: (argument: string) => string, propert
       build(`{ ...options }`),
       build(`this.options`),
       build(`getOptions()`),
+      // Options in a local `const` initialized with an object literal without the property
+      `const options = {};\n${build(`options`)}`,
+      `const options = { other: true };\n${build(`options`)}`,
+      // Nested scope: the `const` is resolved from an outer scope
+      `const options = {};\nfunction f() { ${build(`options`)} }`,
     ].map((code) => ({ code, errors })),
   };
 }

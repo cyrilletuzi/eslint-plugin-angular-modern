@@ -6,6 +6,9 @@ Injection context rules:
 - fewer false positives when the call is nested in another expression or block, for example `obs.pipe(takeUntilDestroyed())` in `runInInjectionContext()`, or `const auth = inject(Auth);` in a guard or a route function
 - now report calls in any nested function, not only in callbacks, for example `readonly goHome = () => inject(Router).navigate(['/']);` (see the [known limitation](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/injection-context/known-limitations/CALLBACKS.md))
 - now report calls after any `await`, not only after an `await` statement in the same block
+- options in a local `const` are now checked, for example `const options = { initialValue: 0 }; toSignal(obs, options);` outside of an injection context is now reported (other variables, like imports or parameters, are still supposed to contain the `injector`, see the [known limitation](https://github.com/cyrilletuzi/eslint-plugin-angular-modern/blob/main/docs/injection-context/known-limitations/INJECTOR_IN_VARIABLE.md))
+
+Fewer false positives in all rules checking a property or method name: a computed key with a variable is no longer mistaken for the property with the same name, for example `@Component({ [standalone]: false })`, `{ provide: A, [deps]: [B] }` or `[ngOnInit]() {}`.
 
 ## 1.12.0 (2026-11-21)
 

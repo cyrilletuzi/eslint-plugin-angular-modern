@@ -19,7 +19,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "MethodDefinition[key.type='Identifier'][key.name='ngAfterContentInit'], MethodDefinition[key.type='Literal'][key.value='ngAfterContentInit']"(node: TSESTree.MethodDefinition) {
+      "MethodDefinition[key.type='Identifier'][key.name='ngAfterContentInit'][computed=false], MethodDefinition[key.type='Literal'][key.value='ngAfterContentInit']"(node: TSESTree.MethodDefinition) {
         context.report({
           node,
           messageId,
