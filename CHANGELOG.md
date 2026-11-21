@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.13.0 (not yet released)
+## 1.13.0 (2026-11-21)
 
 Injection context rules:
 - fewer false positives when the call is nested in another expression or block, for example `obs.pipe(takeUntilDestroyed())` in `runInInjectionContext()`, or `const auth = inject(Auth);` in a guard or a route function
