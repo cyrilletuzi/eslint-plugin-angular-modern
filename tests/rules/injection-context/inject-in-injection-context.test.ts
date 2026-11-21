@@ -6,8 +6,8 @@
  *
  * See `tests/README.md` for the meaning of the `KNOWN BUG`, `SUSPECTED BUG`, `KNOWN LIMITATION` and `REGRESSION` markers.
  */
-import * as rule from "../../../src/rules/injection-context/inject-in-injection-context.js";
 import { describe } from "vitest";
+import * as rule from "../../../src/rules/injection-context/inject-in-injection-context.js";
 import { testRule } from "../../rule-tester.js";
 import { injectionContextsCases, withImport } from "./injection-contexts.js";
 
@@ -122,7 +122,7 @@ describe("class initialization (constructor and field initializers)", () => {
       { code: `@Component() class A { constructor() { const f = () => inject(A); } }`, errors },
       { code: `@Component() class A { constructor() { function f() { return inject(A); } } }`, errors },
       { code: `@Component() class A { constructor() { this.f = () => inject(A); } }`, errors },
-      // KNOWN LIMITATION: nested functions run synchronously
+      // KNOWN LIMITATION (FALSE POSITIVE): nested functions run synchronously
       { code: `@Component() class A { constructor() { (() => inject(A))(); } }`, errors },
       // Static blocks are run when the class is defined
       { code: `@Component() class A { static { inject(A); } }`, errors },
