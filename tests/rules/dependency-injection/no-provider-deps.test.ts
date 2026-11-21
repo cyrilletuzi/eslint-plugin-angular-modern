@@ -16,6 +16,9 @@ testRule(rule, {
     `const p = { config: { provide: A }, deps: [B] };`,
     /* Destructuring: parent is an ObjectPattern, not an ObjectExpression */
     `const { provide, deps } = provider;`,
+    /* Computed keys with a variable are not the `deps` or `provide` properties */
+    `const p = { provide: A, [deps]: [B] };`,
+    `const p = { [provide]: A, deps: [B] };`,
     /* Type declarations are not Property nodes */
     `interface P { provide: A; deps: B[]; }`,
     `type P = { provide: A; deps: B[] };`,
@@ -67,7 +70,8 @@ testRule(rule, {
     { code: `const p = { provide: A, useFactory: () => '', 'deps': [B] };`, errors: [error] },
     // Quoted `provide` key
     { code: `const p = { 'provide': A, useFactory: () => '', deps: [B] };`, errors: [error] },
-    /* ACCEPTED FALSE POSITIVE: a computed key with a variable named `deps` is matched as the `deps` property (a dynamic key in a static Angular configuration is a bad practice) */
-    { code: `const p = { provide: A, [deps]: [B] };`, errors: [error] },
+    // Computed key with a string literal is the real `deps` or `provide` property
+    { code: `const p = { provide: A, ["deps"]: [B] };`, errors: [error] },
+    { code: `const p = { ["provide"]: A, deps: [B] };`, errors: [error] },
   ],
 });

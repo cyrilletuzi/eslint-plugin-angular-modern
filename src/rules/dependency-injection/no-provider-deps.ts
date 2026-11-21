@@ -20,13 +20,15 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Property[key.type='Identifier'][key.name='deps'], Property[key.type='Literal'][key.value='deps']"(node: TSESTree.Property) {
+      "Property[key.type='Identifier'][key.name='deps'][computed=false], Property[key.type='Literal'][key.value='deps']"(node: TSESTree.Property) {
         if (
           node.parent.type === 'ObjectExpression' &&
           node.parent.properties.some(
             property =>
               property.type === 'Property' &&
-              getKeyName(property.key) === 'provide',
+              getKeyName(property.key) === 'provide' &&
+              /* `[provide]` is a variable, not the `provide` property */
+              !(property.computed && property.key.type === 'Identifier'),
           )
         ) {
           context.report({
