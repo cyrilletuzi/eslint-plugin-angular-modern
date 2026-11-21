@@ -19,7 +19,8 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "MemberExpression[property.name='ngZone'][property.type='Identifier'][computed=false][object.type!='ThisExpression']"(node: TSESTree.MemberExpression) {
+      // `fixture.ngZone` and `const { ngZone } = fixture;`
+      "MemberExpression[property.name='ngZone'][property.type='Identifier'][computed=false][object.type!='ThisExpression'], VariableDeclarator[init.type!='ThisExpression'] > ObjectPattern > Property[key.name='ngZone'][key.type='Identifier'][computed=false]"(node: TSESTree.MemberExpression | TSESTree.Property) {
         context.report({
           node,
           messageId,

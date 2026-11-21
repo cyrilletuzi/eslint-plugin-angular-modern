@@ -18,8 +18,20 @@ testRule(rule, {
     `fixture.ngzone;`,
     // Computed member with an Identifier: the property is a variable, not the ngZone property
     `fixture[ngZone];`,
-    // SUSPECTED BUG: destructuring is not a MemberExpression (false negative)
-    `const { ngZone } = fixture;`,
+    // Destructuring: look-alike names and computed keys
+    `const { NgZone, ngZoneRef } = fixture;`,
+    `const { [ngZone]: zone } = fixture;`,
+    // Destructuring: `this` is never a fixture
+    `const { ngZone } = this;`,
+    // Destructuring: object literal value named ngZone, not a key
+    `const { zone: ngZone } = fixture;`,
+    // ACCEPTED FALSE NEGATIVE: parameter destructuring is not reported (any object, e.g. factory dependencies)
+    `function f({ ngZone }) {}`,
+    `const f = ({ ngZone }) => {};`,
+    // ACCEPTED FALSE NEGATIVE: nested destructuring is not reported
+    `const { a: { ngZone } } = fixture;`,
+    // ACCEPTED FALSE NEGATIVE: assignment destructuring is not reported
+    `({ ngZone } = fixture);`,
     // Identifier not in a member expression
     `const ngZone = inject(NgZone);`,
     `ngZone.run(() => {});`,
@@ -84,6 +96,31 @@ export class SomeComponent {
       code: `const a = fixture.ngZone;
 const b = otherFixture.ngZone;`,
       errors: [error, error],
+    },
+    // Destructuring
+    {
+      code: `const { ngZone } = fixture;`,
+      errors: [error],
+    },
+    {
+      code: `const { componentInstance, ngZone, nativeElement } = fixture;`,
+      errors: [error],
+    },
+    {
+      code: `const { ngZone: zone } = fixture;`,
+      errors: [error],
+    },
+    {
+      code: `const { ngZone = null } = fixture;`,
+      errors: [error],
+    },
+    {
+      code: `const { ngZone } = this.fixture;`,
+      errors: [error],
+    },
+    {
+      code: `let { ngZone } = fixture;`,
+      errors: [error],
     },
     // ACCEPTED FALSE POSITIVE: any object other than `this` is matched, not only a ComponentFixture
     {
