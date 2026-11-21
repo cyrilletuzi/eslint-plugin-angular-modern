@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-angular-modern",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "description": "ESLint rules for modern and safe Angular. Compatible with Oxlint.",
   "keywords": [
     "angular",
