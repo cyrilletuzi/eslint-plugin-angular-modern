@@ -186,7 +186,7 @@ describe("function types with injection context (guards, resolvers, interceptors
       `const f: CanActivateFn = () => { const a = inject(A).value; return a; };`,
       `const f: CanActivateFn = () => { const a = [inject(A)]; return a; };`,
       `const f: CanActivateFn = () => { const a = { b: inject(A) }; return a; };`,
-      // ACCEPTED FALSE NEGATIVE: `await` after the call in a loop, which pauses before the next iterations (not used in Angular guards)
+      // ACCEPTED FALSE NEGATIVE: `await` after the call in a loop, which pauses before the next iterations (injecting in a loop is useless, as it always returns the same instance)
       `const f: CanActivateFn = async () => { for (const x of xs) { inject(A); await x; } };`,
     ],
     invalid: [
