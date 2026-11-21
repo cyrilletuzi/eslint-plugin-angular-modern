@@ -43,7 +43,7 @@ testRule(rule, {
     // Nested plain class declaration inside a component method: the nearest `ClassDeclaration` is not Angular
     `import { Component } from "@angular/core"; @Component() class A { m() { class B { get a() { return 1; } } } }`,
     // Decorated class expression: only `ClassDeclaration` is looked up
-    // SUSPECTED BUG: a component defined as a class expression is not checked
+    // ACCEPTED FALSE NEGATIVE: a decorated class expression is not detected, only class declarations are (not used in Angular code)
     `import { Component } from "@angular/core"; const A = @Component() class { get a() { return 1; } };`,
     // Decorator callee is a `MemberExpression`
     // ACCEPTED FALSE NEGATIVE: `@core.Component()` (namespace import) is not recognized as a component
@@ -97,7 +97,7 @@ testRule(rule, {
     // Getter and setter pair: one report each
     { code: `import { Component } from "@angular/core"; @Component() class A { get a() { return 1; } set a(value: number) {} }`, errors: [{ messageId }, { messageId }] },
     // Class expression nested in a component: the nearest `ClassDeclaration` is the component
-    // SUSPECTED BUG: an accessor of an unrelated inner class expression is reported
+    // ACCEPTED FALSE POSITIVE: an accessor of an unrelated inner class expression is reported (not used in Angular code)
     { code: `import { Component } from "@angular/core"; @Component() class A { readonly b = class { get c() { return 1; } }; }`, errors: [{ messageId }] },
     // Aliased Angular decorator is checked
     { code: `import { Directive as NgDirective } from '@angular/core'; @NgDirective() export class A { get value() { return 1; } }`, errors: [{ messageId }] },

@@ -166,4 +166,6 @@ export class Example {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/signals/no-directive-writable-property.test.ts)
+
 [Back to README](../../README.md)

@@ -15,12 +15,8 @@ testRule(rule, {
     `@Component() class A { ngOnInit2(): void {} }`,
     `@Component() class A { myNgOnInit(): void {} }`,
     // Only `MethodDefinition` is targeted: a property holding an arrow function is ignored
-    // SUSPECTED BUG: a hook defined as an arrow function property is still called by Angular, but is not reported
+    // An arrow function property is not a lifecycle hook: Angular only registers hooks defined on the class prototype
     `@Component() class A { ngOnInit = (): void => {}; }`,
-    // Only an `Identifier` key is targeted: string literal and computed keys are ignored
-    // SUSPECTED BUG: `'ngOnInit'()` and `['ngOnInit']()` define the same hook, but are not reported
-    `@Component() class A { 'ngOnInit'(): void {} }`,
-    `@Component() class A { ['ngOnInit'](): void {} }`,
     // A native private method (`PrivateIdentifier` key) is a different member, not a hook
     `@Component() class A { #ngOnInit(): void {} }`,
     // Abstract method (`TSAbstractMethodDefinition`) is not targeted
@@ -76,5 +72,8 @@ testRule(rule, {
       `,
       errors: [{ messageId }],
     },
+    // Quoted and computed string keys define the same hook
+    { code: `@Component() class A { 'ngOnInit'(): void {} }`, errors: [{ messageId }] },
+    { code: `@Component() class A { ['ngOnInit'](): void {} }`, errors: [{ messageId }] },
   ],
 });

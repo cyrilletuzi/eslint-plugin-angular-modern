@@ -1,6 +1,6 @@
 # no-subscribe-in-component-constructor
 
-Restrict the usage of `.subscribe()` in components constructors.
+Restrict the usage of `.subscribe()` in components constructors and field initializers.
 
 An observable inside a component constructor can generally be managed with `toSignal()` or `rxResource()`.
 
@@ -67,6 +67,19 @@ export class AdminPage implements OnInit {
 }
 ```
 
+```typescript
+@Component()
+export class AdminPage implements OnInit {
+  readonly #auth = inject(Auth);
+  readonly isAuthenticated = signal(false);
+  readonly subscription = this.#auth.isAuthenticatedObservable.pipe(
+    takeUntilDestroyed(),
+  ).subscribe((isAuthenticated) => {
+    this.isAuthenticated.set(isAuthenticated);
+  });
+}
+```
+
 ## ✅ Valid
 
 ```typescript
@@ -102,5 +115,7 @@ export class AdminPage implements OnInit {
   );
 }
 ```
+
+[View the test file for all valid and invalid cases](../../tests/rules/experimental/no-subscribe-in-component-constructor.test.ts)
 
 [Back to README](../../README.md)

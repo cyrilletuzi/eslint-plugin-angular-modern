@@ -1,4 +1,5 @@
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getKeyName } from "./ast-property-key";
 
 export function isCalledWithProperty(node: TSESTree.CallExpression, argumentPosition: number, propertyName: string): boolean {
   const argument = node.arguments.at(argumentPosition);
@@ -6,8 +7,7 @@ export function isCalledWithProperty(node: TSESTree.CallExpression, argumentPosi
   if ((argument?.type === "ObjectExpression" &&
     argument.properties.find((property) =>
       property.type === "Property" &&
-      property.key.type === "Identifier" &&
-      property.key.name === propertyName
+      getKeyName(property.key) === propertyName
     )) || argument?.type === "Identifier"
   ) {
     return true;

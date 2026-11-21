@@ -19,7 +19,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "ImportDeclaration[source.value='zone.js']"(node: TSESTree.ImportDeclaration) {
+      "ImportDeclaration[source.value=/^zone\\.js(?:\\/|$)/]"(node: TSESTree.ImportDeclaration) {
         context.report({
           node,
           messageId,

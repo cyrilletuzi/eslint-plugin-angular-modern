@@ -19,7 +19,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "MethodDefinition[key.type='Identifier'][key.name='ngAfterViewChecked']"(node: TSESTree.MethodDefinition) {
+      "MethodDefinition[key.type='Identifier'][key.name='ngAfterViewChecked'], MethodDefinition[key.type='Literal'][key.value='ngAfterViewChecked']"(node: TSESTree.MethodDefinition) {
         context.report({
           node,
           messageId,

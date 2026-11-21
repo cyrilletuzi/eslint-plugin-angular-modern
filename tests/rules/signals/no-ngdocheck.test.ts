@@ -15,12 +15,8 @@ testRule(rule, {
     `@Component() class A { ngDoCheck2(): void {} }`,
     `@Component() class A { myNgDoCheck(): void {} }`,
     // Only `MethodDefinition` is targeted: a property holding an arrow function is ignored
-    // SUSPECTED BUG: a hook defined as an arrow function property is still called by Angular, but is not reported
+    // An arrow function property is not a lifecycle hook: Angular only registers hooks defined on the class prototype
     `@Component() class A { ngDoCheck = (): void => {}; }`,
-    // Only an `Identifier` key is targeted: string literal and computed keys are ignored
-    // SUSPECTED BUG: `'ngDoCheck'()` and `['ngDoCheck']()` define the same hook, but are not reported
-    `@Component() class A { 'ngDoCheck'(): void {} }`,
-    `@Component() class A { ['ngDoCheck'](): void {} }`,
     // A native private method (`PrivateIdentifier` key) is a different member, not a hook
     `@Component() class A { #ngDoCheck(): void {} }`,
     // Abstract method (`TSAbstractMethodDefinition`) is not targeted
@@ -76,5 +72,8 @@ testRule(rule, {
       `,
       errors: [{ messageId }],
     },
+    // Quoted and computed string keys define the same hook
+    { code: `@Component() class A { 'ngDoCheck'(): void {} }`, errors: [{ messageId }] },
+    { code: `@Component() class A { ['ngDoCheck'](): void {} }`, errors: [{ messageId }] },
   ],
 });

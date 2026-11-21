@@ -29,4 +29,6 @@ Restrict the usage of `withModule`.
 withModule();
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/standalone/no-withmodule-testing.test.ts)
+
 [Back to README](../../README.md)

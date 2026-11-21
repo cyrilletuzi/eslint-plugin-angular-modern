@@ -38,4 +38,6 @@ export class SomeDirective {}
 export class SomeDirective {}
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/standalone/no-ngmodule-directive.test.ts)
+
 [Back to README](../../README.md)

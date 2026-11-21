@@ -43,3 +43,13 @@ export function isInAngularHttpClientOptionsVariable(object: TSESTree.ObjectExpr
 
   return httpClientOptionsInterfacesNames.has(variableType);
 }
+
+/**
+ * Checks if a node is an argument of a `new HttpRequest()` (options are the 3rd or 4th argument depending on the HTTP method).
+ */
+export function isInAngularHttpRequestConstructor(object: TSESTree.ObjectExpression): boolean {
+  return object.parent?.type === "NewExpression" &&
+    object.parent.callee.type === "Identifier" &&
+    object.parent.callee.name === "HttpRequest" &&
+    object.parent.arguments.includes(object);
+}

@@ -1,6 +1,6 @@
 # no-browsertestingmodule
 
-Restrict the usage of `BrowserTestingModule`.
+Restrict the usage of `BrowserTestingModule` and `BrowserDynamicTestingModule`.
 
 ## Documentation
 
@@ -27,6 +27,9 @@ Restrict the usage of `BrowserTestingModule`.
 
 ```typescript
 BrowserTestingModule
+BrowserDynamicTestingModule
 ```
+
+[View the test file for all valid and invalid cases](../../tests/rules/standalone/no-browsertestingmodule.test.ts)
 
 [Back to README](../../README.md)

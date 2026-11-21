@@ -32,4 +32,6 @@ export class SomeComponent implements DoCheck {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/signals/no-ngdocheck.test.ts)
+
 [Back to README](../../README.md)

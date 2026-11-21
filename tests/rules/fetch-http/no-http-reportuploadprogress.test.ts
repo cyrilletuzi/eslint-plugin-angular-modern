@@ -33,8 +33,6 @@ testRule(rule, {
     `this.httpClient.get('/api', { ...{ reportUploadProgress: true } });`,
     `this.httpClient.get('/api', [{ reportUploadProgress: true }]);`,
     `this.httpClient.get('/api', cond ? { reportUploadProgress: true } : {});`,
-    // SUSPECTED BUG: `new HttpRequest(...)` is a NewExpression, so its options object is not checked although it is a classic usage of upload progress
-    `const req = new HttpRequest('POST', '/api', body, { reportUploadProgress: true });`,
     /* Case 2 negative: variable without type or with another type */
     `const options = { reportUploadProgress: true };`,
     `const options: Options = { reportUploadProgress: true };`,
@@ -50,8 +48,8 @@ testRule(rule, {
     `const options: HttpRequestOptions = { context: { reportUploadProgress: true } };`,
     /* Case 2 negative: typed class property (PropertyDefinition, not VariableDeclarator) */
     `class A { options: HttpRequestOptions = { reportUploadProgress: true }; }`,
-    // SUSPECTED BUG: string-quoted `'reportUploadProgress'` key is not matched (selector requires an Identifier key)
-    `this.httpClient.get('/api', { 'reportUploadProgress': true });`,
+    /* Case 3 negative: another class */
+    `const req = new OtherRequest('POST', '/api', body, { reportUploadProgress: true });`,
   ],
   invalid: [
     /* Case 1: each HTTP method */
@@ -87,5 +85,10 @@ testRule(rule, {
       code: `http.get('/a', { reportUploadProgress: true }); http.post('/b', body, { reportUploadProgress: true });`,
       errors: [error, error],
     },
+    // Quoted `reportUploadProgress` key
+    { code: `this.httpClient.get('/api', { 'reportUploadProgress': true });`, errors: [error] },
+    /* Case 3: `new HttpRequest()`, options as 4th argument (with body) or 3rd argument (without body) */
+    { code: `const req = new HttpRequest('POST', '/api', body, { reportUploadProgress: true });`, errors: [error] },
+    { code: `const req = new HttpRequest('GET', '/api', { reportUploadProgress: true });`, errors: [error] },
   ],
 });

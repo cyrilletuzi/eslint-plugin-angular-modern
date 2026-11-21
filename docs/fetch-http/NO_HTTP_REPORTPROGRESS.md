@@ -72,4 +72,6 @@ const options: HttpRequestOptions = {
 this.httpClient.post('/some/api', body, options);
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/fetch-http/no-http-reportprogress.test.ts)
+
 [Back to README](../../README.md)

@@ -3,9 +3,24 @@ import type { TSESTree } from "@typescript-eslint/utils";
 import { getImportedFunctionCalls } from "../../utils/angular-import";
 import { isInInjectionContext } from "../../utils/angular-injection-context";
 import { isCalledWithProperty } from "../../utils/ast-call-argument";
+import { getKeyName } from "../../utils/ast-property-key";
 
 export const ruleName = "to-signal-in-injection-context";
 const messageId = "toSignalInInjectionContext";
+
+/**
+ * `manualCleanup: false` is the default value, so it still requires an injection context.
+ */
+function isManualCleanupDisabled(node: TSESTree.CallExpression): boolean {
+  const options = node.arguments[1];
+
+  return options?.type === "ObjectExpression" && options.properties.some((property) =>
+    property.type === "Property" &&
+    getKeyName(property.key) === "manualCleanup" &&
+    property.value.type === "Literal" &&
+    property.value.value === false
+  );
+}
 
 export const ruleDefinition: RuleDefinition = {
   meta: {
@@ -28,7 +43,10 @@ export const ruleDefinition: RuleDefinition = {
           if (
             /* Takes an `Injector` or `manualCleanup` in second argument object: `toSignal(obs, { injector })` or `toSignal(obs, { manualCleanup })` */
             !isCalledWithProperty(node, 1, 'injector') &&
-            !isCalledWithProperty(node, 1, 'manualCleanup') &&
+            !(
+              isCalledWithProperty(node, 1, 'manualCleanup') &&
+              !isManualCleanupDisabled(node)
+            ) &&
             !isInInjectionContext(node)
           ) {
             context.report({

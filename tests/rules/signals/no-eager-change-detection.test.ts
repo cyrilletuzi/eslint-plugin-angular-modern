@@ -18,17 +18,15 @@ testRule(rule, {
     `const a = [Strategy.Default, changeDetectionStrategy.Eager, ChangeDetection.Default, Other.Eager];`,
     // A native private member is not a usage
     `import { ChangeDetectionStrategy } from "@angular/core"; class A { #Default = 1; m() { return ChangeDetectionStrategy.#Default; } }`,
-    // Computed access: the property is a `Literal`
-    // SUSPECTED BUG: `ChangeDetectionStrategy["Default"]` is not reported
-    `import { ChangeDetectionStrategy } from "@angular/core"; @Component({ changeDetection: ChangeDetectionStrategy["Default"] }) class A {}`,
     // The object is a `MemberExpression`, not an `Identifier`
     // ACCEPTED FALSE NEGATIVE: with a namespace import, `core.ChangeDetectionStrategy.Default` is not reported
     `import { ChangeDetectionStrategy } from "@angular/core"; @Component({ changeDetection: core.ChangeDetectionStrategy.Default }) class A {}`,
-    // Raw enum value
-    // SUSPECTED BUG: the raw value of `ChangeDetectionStrategy.Default` (`1`) is not reported
+    // ACCEPTED FALSE NEGATIVE: the raw enum value of `ChangeDetectionStrategy.Default` (`1`) is not reported (unrealistic, the enum is always used)
     `@Component({ changeDetection: 1 }) class A {}`,
     // Destructuring
     `import { ChangeDetectionStrategy } from "@angular/core"; const { Default } = ChangeDetectionStrategy;`,
+    // ACCEPTED FALSE NEGATIVE: computed access with a string is not reported (unnecessary computed access, already flagged by `dot-notation`)
+    `import { ChangeDetectionStrategy } from "@angular/core"; @Component({ changeDetection: ChangeDetectionStrategy["Default"] }) class A {}`,
   ],
   invalid: [
     // Doc examples

@@ -19,9 +19,9 @@ testRule(rule, {
     // Member access without call (parent is not a `CallExpression`)
     `const detect = fixture.detectChanges;`,
     `new Foo(fixture.detectChanges);`,
-    // Computed access (`computed=true`)
-    // SUSPECTED BUG: `fixture["detectChanges"]()` is not reported
-    `fixture["detectChanges"]();`,
+    /* A `.detectChanges` reference passed as an argument is not a call */
+    `spyOn(fixture.detectChanges);`,
+    // Computed access with a variable: not the `detectChanges` property
     `fixture[detectChanges]();`,
     // Native private method (`PrivateIdentifier` property)
     `class A { #detectChanges() {} m() { this.#detectChanges(); } }`,
@@ -41,6 +41,10 @@ testRule(rule, {
     `@Component() class A { readonly b = class { m() { this.cdr.detectChanges(); } }; }`,
     // Component test host declared in a test file
     `describe("x", () => { @Component() class Host { m() { this.cdr.detectChanges(); } } });`,
+    // ACCEPTED FALSE NEGATIVE: computed access with a string is not reported (unnecessary computed access, already flagged by `dot-notation`)
+    `fixture["detectChanges"]();`,
+    // Pipes can inject `ChangeDetectorRef` too, so it is not a testing issue
+    `@Pipe({ name: "a" }) class A { transform() { this.cdr.detectChanges(); } }`,
   ],
   invalid: [
     // Doc example
@@ -69,18 +73,14 @@ testRule(rule, {
     { code: `class A { m() { this.fixture.detectChanges(); } }`, errors: [{ messageId }] },
     { code: `@Injectable() class A { m() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
     { code: `@NgModule() class A { m() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
-    // SUSPECTED BUG: a pipe can inject `ChangeDetectorRef`, but `detectChanges()` there is reported as a testing issue
-    { code: `@Pipe({ name: "a" }) class A { transform() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
     // Nested plain class declaration inside a component: the nearest `ClassDeclaration` is not Angular
     { code: `@Component() class A { m() { class B { n() { this.cdr.detectChanges(); } } } }`, errors: [{ messageId }] },
     // Decorated class expression: only `ClassDeclaration` is looked up
-    // SUSPECTED BUG: a component defined as a class expression is not recognized
+    // ACCEPTED FALSE POSITIVE: a decorated class expression is not recognized as an Angular class, only class declarations are (not used in Angular code)
     { code: `const A = @Component() class { m() { this.cdr.detectChanges(); } };`, errors: [{ messageId }] },
     // Decorator callee is a `MemberExpression`
-    // SUSPECTED BUG: `@core.Component()` (namespace import) is not recognized as a component
+    // ACCEPTED FALSE POSITIVE: `@core.Component()` (namespace import) is not recognized as a component (not used in Angular code)
     { code: `@core.Component() class A { m() { this.cdr.detectChanges(); } }`, errors: [{ messageId }] },
     // The selector matches any `MemberExpression` child of a `CallExpression`, including arguments
-    // SUSPECTED BUG: passing `fixture.detectChanges` as an argument (not calling it) is reported
-    { code: `spyOn(fixture.detectChanges);`, errors: [{ messageId }] },
   ],
 });

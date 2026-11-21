@@ -43,4 +43,6 @@ export const authGuard: CanMatchFn = () => {
 };
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/functional/no-canload-class.test.ts)
+
 [Back to README](../../README.md)

@@ -47,4 +47,6 @@ export class ProductsList {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/signals/no-ngafterviewchecked.test.ts)
+
 [Back to README](../../README.md)

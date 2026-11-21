@@ -47,4 +47,6 @@ export class SomeComponent {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/host-bindings/no-hostlistener-decorator.test.ts)
+
 [Back to README](../../README.md)

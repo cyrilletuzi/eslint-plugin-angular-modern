@@ -82,21 +82,12 @@ export class SomeClass {}`,
 
 @Component({ standalone() { return false; } })
 export class SomeClass {}`,
-    // SUSPECTED BUG: `!true` is a UnaryExpression, not a Literal (false negative)
+    // ACCEPTED FALSE NEGATIVE: `!true` is not detected as `false` (unrealistic code, `false` would be written directly)
     `import { Component } from "@angular/core";
 
 @Component({ standalone: !true })
 export class SomeClass {}`,
-    // Key is not an Identifier named standalone
-    // SUSPECTED BUG: quoted key is a Literal, not an Identifier (false negative)
-    `import { Component } from "@angular/core";
-
-@Component({ "standalone": false })
-export class SomeClass {}`,
-    `import { Component } from "@angular/core";
-
-@Component({ ["standalone"]: false })
-export class SomeClass {}`,
+    // Key not named standalone
     `import { Component } from "@angular/core";
 
 @Component({ isStandalone: false })
@@ -209,20 +200,27 @@ export class A {
 }`,
       errors: [error],
     },
-    // SUSPECTED BUG: a computed key referencing a variable named `standalone` matches (key.type is Identifier, `computed` is not checked)
-    {
-      code: `import { Component } from "@angular/core";
-
-const standalone = "other";
-
-@Component({ [standalone]: false })
-export class SomeClass {}`,
-      errors: [error],
-    },
     // Aliased import is reported
     { code: `import { Component as NgComponent } from "@angular/core";
 
 @NgComponent({ standalone: false })
+export class SomeClass {}`, errors: [error] },
+    // Quoted `standalone` key
+    { code: `import { Component } from "@angular/core";
+
+@Component({ "standalone": false })
+export class SomeClass {}`, errors: [error] },
+    // Computed key with a string
+    { code: `import { Component } from "@angular/core";
+
+@Component({ ["standalone"]: false })
+export class SomeClass {}`, errors: [error] },
+    // ACCEPTED FALSE POSITIVE: a computed key with a variable named `standalone` is matched as the `standalone` property (a dynamic key in a static Angular configuration is a bad practice)
+    { code: `import { Component } from "@angular/core";
+
+const standalone = "other";
+
+@Component({ [standalone]: false })
 export class SomeClass {}`, errors: [error] },
   ],
 });

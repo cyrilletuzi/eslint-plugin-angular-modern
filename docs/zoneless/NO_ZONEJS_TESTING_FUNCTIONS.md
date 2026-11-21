@@ -68,4 +68,6 @@ it(`should...`, fakeAsync(() => {
 }));
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/zoneless/no-zonejs-testing-functions.test.ts)
+
 [Back to README](../../README.md)

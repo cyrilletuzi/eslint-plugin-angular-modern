@@ -66,8 +66,6 @@ describe("class initialization (constructor and field initializers)", () => {
       `@Component() class A { #a = inject(A); }`,
       `@Component() class A { a: A = inject(A); }`,
       `@Component() class A { ['a'] = inject(A); }`,
-      // SUSPECTED BUG: static field initializers are run when the class is defined, not in an injection context
-      `@Component() class A { static a = inject(A); }`,
       // Nested in an expression of the field initializer
       `@Component() class A { a = inject(A).something; }`,
       `@Component() class A { a = inject(A).something(); }`,
@@ -95,17 +93,20 @@ describe("class initialization (constructor and field initializers)", () => {
       `@Component() class A { constructor() { const f = () => inject(A); } }`,
       `@Component() class A { constructor() { function f() { return inject(A); } } }`,
       `@Component() class A { constructor() { this.f = () => inject(A); } }`,
+      // Auto-accessor (`accessor` keyword) initializers run at construction too
+      `@Component() class A { accessor a = inject(A); }`,
     ],
     invalid: [
+      // Static fields are initialized when the class is defined, not in an injection context
+      { code: `@Component() class A { static a = inject(A); }`, errors },
+      { code: `@Component() class A { static accessor a = inject(A); }`, errors },
       // Not an Angular class
       { code: `class A { a = inject(A); }`, errors },
       { code: `class A { constructor() { inject(A); } }`, errors },
       { code: `@Other() class A { a = inject(A); }`, errors },
       { code: `@ng.Component() class A { a = inject(A); }`, errors },
-      // SUSPECTED BUG: class expressions are not detected
+      // ACCEPTED FALSE POSITIVE: a decorated class expression is not recognized as an Angular class, only class declarations are (not used in Angular code)
       { code: `const A = @Component() class { a = inject(A); };`, errors },
-      // SUSPECTED BUG: auto-accessors are field initializers too
-      { code: `@Component() class A { accessor a = inject(A); }`, errors },
       // Methods other than the constructor
       { code: `@Component() class A { ngOnInit() { inject(A); } }`, errors },
       { code: `@Component() class A { method() { inject(A); } }`, errors },
@@ -129,10 +130,17 @@ describe("class initialization (constructor and field initializers)", () => {
 
 describe("inheritance", () => {
   testRule(rule, withImport(importDeclaration, {
-    valid: [],
+    valid: [
+      // Abstract base classes can only be instantiated by a child class, supposed to be an Angular class
+      `abstract class Base { a = inject(A); } @Component() class Child extends Base {}`,
+      `export abstract class Base { a = inject(A); }`,
+      `export abstract class Base { constructor() { inject(A); } }`,
+    ],
     invalid: [
-      // SUSPECTED BUG: undecorated base classes are in an injection context when instantiated by a decorated child class
-      { code: `abstract class Base { a = inject(A); } @Component() class Child extends Base {}`, errors },
+      // ACCEPTED FALSE POSITIVE: a non-abstract undecorated base class is not recognized as instantiated by a decorated child class (it may be instantiated elsewhere)
+      { code: `class Base { a = inject(A); } @Component() class Child extends Base {}`, errors },
+      // Methods of an abstract class are not an injection context
+      { code: `export abstract class Base { m() { inject(A); } }`, errors },
     ],
   }));
 });
@@ -307,14 +315,15 @@ describe("factories", () => {
       // KNOWN BUG: nested functions which can be run later, outside of the injection context
       `const p = { provide: T, useFactory: () => () => inject(A) };`,
       `const T = new InjectionToken('t', { factory: () => () => inject(A) });`,
+      // Quoted and computed string `useFactory` keys
+      `const p = { provide: T, 'useFactory': () => inject(A) };`,
+      `const p = { provide: T, ['useFactory']: () => inject(A) };`,
     ],
     invalid: [
       // `useFactory` without `provide`
       { code: `const p = { useFactory: () => inject(A) };`, errors },
       // Other property names
       { code: `const p = { provide: T, factory: () => inject(A) };`, errors },
-      { code: `const p = { provide: T, ['useFactory']: () => inject(A) };`, errors },
-      { code: `const p = { provide: T, 'useFactory': () => inject(A) };`, errors },
       // Not an `InjectionToken`
       { code: `const T = new Other('t', { factory: () => inject(A) });`, errors },
       { code: `const T = new ng.InjectionToken('t', { factory: () => inject(A) });`, errors },
@@ -343,6 +352,15 @@ describe("functions with injection context", () => {
       `runInInjectionContext(injector, async () => { inject(A); await something(); });`,
       `TestBed.runInInjectionContext(() => inject(A));`,
       `TestBed.runInInjectionContext(() => { const a = inject(A); });`,
+      // `TestBed` instance from `getTestBed()`
+      `testBed.runInInjectionContext(() => inject(A));`,
+      `getTestBed().runInInjectionContext(() => inject(A));`,
+      // `EnvironmentInjector.runInContext()`
+      `injector.runInContext(() => inject(A));`,
+      `this.injector.runInContext(() => { const a = inject(A); });`,
+      `inject(EnvironmentInjector).runInContext(() => inject(A));`,
+      // ACCEPTED FALSE NEGATIVE: methods are name-based, whatever the object (the check only skips reports)
+      `Other.runInInjectionContext(() => inject(A));`,
       // Async application initialization
       `provideAppInitializer(() => inject(A));`,
       `provideAppInitializer(() => { const a = inject(A); return a.init(); });`,
@@ -360,11 +378,12 @@ describe("functions with injection context", () => {
     invalid: [
       // Other functions
       { code: `other(injector, () => inject(A));`, errors },
-      { code: `Other.runInInjectionContext(() => inject(A));`, errors },
       { code: `TestBed.other(() => inject(A));`, errors },
-      { code: `testBed.runInInjectionContext(() => inject(A));`, errors },
-      // SUSPECTED BUG: `TestBed.inject(Injector).runInInjectionContext()` / `EnvironmentInjector.runInContext()` are not detected
-      { code: `injector.runInContext(() => inject(A));`, errors },
+      { code: `injector.other(() => inject(A));`, errors },
+      // Callback not inside the method call
+      { code: `injector.runInContext(cb); const f = () => inject(A);`, errors },
+      // After `await`
+      { code: `injector.runInContext(async () => { await something(); inject(A); });`, errors },
       // Callbacks
       { code: `runInInjectionContext(injector, () => { obs.subscribe(() => inject(A)); });`, errors },
       { code: `provideAppInitializer(() => { obs.subscribe(() => inject(A)); });`, errors },
@@ -402,7 +421,7 @@ describe("assertInInjectionContext()", () => {
       // Conditional assertion
       `function f(injector) { if (!injector) { assertInInjectionContext(f); } return inject(A); }`,
       `function f(injector) { if (!injector) { other(); assertInInjectionContext(f); } return inject(A); }`,
-      // SUSPECTED BUG: the assertion is not required to be before the call
+      // The assertion declares that the function must be called in an injection context, wherever it is placed: misuse fails either way
       `function f() { const a = inject(A); assertInInjectionContext(f); return a; }`,
       // KNOWN BUG: assertion only covers the synchronous part of the function
       `async function f() { assertInInjectionContext(f); await something(); return inject(A); }`,

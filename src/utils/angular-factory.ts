@@ -1,4 +1,5 @@
 import type { TSESTree } from "@typescript-eslint/utils";
+import { getKeyName } from "./ast-property-key";
 import { findAngularClassDecorator } from "./angular-class-decorator";
 import { findNearestAncestorOf } from "./ast-traversal";
 
@@ -25,10 +26,7 @@ function isPropertyInProviderFactory(
   property: TSESTree.PropertyComputedName | TSESTree.PropertyNonComputedName,
 ): boolean {
   // Check the property is called `useFactory`
-  if (
-    property.key.type !== "Identifier" ||
-    property.key.name !== "useFactory"
-  ) {
+  if (getKeyName(property.key) !== "useFactory") {
     return false;
   }
 
@@ -41,8 +39,7 @@ function isPropertyInProviderFactory(
   const provideProperty = objectExpression?.properties.find(
     (objectProperty) =>
       objectProperty.type === "Property" &&
-      objectProperty.key.type === "Identifier" &&
-      objectProperty.key.name === "provide",
+      getKeyName(objectProperty.key) === "provide",
   );
 
   if (provideProperty !== undefined) {
@@ -56,10 +53,7 @@ function isPropertyInServiceFactory(
   property: TSESTree.PropertyComputedName | TSESTree.PropertyNonComputedName,
 ): boolean {
   // Check the property is called `useFactory`
-  if (
-    property.key.type !== "Identifier" ||
-    property.key.name !== "factory"
-  ) {
+  if (getKeyName(property.key) !== "factory") {
     return false;
   }
 
@@ -84,10 +78,7 @@ function isPropertyInInjectableFactory(
   property: TSESTree.PropertyComputedName | TSESTree.PropertyNonComputedName,
 ): boolean {
   // Check the property is called `useFactory`
-  if (
-    property.key.type !== "Identifier" ||
-    property.key.name !== "useFactory"
-  ) {
+  if (getKeyName(property.key) !== "useFactory") {
     return false;
   }
 

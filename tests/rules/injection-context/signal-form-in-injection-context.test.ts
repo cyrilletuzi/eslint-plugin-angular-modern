@@ -23,13 +23,14 @@ describe("explicit `injector` in the third argument: `form(model, schema, option
 describe("schema in the second argument", () => {
   testRule(rule, withImport(importDeclaration, {
     valid: [
-      // SUSPECTED BUG: a schema in a variable is considered as options with an `injector`
+      // TODO: KNOWN LIMITATION, with 2 arguments, a variable can be a schema or options, and is assumed to be options with an `injector`
       `form(model, schema);`,
-      `form(model, schema, {});`,
     ],
     invalid: [
       { code: `form(model, (path) => {});`, errors },
       { code: `form(model, schema(), {});`, errors },
+      // With 3 arguments, a schema in a variable is not mistaken for options
+      { code: `form(model, schema, {});`, errors },
       { code: `form(model, (path) => {}, { injector }, extra);`, errors },
     ],
   }));

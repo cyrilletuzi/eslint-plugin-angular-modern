@@ -26,4 +26,6 @@ Restrict the import of `zone.js`.
 import 'zone.js';
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/zoneless/no-zonejs-import.test.ts)
+
 [Back to README](../../README.md)

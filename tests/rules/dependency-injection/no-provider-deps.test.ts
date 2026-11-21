@@ -29,10 +29,6 @@ testRule(rule, {
     `const p = { ...base, deps: [B] };`,
     /* Member access */
     `provider.deps = [B];`,
-    // SUSPECTED BUG: string-quoted `'deps'` key is not matched (selector requires an Identifier key)
-    `const p = { provide: A, useFactory: () => '', 'deps': [B] };`,
-    // SUSPECTED BUG: string-quoted `'provide'` key is not detected as a provider
-    `const p = { 'provide': A, useFactory: () => '', deps: [B] };`,
   ],
   invalid: [
     /* Classic factory provider */
@@ -52,8 +48,6 @@ testRule(rule, {
     { code: `const p = { ...base, provide: A, deps: [B] };`, errors: [error] },
     /* `provide` as a method still counts (any Property) */
     { code: `const p = { provide() {}, deps: [B] };`, errors: [error] },
-    /* Computed `[deps]` key is still an Identifier key */
-    { code: `const p = { provide: A, [deps]: [B] };`, errors: [error] },
     /* Inside a `providers` array of a decorator */
     {
       code: `@Component({ providers: [{ provide: A, useFactory: (b: B) => b, deps: [B] }] }) class C {}`,
@@ -69,5 +63,11 @@ testRule(rule, {
       code: `const providers = [{ provide: A, deps: [] }, { provide: B, deps: [] }];`,
       errors: [error, error],
     },
+    // Quoted `deps` key
+    { code: `const p = { provide: A, useFactory: () => '', 'deps': [B] };`, errors: [error] },
+    // Quoted `provide` key
+    { code: `const p = { 'provide': A, useFactory: () => '', deps: [B] };`, errors: [error] },
+    /* ACCEPTED FALSE POSITIVE: a computed key with a variable named `deps` is matched as the `deps` property (a dynamic key in a static Angular configuration is a bad practice) */
+    { code: `const p = { provide: A, [deps]: [B] };`, errors: [error] },
   ],
 });

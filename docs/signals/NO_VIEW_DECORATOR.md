@@ -71,4 +71,6 @@ export class ProductsPage {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/signals/no-view-decorator.test.ts)
+
 [Back to README](../../README.md)

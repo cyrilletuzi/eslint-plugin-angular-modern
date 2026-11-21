@@ -5,10 +5,12 @@ import { findNearestAncestorOf } from "./ast-traversal";
 function isInProperty(node: TSESTree.Node): boolean {
   const propertyDefinition = findNearestAncestorOf(
     node,
-    (node) => node.type === "PropertyDefinition",
+    /* Auto-accessors (`accessor a = inject(A)`) are initialized at construction too */
+    (node) => node.type === "PropertyDefinition" || node.type === "AccessorProperty",
     { notInCallback: true },
   );
-  if (propertyDefinition) {
+  /* Static fields are initialized when the class is defined, not when it is instantiated */
+  if (propertyDefinition && !propertyDefinition.static) {
     return true;
   }
   return false;
@@ -36,7 +38,8 @@ export function isInAngularClassInitialization(node: TSESTree.Node): boolean {
 
     if (
       classDeclaration &&
-      findAngularClassDecorator(classDeclaration)
+      /* An abstract class can only be instantiated by a child class, which is supposed to be an Angular class */
+      (classDeclaration.abstract || findAngularClassDecorator(classDeclaration))
     ) {
       return true;
     }

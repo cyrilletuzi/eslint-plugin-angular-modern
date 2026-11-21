@@ -13,8 +13,15 @@ testRule(rule, {
     `import { Component } from "@angular/core"; @Component() class A { method() { this.obs.subscribe(); } }`,
     `import { Component } from "@angular/core"; @Component() class A { get value() { return this.obs.subscribe(); } }`,
     `import { Component } from "@angular/core"; @Component() class A { static create() { obs.subscribe(); } }`,
-    // SUSPECTED BUG: field initializers run during construction too, but are not in a constructor MethodDefinition
-    `import { Component } from "@angular/core"; @Component() class A { sub = this.obs.subscribe(); }`,
+    /* Field whose value is directly a function: a method in disguise, run later */
+    `import { Component } from "@angular/core"; @Component() class A { handler = () => this.obs.subscribe(); }`,
+    `import { Component } from "@angular/core"; @Component() class A { handler = () => { this.obs.subscribe(); }; }`,
+    `import { Component } from "@angular/core"; @Component() class A { handler = function () { this.obs.subscribe(); }; }`,
+    /* Static field: initialized when the class is defined, not when it is instantiated */
+    `import { Component } from "@angular/core"; @Component() class A { static sub = obs.subscribe(); }`,
+    /* Field initializers of non-Component classes */
+    `import { Directive } from "@angular/core"; @Directive() class A { sub = this.obs.subscribe(); }`,
+    `class A { sub = this.obs.subscribe(); }`,
     /* `.subscribe()` in constructors of non-Component classes */
     `import { Directive } from "@angular/core"; @Directive() class A { constructor() { this.obs.subscribe(); } }`,
     `import { Injectable } from "@angular/core"; @Injectable() class A { constructor() { this.obs.subscribe(); } }`,
@@ -32,8 +39,6 @@ testRule(rule, {
     `import { Component } from "@angular/core"; @Component() class A { constructor() { const B = class { method() { obs.subscribe(); } }; } }`,
     /* Undecorated class declared inside the component constructor: nearest ClassDeclaration is not the component */
     `import { Component } from "@angular/core"; @Component() class A { constructor() { class B { constructor() { obs.subscribe(); } } } }`,
-    /* Computed access is not matched */
-    `import { Component } from "@angular/core"; @Component() class A { constructor() { this.obs['subscribe'](); } }`,
     /* `subscribe` not called (parent is not a CallExpression) */
     `import { Component } from "@angular/core"; @Component() class A { constructor() { const s = this.obs.subscribe; } }`,
     `import { Component } from "@angular/core"; @Component() class A { constructor() { this.obs.subscribe.bind(this.obs); } }`,
@@ -47,6 +52,10 @@ testRule(rule, {
     `import { Component } from '@stencil/core'; @Component({ tag: 'my-a' }) export class A { constructor() { obs.subscribe(); } }`,
     /* Angular decorator used without import is not checked */
     `@Component({}) export class A { constructor() { obs.subscribe(); } }`,
+    /* A `.subscribe` reference passed as an argument is not a call */
+    `import { Component } from "@angular/core"; @Component() class A { constructor() { foo(this.obs.subscribe); } }`,
+    /* ACCEPTED FALSE NEGATIVE: computed access with a string is not reported (unnecessary computed access, already flagged by `dot-notation`) */
+    `import { Component } from "@angular/core"; @Component() class A { constructor() { this.obs['subscribe'](); } }`,
   ],
   invalid: [
     /* Basic case */
@@ -76,12 +85,18 @@ testRule(rule, {
       code: `import { Component } from "@angular/core"; @Component() class A { constructor() { a.subscribe(() => { b.subscribe(); }); } }`,
       errors: [error, error],
     },
-    // SUSPECTED BUG: `CallExpression > MemberExpression` also matches a `.subscribe` reference passed as an argument (not a call)
-    { code: `import { Component } from "@angular/core"; @Component() class A { constructor() { foo(this.obs.subscribe); } }`, errors: [error] },
     /* Any `.subscribe()` method is matched, even on non-observables */
     { code: `import { Component } from "@angular/core"; @Component() class A { constructor() { this.store.subscribe(() => {}); } }`, errors: [error] },
     /* Component class nested inside another context */
     { code: `import { Component } from "@angular/core"; function f() { @Component() class A { constructor() { obs.subscribe(); } } }`, errors: [error] },
+    /* Field initializers run during construction too */
+    { code: `import { Component } from "@angular/core"; @Component() class A { sub = this.obs.subscribe(); }`, errors: [error] },
+    { code: `import { Component } from "@angular/core"; @Component() class A { readonly #sub = this.api.get().pipe(takeUntilDestroyed()).subscribe((v) => this.v.set(v)); }`, errors: [error] },
+    { code: `import { Component } from "@angular/core"; @Component() class A { accessor sub = obs.subscribe(); }`, errors: [error] },
+    /* Callback in a field initializer, consistent with callbacks in the constructor */
+    { code: `import { Component } from "@angular/core"; @Component() class A { e = effect(() => { obs.subscribe(); }); }`, errors: [error] },
+    /* ACCEPTED FALSE POSITIVE: a class expression nested in the constructor is unrealistic */
+    { code: `import { Component } from "@angular/core"; @Component() class A { constructor() { const B = class { sub = obs.subscribe(); }; } }`, errors: [error] },
     /* Aliased Angular decorator is checked */
     { code: `import { Component as NgComponent } from '@angular/core'; @NgComponent({}) export class A { constructor() { obs.subscribe(); } }`, errors: [error] },
   ],

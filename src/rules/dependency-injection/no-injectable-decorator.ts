@@ -24,12 +24,13 @@ export const ruleDefinition: RuleDefinition = {
       "ImportDeclaration[source.value='@angular/core'] > ImportSpecifier[imported.name='Injectable']"(importNode: TSESTree.ImportSpecifier) {
         /* Check the import source, but report at decorator sites */
         for (const node of getImportedDecorators(context, importNode)) {
-          const providedIn = getDecoratorProperty(node, "providedIn");
+          const providedIn = getDecoratorProperty(node, "providedIn")?.value;
 
           /* `providedIn: 'platform'` is the only exception allowed, not expressable with `@Service()` */
           if (
-            providedIn?.value.type === "Literal" &&
-            providedIn.value.value === 'platform'
+            (providedIn?.type === "Literal" && providedIn.value === "platform") ||
+            /* Backticks without interpolation: `platform` */
+            (providedIn?.type === "TemplateLiteral" && providedIn.quasis.length === 1 && providedIn.quasis[0]?.value.cooked === "platform")
           ) {
             continue;
           }

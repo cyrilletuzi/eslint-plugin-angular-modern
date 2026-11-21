@@ -18,9 +18,9 @@ testRule(rule, {
     `import { a } from 'angular/platform-browser/animations';`,
     /* String usage not in an import declaration */
     `const a = '@angular/platform-browser/animations';`,
-    // SUSPECTED BUG: re-exports are not ImportDeclaration and are not reported
+    // ACCEPTED FALSE NEGATIVE: re-exports are not reported (not a usage, and not used in Angular applications)
     `export { provideAnimations } from '@angular/platform-browser/animations';`,
-    // SUSPECTED BUG: dynamic imports are not ImportDeclaration and are not reported
+    // ACCEPTED FALSE NEGATIVE: dynamic imports are not reported (not used: lazy loading is done with `@angular/platform-browser/animations/async`, which is reported)
     `const m = await import('@angular/platform-browser/animations');`,
   ],
   invalid: [

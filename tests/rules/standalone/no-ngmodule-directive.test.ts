@@ -80,21 +80,12 @@ export class SomeClass {}`,
 
 @Directive({ standalone() { return false; } })
 export class SomeClass {}`,
-    // SUSPECTED BUG: `!true` is a UnaryExpression, not a Literal (false negative)
+    // ACCEPTED FALSE NEGATIVE: `!true` is not detected as `false` (unrealistic code, `false` would be written directly)
     `import { Directive } from "@angular/core";
 
 @Directive({ standalone: !true })
 export class SomeClass {}`,
-    // Key is not an Identifier named standalone
-    // SUSPECTED BUG: quoted key is a Literal, not an Identifier (false negative)
-    `import { Directive } from "@angular/core";
-
-@Directive({ "standalone": false })
-export class SomeClass {}`,
-    `import { Directive } from "@angular/core";
-
-@Directive({ ["standalone"]: false })
-export class SomeClass {}`,
+    // Key not named standalone
     `import { Directive } from "@angular/core";
 
 @Directive({ isStandalone: false })
@@ -206,20 +197,27 @@ export class A {
 }`,
       errors: [error],
     },
-    // SUSPECTED BUG: a computed key referencing a variable named `standalone` matches (key.type is Identifier, `computed` is not checked)
-    {
-      code: `import { Directive } from "@angular/core";
-
-const standalone = "other";
-
-@Directive({ [standalone]: false })
-export class SomeClass {}`,
-      errors: [error],
-    },
     // Aliased import is reported
     { code: `import { Directive as NgDirective } from "@angular/core";
 
 @NgDirective({ standalone: false })
+export class SomeClass {}`, errors: [error] },
+    // Quoted `standalone` key
+    { code: `import { Directive } from "@angular/core";
+
+@Directive({ "standalone": false })
+export class SomeClass {}`, errors: [error] },
+    // Computed key with a string
+    { code: `import { Directive } from "@angular/core";
+
+@Directive({ ["standalone"]: false })
+export class SomeClass {}`, errors: [error] },
+    // ACCEPTED FALSE POSITIVE: a computed key with a variable named `standalone` is matched as the `standalone` property (a dynamic key in a static Angular configuration is a bad practice)
+    { code: `import { Directive } from "@angular/core";
+
+const standalone = "other";
+
+@Directive({ [standalone]: false })
 export class SomeClass {}`, errors: [error] },
   ],
 });

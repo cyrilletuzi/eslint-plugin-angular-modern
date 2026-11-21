@@ -102,4 +102,6 @@ export class ProductsList {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/signals/no-ngoninit.test.ts)
+
 [Back to README](../../README.md)

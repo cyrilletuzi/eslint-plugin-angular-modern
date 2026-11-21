@@ -26,9 +26,9 @@ testRule(rule, {
     `@Components() class A { constructor(a: A) {} }`,
     `@component() class A { constructor(a: A) {} }`,
     /* Angular decorators not in the allowed list */
-    // SUSPECTED BUG: constructor injection in a `@Service()` class is not reported, while `@Service()` is the modern replacement of `@Injectable()` and also supports DI
+    // `@Service()` does not need to be checked: the Angular compiler already forbids constructor injection there
     `import { Service } from "@angular/core"; @Service() class A { constructor(a: A) {} }`,
-    // SUSPECTED BUG: constructor injection in an `@NgModule()` class is not reported, while NgModule constructors also support DI
+    // `@NgModule()` is not checked, as the NgModule itself is already reported by `no-ngmodule`
     `import { NgModule } from "@angular/core"; @NgModule({}) class A { constructor(a: A) {} }`,
     /* Member expression decorators are not recognized */
     `@ng.Component() class A { constructor(a: A) {} }`,
@@ -36,7 +36,7 @@ testRule(rule, {
     `import { Component } from "@angular/core"; @Component() class A { method() { class B { constructor(b: B) {} } } }`,
     /* Class expressions are not ClassDeclaration, so the nearest decorated ClassDeclaration is searched */
     `const A = class { constructor(a: A) {} };`,
-    // SUSPECTED BUG: a decorated class expression is not detected, only ClassDeclaration is searched (rare in Angular code)
+    // ACCEPTED FALSE NEGATIVE: a decorated class expression is not detected, only class declarations are (not used in Angular code)
     `import { Component } from "@angular/core"; const A = @Component() class { constructor(a: A) {} };`,
     /* Constructor function outside a class */
     `function A(a: A) {}`,

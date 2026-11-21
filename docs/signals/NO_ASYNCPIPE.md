@@ -100,4 +100,6 @@ export class AdminPage implements OnInit {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/signals/no-asyncpipe.test.ts)
+
 [Back to README](../../README.md)

@@ -39,15 +39,15 @@ testRule(rule, {
     // Index signature (`TSIndexSignature`)
     `import { Component } from "@angular/core"; @Component() class A { [key: string]: unknown; }`,
     // Auto-accessor (`AccessorProperty`)
-    // SUSPECTED BUG: an auto-accessor is writable, but is not reported
+    // ACCEPTED FALSE NEGATIVE: an auto-accessor (`accessor` keyword) is writable, but is not reported (not used in Angular code)
     `import { Component } from "@angular/core"; @Component() class A { accessor a = 1; }`,
     // Constructor parameter property (`TSParameterProperty`)
-    // SUSPECTED BUG: a writable parameter property is not reported
+    // Constructor parameters are dependency injection, already reported by `no-constructor-injection`
     `import { Component } from "@angular/core"; @Component() class A { constructor(public a: string) {} }`,
     // Nested plain class declaration inside a component method: the nearest `ClassDeclaration` is not Angular
     `import { Component } from "@angular/core"; @Component() class A { m() { class B { a = 1; } } }`,
     // Decorated class expression: only `ClassDeclaration` is looked up
-    // SUSPECTED BUG: a component defined as a class expression is not checked
+    // ACCEPTED FALSE NEGATIVE: a decorated class expression is not detected, only class declarations are (not used in Angular code)
     `import { Component } from "@angular/core"; const A = @Component() class { a = 1; };`,
     // Decorator callee is a `MemberExpression`
     // ACCEPTED FALSE NEGATIVE: `@core.Component()` (namespace import) is not recognized as a component
@@ -105,7 +105,7 @@ testRule(rule, {
     // One report per writable property, `readonly` and `#private` ones are skipped
     { code: `import { Component } from "@angular/core"; @Component() class A { a = 1; readonly b = 2; c = 3; #d = 4; }`, errors: [{ messageId }, { messageId }] },
     // Class expression nested in a component: the nearest `ClassDeclaration` is the component
-    // SUSPECTED BUG: the outer property is writable (1 report) but a property of an unrelated inner class expression is reported too (1 report)
+    // ACCEPTED FALSE POSITIVE: the outer property is rightly reported, but a property of an unrelated inner class expression is reported too (not used in Angular code)
     { code: `import { Component } from "@angular/core"; @Component() class A { b = class { c = 1; }; }`, errors: [{ messageId }, { messageId }] },
     // Aliased Angular decorator is checked
     { code: `import { Component as NgComponent } from '@angular/core'; @NgComponent({}) export class A { name = ''; }`, errors: [{ messageId }] },

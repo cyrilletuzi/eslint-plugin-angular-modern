@@ -65,4 +65,6 @@ export const appConfig: ApplicationConfig = {
 
 See the [no-component-animations](./NO_COMPONENT_ANIMATIONS.md) rule for an example of native CSS animations.
 
+[View the test file for all valid and invalid cases](../../tests/rules/native-animations/no-platformbrowser-animations-import.test.ts)
+
 [Back to README](../../README.md)

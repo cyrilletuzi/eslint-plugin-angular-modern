@@ -5,7 +5,26 @@
 Rules now check that the Angular APIs really come from Angular imports:
 - no more false positives on APIs with the same names from other libraries (for example NestJS `@Injectable()` and constructor injection, Vitest `inject()`), or on unrelated local code with the same names
 - aliased imports are now reported too (for example `import { Input as NgInput } from '@angular/core'`)
-- `no-material-modules` now also reports Material modules without the `Mat` prefix, like `NativeDateModule` and the date adapters modules
+
+Rules now also report:
+- `no-browsertestingmodule`: reports `BrowserDynamicTestingModule`
+- `no-zonejs-import`: reports `zone.js` sub-entry points like `zone.js/testing`
+- `no-http-reportprogress` and `no-http-reportuploadprogress`: report the options in `new HttpRequest()`
+- `no-subscribe-in-component-constructor`: reports `.subscribe()` in components field initializers
+- injection context rules: reports calls in static fields
+- `to-signal-in-injection-context`: reports `toSignal()` with `manualCleanup: false`
+- `signal-form-in-injection-context`: reports `form(model, schema, options)` without `injector` when the schema is a variable
+- `no-ngzone-testing`: reports `const { ngZone } = fixture`
+- `no-material-modules`: reports Material modules without the `Mat` prefix, like `NativeDateModule` and the date adapters modules
+
+Fewer false positives:
+- quoted keys are now handled, for example `{ 'providedIn': 'platform' }`, and backticks too, for example ``providedIn: `platform` ``
+- `no-subscribe-in-component-constructor`: `.subscribe` passed as a reference (not called) is no longer reported
+- `no-detectchanges-testing`: `.detectChanges` passed as a reference (not called) is no longer reported
+- injection context rules: `injector.runInContext()` and `getTestBed().runInInjectionContext()` are now recognized as injection contexts, like `TestBed.runInInjectionContext()`
+- injection context rules: calls in fields of abstract classes and in auto-accessors (`accessor user = inject(User)`) are no longer reported
+- `no-ngzone-testing`: `this.ngZone` is no longer reported
+- `no-detectchanges-testing`: `detectChanges()` in pipes is no longer reported
 
 Linting is also faster, especially on large files.
 

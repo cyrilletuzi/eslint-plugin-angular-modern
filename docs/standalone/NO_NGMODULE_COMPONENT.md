@@ -38,4 +38,6 @@ export class SomeComponent {}
 export class SomeComponent {}
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/standalone/no-ngmodule-component.test.ts)
+
 [Back to README](../../README.md)

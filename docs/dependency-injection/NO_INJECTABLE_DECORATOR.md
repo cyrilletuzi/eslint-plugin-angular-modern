@@ -110,4 +110,6 @@ export class SomeService {}
 export class SomeService {}
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/dependency-injection/no-injectable-decorator.test.ts)
+
 [Back to README](../../README.md)
