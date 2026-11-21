@@ -16,7 +16,7 @@ function isManualCleanupDisabled(node: TSESTree.CallExpression): boolean {
 
   return options?.type === "ObjectExpression" && options.properties.some((property) =>
     property.type === "Property" &&
-    getKeyName(property.key) === "manualCleanup" &&
+    getKeyName(property) === "manualCleanup" &&
     property.value.type === "Literal" &&
     property.value.value === false
   );

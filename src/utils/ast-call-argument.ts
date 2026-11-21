@@ -7,7 +7,7 @@ export function isCalledWithProperty(node: TSESTree.CallExpression, argumentPosi
   if ((argument?.type === "ObjectExpression" &&
     argument.properties.find((property) =>
       property.type === "Property" &&
-      getKeyName(property.key) === propertyName
+      getKeyName(property) === propertyName
     )) || argument?.type === "Identifier"
   ) {
     return true;

@@ -26,9 +26,7 @@ export const ruleDefinition: RuleDefinition = {
           node.parent.properties.some(
             property =>
               property.type === 'Property' &&
-              getKeyName(property.key) === 'provide' &&
-              /* `[provide]` is a variable, not the `provide` property */
-              !(property.computed && property.key.type === 'Identifier'),
+              getKeyName(property) === 'provide',
           )
         ) {
           context.report({

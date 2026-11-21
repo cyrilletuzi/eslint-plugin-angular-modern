@@ -29,7 +29,7 @@ export function isMethodWithInjectionContext(functionNode: FunctionNode, {
     return false;
   }
 
-  const methodName = getKeyName(methodDefinition.key);
+  const methodName = getKeyName(methodDefinition);
 
   if (methodName === undefined) {
     return false;

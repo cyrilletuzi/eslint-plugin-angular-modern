@@ -19,6 +19,8 @@ testRule(rule, {
     `@Component() class A { ngAfterContentChecked = (): void => {}; }`,
     // A native private method (`PrivateIdentifier` key) is a different member, not a hook
     `@Component() class A { #ngAfterContentChecked(): void {} }`,
+    // A computed key with a variable is not the hook
+    `@Component() class A { [ngAfterContentChecked](): void {} }`,
     // Abstract method (`TSAbstractMethodDefinition`) is not targeted
     `abstract class A { abstract ngAfterContentChecked(): void; }`,
     // Interface method signature (`TSMethodSignature`) is not targeted

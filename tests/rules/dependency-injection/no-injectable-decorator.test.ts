@@ -57,6 +57,8 @@ testRule(rule, {
     { code: `import { Injectable } from '@angular/core'; @Injectable({ ...config }) class A {}`, errors: [error] },
     /* Quoted key with another value than 'platform' */
     { code: `import { Injectable } from '@angular/core'; @Injectable({ 'providedIn': 'root' }) class A {}`, errors: [error] },
+    /* Computed key with a variable is not the `providedIn` property, so the `'platform'` exception does not apply */
+    { code: `import { Injectable } from '@angular/core'; @Injectable({ [providedIn]: 'platform' }) class A {}`, errors: [error] },
     /* Generic call */
     { code: `import { Injectable } from '@angular/core'; @Injectable<unknown>() class A {}`, errors: [error] },
     /* Exported class, decorator among others */

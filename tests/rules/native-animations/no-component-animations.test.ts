@@ -31,6 +31,8 @@ testRule(rule, {
     `import { Component } from "@angular/core"; @Components({ animations: [] }) class A {}`,
     /* Same name imported from another library is not reported */
     `import { Component } from "other-lib"; @Component({ animations: [] }) class A {}`,
+    // Computed key with a variable is not the `animations` property
+    `import { Component } from "@angular/core"; @Component({ [animations]: [] }) class A {}`,
   ],
   invalid: [
     /* Classic usage */
@@ -59,5 +61,7 @@ testRule(rule, {
     },
     // Quoted `animations` key
     { code: `import { Component } from "@angular/core"; @Component({ 'animations': [] }) class A {}`, errors: [error] },
+    // Computed key with a string
+    { code: `import { Component } from "@angular/core"; @Component({ ['animations']: [] }) class A {}`, errors: [error] },
   ],
 });

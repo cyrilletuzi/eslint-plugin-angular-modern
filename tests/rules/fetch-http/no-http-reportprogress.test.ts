@@ -50,6 +50,8 @@ testRule(rule, {
     `class A { options: HttpRequestOptions = { reportProgress: true }; }`,
     /* Case 3 negative: another class */
     `const req = new OtherRequest('POST', '/api', body, { reportProgress: true });`,
+    /* Computed key with a variable is not the `reportProgress` property */
+    `this.httpClient.get('/api', { [reportProgress]: true });`,
   ],
   invalid: [
     /* Case 1: each HTTP method */
@@ -87,6 +89,8 @@ testRule(rule, {
     },
     // Quoted `reportProgress` key
     { code: `this.httpClient.get('/api', { 'reportProgress': true });`, errors: [error] },
+    // Computed key with a string
+    { code: `this.httpClient.get('/api', { ['reportProgress']: true });`, errors: [error] },
     /* Case 3: `new HttpRequest()`, options as 4th argument (with body) or 3rd argument (without body) */
     { code: `const req = new HttpRequest('POST', '/api', body, { reportProgress: true });`, errors: [error] },
     { code: `const req = new HttpRequest('GET', '/api', { reportProgress: true });`, errors: [error] },

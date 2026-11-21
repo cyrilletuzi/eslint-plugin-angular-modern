@@ -29,13 +29,13 @@ export function isFactoryFunction(functionNode: FunctionNode): boolean {
   }
 
   const objectExpression = property.parent;
-  const keyName = getKeyName(property.key);
+  const keyName = getKeyName(property);
 
   if (keyName === "useFactory") {
     return objectExpression.properties.some(
       (objectProperty) =>
         objectProperty.type === "Property" &&
-        getKeyName(objectProperty.key) === "provide",
+        getKeyName(objectProperty) === "provide",
     ) || isDecoratorOptions(objectExpression, "Injectable");
   }
 

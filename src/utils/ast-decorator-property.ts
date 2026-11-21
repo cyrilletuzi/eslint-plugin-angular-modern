@@ -21,7 +21,7 @@ export function getDecoratorProperty(node: TSESTree.Decorator, name: string): TS
   const matchedProperty = config.properties.find(
     (property) =>
       property.type === "Property" &&
-      getKeyName(property.key) === name,
+      getKeyName(property) === name,
   );
 
   if (matchedProperty?.type === "Property") {

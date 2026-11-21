@@ -25,11 +25,15 @@ describe("`manualCleanup` in the second argument", () => {
       `toSignal(obs, { manualCleanup: isManual });`,
       // Quoted `manualCleanup` key
       `toSignal(obs, { 'manualCleanup': true });`,
+      `toSignal(obs, { ['manualCleanup']: true });`,
     ],
     invalid: [
       { code: `toSignal(obs, { initialValue: 0 });`, errors },
       // `false` is the default value, so an injection context is still required
       { code: `toSignal(obs, { manualCleanup: false });`, errors },
+      { code: `toSignal(obs, { 'manualCleanup': false });`, errors },
+      // Computed key with a variable is not the `manualCleanup` property
+      { code: `toSignal(obs, { [manualCleanup]: true });`, errors },
     ],
   }));
 });

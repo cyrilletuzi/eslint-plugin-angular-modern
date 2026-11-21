@@ -244,6 +244,8 @@ describe("legacy class guards, resolvers and interceptors", () => {
       { code: `@Injectable() class G implements CanMatch { canActivate() { return inject(A).check(); } }`, errors },
       // No interface
       { code: `@Injectable() class G { canActivate() { return inject(A).check(); } }`, errors },
+      // Computed method name with a variable is not the guard method
+      { code: `@Injectable() class G implements CanActivate { [canActivate]() { return inject(A).check(); } }`, errors },
       // Not an Angular class
       { code: `class G implements CanActivate { canActivate() { return inject(A).check(); } }`, errors },
       // Other method
@@ -333,6 +335,9 @@ describe("factories", () => {
     invalid: [
       // `useFactory` without `provide`
       { code: `const p = { useFactory: () => inject(A) };`, errors },
+      // Computed keys with a variable are not the `provide` or `useFactory` properties
+      { code: `const p = { [provide]: T, useFactory: () => inject(A) };`, errors },
+      { code: `const p = { provide: T, [useFactory]: () => inject(A) };`, errors },
       // Other property names
       { code: `const p = { provide: T, factory: () => inject(A) };`, errors },
       { code: `const T = new InjectionToken('t', { other: () => inject(A) });`, errors },

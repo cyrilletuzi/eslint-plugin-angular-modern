@@ -20,7 +20,7 @@ export const ruleDefinition: RuleDefinition = {
   },
   create(context) {
     return {
-      "Property[key.type='Identifier'][key.name='reportProgress'], Property[key.type='Literal'][key.value='reportProgress']"(node: TSESTree.Property) {
+      "Property[key.type='Identifier'][key.name='reportProgress'][computed=false], Property[key.type='Literal'][key.value='reportProgress']"(node: TSESTree.Property) {
         const object = node.parent;
 
         if (object.type !== "ObjectExpression") {

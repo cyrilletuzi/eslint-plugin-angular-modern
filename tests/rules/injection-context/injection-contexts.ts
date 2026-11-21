@@ -121,8 +121,8 @@ export function objectArgumentCases(build: (argument: string) => string, propert
       build(`{ ...others, ${propertyName} }`),
       // Quoted key
       build(`{ '${propertyName}': value }`),
-      // Computed key with the same identifier name (edge case)
-      build(`{ [${propertyName}]: value }`),
+      // Computed key with a string
+      build(`{ ['${propertyName}']: value }`),
       // KNOWN LIMITATION: options in a variable are supposed to contain the property
       build(`options`),
     ],
@@ -132,6 +132,8 @@ export function objectArgumentCases(build: (argument: string) => string, propert
       build(`{ ...options }`),
       build(`this.options`),
       build(`getOptions()`),
+      // Computed key with a variable is not the property
+      build(`{ [${propertyName}]: value }`),
     ].map((code) => ({ code, errors })),
   };
 }
