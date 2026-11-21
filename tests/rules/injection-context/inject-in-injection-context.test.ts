@@ -3,8 +3,6 @@
  * of the shared injection context detection logic (`src/utils/angular-injection-context.ts` and its dependencies).
  *
  * Other injection context rules only test their own specificities (explicit injector argument, enabled special contexts).
- *
- * See `tests/README.md` for the meaning of the `KNOWN BUG`, `SUSPECTED BUG`, `KNOWN LIMITATION` and `REGRESSION` markers.
  */
 import { describe } from "vitest";
 import * as rule from "../../../src/rules/injection-context/inject-in-injection-context.js";
