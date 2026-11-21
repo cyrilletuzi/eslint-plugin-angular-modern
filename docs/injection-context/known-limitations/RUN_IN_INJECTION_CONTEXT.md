@@ -2,7 +2,7 @@
 
 This known limitation is a false positive.
 
-These rules detect if `runInInjectionContext()` or `TestBed.runInInjectionContext()` is called. But it does so only in the current function. If it was done before in another function in the call stack, the injection may still be available, but the lint analysis cannot detect that.
+These rules detect if `runInInjectionContext()`, `TestBed.runInInjectionContext()` or `EnvironmentInjector.runInContext()` is called. But it does so only in the current function. If it was done before in another function in the call stack, the injection may still be available, but the lint analysis cannot detect that.
 
 While this is a limitation, it is acceptable because:
 - it is a rare and edge case, happening at framework-level or in low-level libraries, but very unlikely in applications

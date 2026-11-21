@@ -38,23 +38,19 @@ export function isInFunctionWithInjectionContext(node: TSESTree.Node, {
     return true;
   }
 
-  if (callExpression?.callee.type === "MemberExpression") {
-    const staticFunctionsWithInjectionContext: ReadonlyMap<string, string> = new Map([
-      // see https://angular.dev/api/core/testing/TestBed#runInInjectionContext
-      ["TestBed", "runInInjectionContext"],
-    ]);
-
-    for (const [className, functionName] of staticFunctionsWithInjectionContext) {
-      if (
-        callExpression.callee.object.type === "Identifier" &&
-        callExpression.callee.object.name === className &&
-        callExpression.callee.property.type === "Identifier" &&
-        callExpression.callee.property.name === functionName &&
-        !isAfterAwait(node)
-      ) {
-        return true;
-      }
-    }
+  // Methods: name-based whatever the object (an instance can be in any variable), as it only skips reports
+  if (
+    callExpression?.callee.type === "MemberExpression" &&
+    callExpression.callee.property.type === "Identifier" &&
+    (
+      // see https://angular.dev/api/core/testing/TestBed#runInInjectionContext (static and instance from `getTestBed()`)
+      callExpression.callee.property.name === "runInInjectionContext" ||
+      // see https://angular.dev/api/core/EnvironmentInjector#runInContext
+      callExpression.callee.property.name === "runInContext"
+    ) &&
+    !isAfterAwait(node)
+  ) {
+    return true;
   }
 
   return false;

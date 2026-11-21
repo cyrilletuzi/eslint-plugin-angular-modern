@@ -168,7 +168,7 @@ export class MyService {
 ```
 
 > [!NOTE]
-> The rule only detects `runInInjectionContext()` or `TestBed.runInInjectionContext()` in the current function, see the [known limitation documentation](./known-limitations/RUN_IN_INJECTION_CONTEXT.md).
+> The rule only detects `runInInjectionContext()`, `TestBed.runInInjectionContext()` or `EnvironmentInjector.runInContext()` in the current function, see the [known limitation documentation](./known-limitations/RUN_IN_INJECTION_CONTEXT.md).
 
 - when asserted
 ```typescript

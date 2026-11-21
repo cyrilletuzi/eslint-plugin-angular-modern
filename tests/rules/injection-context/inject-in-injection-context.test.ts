@@ -352,6 +352,15 @@ describe("functions with injection context", () => {
       `runInInjectionContext(injector, async () => { inject(A); await something(); });`,
       `TestBed.runInInjectionContext(() => inject(A));`,
       `TestBed.runInInjectionContext(() => { const a = inject(A); });`,
+      // `TestBed` instance from `getTestBed()`
+      `testBed.runInInjectionContext(() => inject(A));`,
+      `getTestBed().runInInjectionContext(() => inject(A));`,
+      // `EnvironmentInjector.runInContext()`
+      `injector.runInContext(() => inject(A));`,
+      `this.injector.runInContext(() => { const a = inject(A); });`,
+      `inject(EnvironmentInjector).runInContext(() => inject(A));`,
+      // ACCEPTED FALSE NEGATIVE: methods are name-based, whatever the object (the check only skips reports)
+      `Other.runInInjectionContext(() => inject(A));`,
       // Async application initialization
       `provideAppInitializer(() => inject(A));`,
       `provideAppInitializer(() => { const a = inject(A); return a.init(); });`,
@@ -369,11 +378,12 @@ describe("functions with injection context", () => {
     invalid: [
       // Other functions
       { code: `other(injector, () => inject(A));`, errors },
-      { code: `Other.runInInjectionContext(() => inject(A));`, errors },
       { code: `TestBed.other(() => inject(A));`, errors },
-      { code: `testBed.runInInjectionContext(() => inject(A));`, errors },
-      // SUSPECTED BUG: `TestBed.inject(Injector).runInInjectionContext()` / `EnvironmentInjector.runInContext()` are not detected
-      { code: `injector.runInContext(() => inject(A));`, errors },
+      { code: `injector.other(() => inject(A));`, errors },
+      // Callback not inside the method call
+      { code: `injector.runInContext(cb); const f = () => inject(A);`, errors },
+      // After `await`
+      { code: `injector.runInContext(async () => { await something(); inject(A); });`, errors },
       // Callbacks
       { code: `runInInjectionContext(injector, () => { obs.subscribe(() => inject(A)); });`, errors },
       { code: `provideAppInitializer(() => { obs.subscribe(() => inject(A)); });`, errors },
