@@ -31,4 +31,6 @@ Use standalone components, directives and pipes instead.
 createNgModule();
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/standalone/no-createngmodule.test.ts)
+
 [Back to README](../../README.md)

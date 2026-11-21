@@ -46,4 +46,6 @@ export const authGuard: CanActivateFn = () => {
 };
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/functional/no-canactivate-class.test.ts)
+
 [Back to README](../../README.md)

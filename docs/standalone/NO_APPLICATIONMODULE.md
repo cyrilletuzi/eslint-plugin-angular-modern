@@ -29,4 +29,6 @@ Restrict the usage of `ApplicationModule`.
 ApplicationModule
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/standalone/no-applicationmodule.test.ts)
+
 [Back to README](../../README.md)

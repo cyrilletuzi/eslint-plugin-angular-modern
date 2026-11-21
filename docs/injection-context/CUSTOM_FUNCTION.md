@@ -302,4 +302,6 @@ These cases are allowed for this configuration:
   - `provideEnvironmentInitializer()`
   - `withViewTransitions()` `onViewTransitionCreated`
 
+[View the test file for all valid and invalid cases](../../tests/rules/injection-context/custom-function-in-injection-context.test.ts)
+
 [Back to README](../../README.md)

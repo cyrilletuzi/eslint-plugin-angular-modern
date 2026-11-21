@@ -54,4 +54,6 @@ export class SomeComponent {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/styling-bindings/no-ngstyle.test.ts)
+
 [Back to README](../../README.md)

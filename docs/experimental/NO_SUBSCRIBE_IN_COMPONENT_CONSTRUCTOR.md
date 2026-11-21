@@ -116,4 +116,6 @@ export class AdminPage implements OnInit {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/experimental/no-subscribe-in-component-constructor.test.ts)
+
 [Back to README](../../README.md)

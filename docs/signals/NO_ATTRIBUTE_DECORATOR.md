@@ -42,4 +42,6 @@ export class SomeComponent {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/signals/no-attribute-decorator.test.ts)
+
 [Back to README](../../README.md)

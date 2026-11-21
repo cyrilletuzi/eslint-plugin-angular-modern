@@ -154,4 +154,6 @@ function customOperator(injector: Injector) {
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/injection-context/effect-in-injection-context.test.ts)
+
 [Back to README](../../README.md)

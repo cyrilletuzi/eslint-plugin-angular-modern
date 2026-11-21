@@ -41,4 +41,6 @@ it('should...', async () => {
 });
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/signals/no-detectchanges-testing.test.ts)
+
 [Back to README](../../README.md)

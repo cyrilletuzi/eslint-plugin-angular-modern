@@ -51,4 +51,6 @@ Use `inject()` instead.
 }
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/dependency-injection/no-provider-deps.test.ts)
+
 [Back to README](../../README.md)

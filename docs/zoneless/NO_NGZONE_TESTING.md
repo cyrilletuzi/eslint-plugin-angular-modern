@@ -28,4 +28,6 @@ it('should...', () => {
 });
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/zoneless/no-ngzone-testing.test.ts)
+
 [Back to README](../../README.md)

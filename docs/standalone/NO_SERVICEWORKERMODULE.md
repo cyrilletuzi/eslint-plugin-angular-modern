@@ -47,4 +47,6 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/standalone/no-serviceworkermodule.test.ts)
+
 [Back to README](../../README.md)

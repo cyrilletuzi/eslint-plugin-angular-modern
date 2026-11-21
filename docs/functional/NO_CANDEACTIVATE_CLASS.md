@@ -46,4 +46,6 @@ export const unsavedFormGuard: CanDeactivateFn<SomeComponent> = () => {
 };
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/functional/no-candeactivate-class.test.ts)
+
 [Back to README](../../README.md)

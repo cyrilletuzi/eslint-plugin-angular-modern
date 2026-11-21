@@ -39,4 +39,6 @@ bootstrapApplication(App, appConfig).catch((message) => {
 });
 ```
 
+[View the test file for all valid and invalid cases](../../tests/rules/standalone/no-platformbrowserdynamic.test.ts)
+
 [Back to README](../../README.md)
